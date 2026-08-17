@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Login - OnShop</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+.login-box{
+  max-width:420px;
+  margin:80px auto;
+  text-align:center;
+}
+
+.login-box h1{
+  color:var(--primary);
+  margin-bottom:10px;
+}
+
+.login-box p{
+  color:#666;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:15px;
+  outline:none;
+}
+
+button{
+  width:100%;
+  margin-top:15px;
+}
+
+.note{
+  font-size:13px;
+  color:#888;
+  margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card login-box">
+
+<h1>🛠 Admin Login</h1>
+
+<p>Only authorized admin can access this panel</p>
+
+<input type="email" id="email" placeholder="Admin Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="adminLogin()">Login</button>
+
+<p class="note">Secure Admin Access System</p>
+
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { getFirestore, doc, getDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 🔥 Firebase Config (replace yours)
+const firebaseConfig = {
+apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ADMIN LOGIN
+window.adminLogin = async function(){
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if(!email || !password){
+    alert("Please fill all fields");
+    return;
+  }
+
+  try{
+
+    // 1. Firebase Authentication
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+
+    // 2. Firestore check (IMPORTANT)
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+
+    if(!snap.exists()){
+      alert("❌ Not an admin account");
+      return;
+    }
+
+    const data = snap.data();
+
+    // 3. ROLE CHECK
+    if(data.role !== "admin"){
+      alert("❌ Access denied: Not admin");
+      return;
+    }
+
+    // 4. ACTIVE CHECK (your field)
+    if(data.active !== true){
+      alert("❌ Admin account is inactive");
+      return;
+    }
+
+    // SUCCESS
+    localStorage.setItem("adminName", data.name || "Admin");
+
+    alert("✅ Admin login successful");
+
+    window.location.href = "admin-dashboard.html";
+
+  } catch(err){
+    alert("Login failed: " + err.message);
+  }
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>OnShop Admin V2</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+:root{
+
+--primary:#2563eb;
+--primary-dark:#1d4ed8;
+
+--success:#10b981;
+--warning:#f59e0b;
+--danger:#ef4444;
+
+--bg:#f1f5f9;
+--card:#ffffff;
+
+--sidebar:#0f172a;
+--sidebar-hover:#1e293b;
+
+--text:#0f172a;
+--muted:#64748b;
+
+--border:#e2e8f0;
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+position:fixed;
+
+left:0;
+top:0;
+
+width:280px;
+height:100vh;
+
+background:var(--sidebar);
+
+overflow-y:auto;
+
+z-index:1000;
+
+}
+
+.logo{
+
+padding:25px;
+
+font-size:28px;
+font-weight:700;
+
+color:white;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.logo span{
+color:#60a5fa;
+}
+
+.nav{
+
+padding:15px;
+
+}
+
+.nav button{
+
+width:100%;
+
+padding:14px 16px;
+
+border:none;
+
+border-radius:12px;
+
+background:none;
+
+color:white;
+
+cursor:pointer;
+
+text-align:left;
+
+margin-bottom:8px;
+
+font-size:15px;
+
+transition:.3s;
+
+}
+
+.nav button:hover{
+
+background:var(--sidebar-hover);
+
+}
+
+.nav button i{
+
+width:28px;
+
+}
+
+/* ==========================
+MAIN
+========================== */
+
+.main{
+
+margin-left:280px;
+
+min-height:100vh;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+background:white;
+
+padding:18px 25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+border-bottom:1px solid var(--border);
+
+}
+
+.search-box{
+
+width:400px;
+
+max-width:100%;
+
+}
+
+.search-box input{
+
+width:100%;
+
+padding:12px 15px;
+
+border-radius:12px;
+
+border:1px solid var(--border);
+
+outline:none;
+
+}
+
+.top-right{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.notify-btn{
+
+width:45px;
+height:45px;
+
+border:none;
+
+border-radius:50%;
+
+cursor:pointer;
+
+background:#eff6ff;
+
+}
+
+.admin-profile{
+
+background:#eff6ff;
+
+padding:10px 16px;
+
+border-radius:12px;
+
+font-weight:600;
+
+}
+
+/* ==========================
+CONTENT
+========================== */
+
+.content{
+
+padding:25px;
+
+}
+
+/* ==========================
+DASHBOARD CARDS
+========================== */
+
+.stats-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-bottom:25px;
+
+}
+
+.stat-card{
+
+background:white;
+
+border-radius:18px;
+
+padding:22px;
+
+box-shadow:
+0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.stat-title{
+
+color:var(--muted);
+
+margin-bottom:10px;
+
+}
+
+.stat-value{
+
+font-size:34px;
+
+font-weight:700;
+
+}
+
+.blue{
+border-left:5px solid var(--primary);
+}
+
+.green{
+border-left:5px solid var(--success);
+}
+
+.orange{
+border-left:5px solid var(--warning);
+}
+
+.red{
+border-left:5px solid var(--danger);
+}
+
+/* ==========================
+MODULE CARD
+========================== */
+
+.module-card{
+
+background:white;
+
+border-radius:20px;
+
+padding:25px;
+
+min-height:600px;
+
+box-shadow:
+0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.module-title{
+
+font-size:24px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+}
+
+/* ==========================
+TABLES
+========================== */
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+th{
+
+background:#f8fafc;
+
+padding:12px;
+
+text-align:left;
+
+}
+
+td{
+
+padding:12px;
+
+border-bottom:1px solid #eee;
+
+}
+
+tr:hover{
+
+background:#f8fafc;
+
+}
+
+/* ==========================
+BUTTONS
+========================== */
+
+.btn{
+
+padding:10px 15px;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+.btn-primary{
+
+background:var(--primary);
+
+color:white;
+
+}
+
+.btn-success{
+
+background:var(--success);
+
+color:white;
+
+}
+
+.btn-danger{
+
+background:var(--danger);
+
+color:white;
+
+}
+
+/* ==========================
+MOBILE
+========================== */
+
+@media(max-width:900px){
+
+.sidebar{
+width:80px;
+}
+
+.sidebar span{
+display:none;
+}
+
+.main{
+margin-left:80px;
+}
+
+.search-box{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+
+🛒 <span>OnShop</span>
+
+</div>
+
+<div class="nav">
+
+<button onclick="showSection('dashboard')">
+<i class="fas fa-chart-line"></i>
+<span>Dashboard</span>
+</button>
+
+<button onclick="showSection('shopkeepers')">
+<i class="fas fa-store"></i>
+<span>Shopkeepers</span>
+</button>
+
+<button onclick="showSection('couriers')">
+<i class="fas fa-truck"></i>
+<span>Couriers</span>
+</button>
+
+<button onclick="showSection('delivery')">
+<i class="fas fa-motorcycle"></i>
+<span>Delivery Partners</span>
+</button>
+
+<button onclick="showSection('orders')">
+<i class="fas fa-box"></i>
+<span>Orders</span>
+</button>
+
+<button onclick="showSection('products')">
+<i class="fas fa-tags"></i>
+<span>Products</span>
+</button>
+
+<button onclick="showSection('categories')">
+<i class="fas fa-layer-group"></i>
+<span>Categories</span>
+</button>
+
+<button onclick="showSection('payments')">
+<i class="fas fa-wallet"></i>
+<span>Payments</span>
+</button>
+
+<button onclick="showSection('coupons')">
+<i class="fas fa-ticket"></i>
+<span>Coupons</span>
+</button>
+
+<button onclick="showSection('support')">
+<i class="fas fa-headset"></i>
+<span>Support Tickets</span>
+</button>
+
+<button onclick="showSection('notifications')">
+<i class="fas fa-bell"></i>
+<span>Notifications</span>
+</button>
+
+<button onclick="showSection('analytics')">
+<i class="fas fa-chart-pie"></i>
+<span>Analytics</span>
+</button>
+
+<button onclick="showSection('settings')">
+<i class="fas fa-cog"></i>
+<span>Settings</span>
+</button>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<div class="search-box">
+
+<input
+type="text"
+id="globalSearch"
+placeholder="Search users, orders, products...">
+
+</div>
+
+<div class="top-right">
+
+<button class="notify-btn">
+<i class="fas fa-bell"></i>
+</button>
+
+<div
+class="admin-profile"
+id="adminName">
+
+Admin
+
+</div>
+
+</div>
+
+</div>
+
+<div class="content">
+
+<div class="stats-grid">
+
+<div class="stat-card blue">
+<div class="stat-title">Total Users</div>
+<div class="stat-value" id="totalUsers">0</div>
+</div>
+
+<div class="stat-card green">
+<div class="stat-title">Shopkeepers</div>
+<div class="stat-value" id="totalShopkeepers">0</div>
+</div>
+
+<div class="stat-card orange">
+<div class="stat-title">Orders</div>
+<div class="stat-value" id="totalOrders">0</div>
+</div>
+
+<div class="stat-card red">
+<div class="stat-title">Revenue</div>
+<div class="stat-value" id="totalRevenue">₹0</div>
+</div>
+
+</div>
+
+<div
+class="module-card"
+id="mainContent">
+
+<div class="module-title">
+
+Welcome to OnShop Admin V2
+
+</div>
+
+<p>
+
+Marketplace control center loading...
+
+</p>
+
+</div>
+
+</div>
+<script type="module">
+
+/* ==========================
+FIREBASE
+========================== */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+getAuth,
+onAuthStateChanged,
+signOut
+
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+
+getFirestore,
+
+collection,
+doc,
+
+getDoc,
+getDocs,
+
+query,
+where,
+
+updateDoc,
+deleteDoc,
+addDoc
+
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ==========================
+YOUR FIREBASE CONFIG
+========================== */
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+/* ==========================
+GLOBAL DATA
+========================== */
+
+let usersData = [];
+
+let shopkeepersData = [];
+
+let couriersData = [];
+
+let deliveryPartnersData = [];
+
+let ordersData = [];
+
+let productsData = [];
+
+let categoriesData = [];
+
+let paymentsData = [];
+
+let couponsData = [];
+
+let notificationsData = [];
+
+let ticketsData = [];
+
+let refundsData = [];
+
+let settingsData = {};
+
+/* ==========================
+AUTH CHECK
+========================== */
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user){
+
+location.href =
+"admin-login.html";
+
+return;
+
+}
+
+const adminDoc =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(!adminDoc.exists()){
+
+alert("Admin account not found");
+
+location.href =
+"admin-login.html";
+
+return;
+
+}
+
+const adminData =
+adminDoc.data();
+
+if(adminData.role !== "admin"){
+
+alert("Access denied");
+
+location.href =
+"admin-login.html";
+
+return;
+
+}
+
+document.getElementById(
+"adminName"
+).innerText =
+adminData.name ||
+"Admin";
+
+await loadDashboard();
+
+}
+);
+
+/* ==========================
+LOAD USERS
+========================== */
+
+async function loadUsers(){
+
+usersData = [];
+
+shopkeepersData = [];
+
+couriersData = [];
+
+deliveryPartnersData = [];
+
+const snap =
+await getDocs(
+collection(db,"users")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+usersData.push(data);
+
+if(data.role==="shopkeeper"){
+
+shopkeepersData.push(data);
+
+}
+
+if(data.role==="courier"){
+
+couriersData.push(data);
+
+}
+
+if(data.role==="delivery"){
+
+deliveryPartnersData.push(data);
+
+}
+
+});
+
+}
+
+/* ==========================
+LOAD ORDERS
+========================== */
+
+async function loadOrdersData(){
+
+ordersData = [];
+
+const snap =
+await getDocs(
+collection(db,"orders")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+ordersData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD PRODUCTS
+========================== */
+
+async function loadProductsData(){
+
+productsData = [];
+
+const snap =
+await getDocs(
+collection(db,"products")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+productsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD CATEGORIES
+========================== */
+
+async function loadCategoriesData(){
+
+categoriesData = [];
+
+const snap =
+await getDocs(
+collection(db,"categories")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+categoriesData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD PAYMENTS
+========================== */
+
+async function loadPaymentsData(){
+
+paymentsData = [];
+
+const snap =
+await getDocs(
+collection(db,"payments")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+paymentsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD COUPONS
+========================== */
+
+async function loadCouponsData(){
+
+couponsData = [];
+
+const snap =
+await getDocs(
+collection(db,"coupons")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+couponsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD NOTIFICATIONS
+========================== */
+
+async function loadNotificationsData(){
+
+notificationsData = [];
+
+const snap =
+await getDocs(
+collection(db,"notifications")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+notificationsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD SUPPORT TICKETS
+========================== */
+
+async function loadTicketsData(){
+
+ticketsData = [];
+
+const snap =
+await getDocs(
+collection(db,"tickets")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+ticketsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD REFUNDS
+========================== */
+
+async function loadRefundsData(){
+
+refundsData = [];
+
+const snap =
+await getDocs(
+collection(db,"refunds")
+);
+
+snap.forEach(docSnap=>{
+
+const data =
+docSnap.data();
+
+data.id =
+docSnap.id;
+
+refundsData.push(data);
+
+});
+
+}
+
+/* ==========================
+LOAD SETTINGS
+========================== */
+
+async function loadSettingsData(){
+
+const snap =
+await getDoc(
+doc(
+db,
+"settings",
+"platform"
+)
+);
+
+if(snap.exists()){
+
+settingsData =
+snap.data();
+
+}
+
+}
+
+/* ==========================
+LOAD DASHBOARD
+========================== */
+
+async function loadDashboard(){
+
+await loadUsers();
+
+await loadOrdersData();
+
+await loadProductsData();
+
+await loadCategoriesData();
+
+await loadPaymentsData();
+
+await loadCouponsData();
+
+await loadNotificationsData();
+
+await loadTicketsData();
+
+await loadRefundsData();
+
+await loadSettingsData();
+
+updateDashboardCards();
+
+showDashboard();
+
+}
+
+/* ==========================
+UPDATE CARDS
+========================== */
+
+function updateDashboardCards(){
+
+document.getElementById(
+"totalUsers"
+).innerText =
+usersData.length;
+
+document.getElementById(
+"totalShopkeepers"
+).innerText =
+shopkeepersData.length;
+
+document.getElementById(
+"totalOrders"
+).innerText =
+ordersData.length;
+
+let revenue = 0;
+
+paymentsData.forEach(payment=>{
+
+revenue +=
+Number(
+payment.amount || 0
+);
+
+});
+
+document.getElementById(
+"totalRevenue"
+).innerText =
+"₹" +
+revenue.toLocaleString();
+
+}
+
+/* ==========================
+DASHBOARD PAGE
+========================== */
+
+function showDashboard(){
+
+document.getElementById(
+"mainContent"
+).innerHTML = `
+
+<div class="module-title">
+
+📊 Dashboard Overview
+
+</div>
+
+<table>
+
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+
+<tr>
+<td>Total Users</td>
+<td>${usersData.length}</td>
+</tr>
+
+<tr>
+<td>Shopkeepers</td>
+<td>${shopkeepersData.length}</td>
+</tr>
+
+<tr>
+<td>Couriers</td>
+<td>${couriersData.length}</td>
+</tr>
+
+<tr>
+<td>Delivery Partners</td>
+<td>${deliveryPartnersData.length}</td>
+</tr>
+
+<tr>
+<td>Products</td>
+<td>${productsData.length}</td>
+</tr>
+
+<tr>
+<td>Orders</td>
+<td>${ordersData.length}</td>
+</tr>
+
+</table>
+
+`;
+
+}
+/* ==========================
+SECTION ROUTER
+========================== */
+
+window.showSection = function(section){
+
+if(section==="dashboard"){
+showDashboard();
+return;
+}
+
+if(section==="shopkeepers"){
+loadShopkeepersPage();
+return;
+}
+
+if(section==="couriers"){
+loadCouriersPage();
+return;
+}
+
+if(section==="delivery"){
+loadDeliveryPage();
+return;
+}
+
+if(section==="orders"){
+loadOrdersPage();
+return;
+}
+
+if(section==="products"){
+loadProductsPage();
+return;
+}
+
+if(section==="categories"){
+loadCategoriesPage();
+return;
+}
+
+if(section==="payments"){
+loadPaymentsPage();
+return;
+}
+
+if(section==="coupons"){
+loadCouponsPage();
+return;
+}
+
+if(section==="support"){
+loadSupportPage();
+return;
+}
+
+if(section==="notifications"){
+loadNotificationsPage();
+return;
+}
+
+if(section==="analytics"){
+loadAnalyticsPage();
+return;
+}
+
+if(section==="settings"){
+loadSettingsPage();
+return;
+}
+
+if(section==="refunds"){
+loadRefundsPage();
+return;
+}
+
+};
+/* ==========================
+SHOPKEEPERS
+========================== */
+
+function loadShopkeepersPage(){
+
+let html = `
+
+<div class="module-title">
+
+🏪 Shopkeepers Management
+
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+margin-bottom:20px;
+">
+
+<input
+id="shopkeeperSearch"
+placeholder="Search shopkeeper..."
+style="
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+width:300px;
+">
+
+<button
+class="btn btn-primary"
+onclick="searchShopkeepers()">
+
+Search
+
+</button>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Shop Name</th>
+<th>Email</th>
+<th>Status</th>
+<th>Access</th>
+<th>Actions</th>
+
+</tr>
+
+`;
+
+shopkeepersData.forEach(user=>{
+
+html += `
+
+<tr>
+
+<td>${user.shopName || "-"}</td>
+
+<td>${user.email || "-"}</td>
+
+<td>${user.status || "pending"}</td>
+
+<td>
+
+${user.onshopAccess
+? "Enabled"
+: "Disabled"}
+
+</td>
+
+<td>
+
+<button
+class="btn btn-success"
+onclick="approveShopkeeper('${user.id}')">
+
+Approve
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="rejectShopkeeper('${user.id}')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += `</table>`;
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+APPROVE SHOPKEEPER
+========================== */
+
+window.approveShopkeeper =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"approved",
+onshopAccess:true
+}
+);
+
+await loadUsers();
+
+loadShopkeepersPage();
+
+};
+
+/* ==========================
+REJECT SHOPKEEPER
+========================== */
+
+window.rejectShopkeeper =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"rejected",
+onshopAccess:false
+}
+);
+
+await loadUsers();
+
+loadShopkeepersPage();
+
+};
+
+/* ==========================
+SEARCH SHOPKEEPERS
+========================== */
+
+window.searchShopkeepers =
+function(){
+
+const value =
+document
+.getElementById(
+"shopkeeperSearch"
+)
+.value
+.toLowerCase();
+
+const filtered =
+shopkeepersData.filter(user=>
+
+(user.shopName||"")
+.toLowerCase()
+.includes(value)
+
+);
+
+renderFilteredShopkeepers(
+filtered
+);
+
+};
+
+function renderFilteredShopkeepers(data){
+
+let html = `
+
+<div class="module-title">
+
+🏪 Shopkeepers
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Shop</th>
+<th>Email</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+data.forEach(user=>{
+
+html += `
+
+<tr>
+
+<td>${user.shopName}</td>
+
+<td>${user.email}</td>
+
+<td>${user.status}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+COURIERS
+========================== */
+
+function loadCouriersPage(){
+
+let html = `
+
+<div class="module-title">
+
+🚚 Courier Companies
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Company</th>
+<th>Email</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+`;
+
+couriersData.forEach(user=>{
+
+html += `
+
+<tr>
+
+<td>${user.companyName||"-"}</td>
+
+<td>${user.email||"-"}</td>
+
+<td>${user.status||"pending"}</td>
+
+<td>
+
+<button
+class="btn btn-success"
+onclick="approveCourier('${user.id}')">
+
+Approve
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="rejectCourier('${user.id}')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+APPROVE COURIER
+========================== */
+
+window.approveCourier =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"approved",
+onshopAccess:true
+}
+);
+
+await loadUsers();
+
+loadCouriersPage();
+
+};
+
+/* ==========================
+REJECT COURIER
+========================== */
+
+window.rejectCourier =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"rejected",
+onshopAccess:false
+}
+);
+
+await loadUsers();
+
+loadCouriersPage();
+
+};
+
+/* ==========================
+DELIVERY PARTNERS
+========================== */
+
+function loadDeliveryPage(){
+
+let html = `
+
+<div class="module-title">
+
+🏍 Delivery Partners
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Name</th>
+<th>Mobile</th>
+<th>Email</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+`;
+
+deliveryPartnersData.forEach(user=>{
+
+html += `
+
+<tr>
+
+<td>${user.name||"-"}</td>
+
+<td>${user.mobile||"-"}</td>
+
+<td>${user.email||"-"}</td>
+
+<td>${user.status||"pending"}</td>
+
+<td>
+
+<button
+class="btn btn-success"
+onclick="approveDelivery('${user.id}')">
+
+Approve
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="rejectDelivery('${user.id}')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+APPROVE DELIVERY
+========================== */
+
+window.approveDelivery =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"approved",
+onshopAccess:true
+}
+);
+
+await loadUsers();
+
+loadDeliveryPage();
+
+};
+
+/* ==========================
+REJECT DELIVERY
+========================== */
+
+window.rejectDelivery =
+async function(id){
+
+await updateDoc(
+doc(db,"users",id),
+{
+status:"rejected",
+onshopAccess:false
+}
+);
+
+await loadUsers();
+
+loadDeliveryPage();
+
+};
+
+/* ==========================
+SUPPORT TICKETS
+========================== */
+
+function loadSupportPage(){
+
+let html = `
+
+<div class="module-title">
+
+🎧 Support Tickets
+
+</div>
+
+<table>
+
+<tr>
+
+<th>User</th>
+<th>Subject</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+ticketsData.forEach(ticket=>{
+
+html += `
+
+<tr>
+
+<td>${ticket.userEmail||"-"}</td>
+
+<td>${ticket.subject||"-"}</td>
+
+<td>${ticket.status||"Open"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+REFUNDS
+========================== */
+
+function loadRefundsPage(){
+
+let html = `
+
+<div class="module-title">
+
+💸 Refund Requests
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Order</th>
+<th>User</th>
+<th>Amount</th>
+
+</tr>
+
+`;
+
+refundsData.forEach(refund=>{
+
+html += `
+
+<tr>
+
+<td>${refund.orderId||"-"}</td>
+
+<td>${refund.userEmail||"-"}</td>
+
+<td>₹${refund.amount||0}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document.getElementById(
+"mainContent"
+).innerHTML = html;
+
+}
+
+/* ==========================
+ORDERS PAGE
+========================== */
+
+function loadOrdersPage(){
+
+let html = `
+
+<div class="module-title">
+
+📦 Orders Management
+
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+margin-bottom:20px;
+">
+
+<input
+id="orderSearch"
+placeholder="Search Order ID..."
+style="
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+width:300px;
+">
+
+<button
+class="btn btn-primary"
+onclick="searchOrders()">
+
+Search
+
+</button>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Order ID</th>
+<th>Customer</th>
+<th>Shop</th>
+<th>Amount</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+ordersData.forEach(order=>{
+
+html += `
+
+<tr>
+
+<td>${order.orderId||order.id}</td>
+
+<td>${order.customerName||"-"}</td>
+
+<td>${order.shopName||"-"}</td>
+
+<td>₹${order.totalAmount||0}</td>
+
+<td>${order.orderStatus||"Pending"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+SEARCH ORDERS
+========================== */
+
+window.searchOrders=function(){
+
+const value =
+document
+.getElementById("orderSearch")
+.value
+.toLowerCase();
+
+const filtered =
+ordersData.filter(order=>
+
+(order.orderId||"")
+.toLowerCase()
+.includes(value)
+
+);
+
+renderFilteredOrders(filtered);
+
+}
+
+function renderFilteredOrders(data){
+
+let html = `
+
+<div class="module-title">
+
+📦 Orders
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Order ID</th>
+<th>Customer</th>
+<th>Amount</th>
+
+</tr>
+
+`;
+
+data.forEach(order=>{
+
+html += `
+
+<tr>
+
+<td>${order.orderId}</td>
+
+<td>${order.customerName}</td>
+
+<td>₹${order.totalAmount}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+PRODUCTS PAGE
+========================== */
+
+function loadProductsPage(){
+
+let html = `
+
+<div class="module-title">
+
+🛍 Products Management
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Product</th>
+<th>Category</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Shop</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+`;
+
+productsData.forEach(product=>{
+
+html += `
+
+<tr>
+
+<td>${product.productName||"-"}</td>
+
+<td>${product.category||"-"}</td>
+
+<td>₹${product.price||0}</td>
+
+<td>${product.stock||0}</td>
+
+<td>${product.shopName||"-"}</td>
+
+<td>
+
+${product.approved
+? "Approved"
+: "Pending"}
+
+</td>
+
+<td>
+
+<button
+class="btn btn-success"
+onclick="approveProduct('${product.id}')">
+
+Approve
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="deleteProduct('${product.id}')">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+APPROVE PRODUCT
+========================== */
+
+window.approveProduct =
+async function(id){
+
+await updateDoc(
+doc(db,"products",id),
+{
+approved:true
+}
+);
+
+await loadProductsData();
+
+loadProductsPage();
+
+}
+
+/* ==========================
+DELETE PRODUCT
+========================== */
+
+window.deleteProduct =
+async function(id){
+
+if(!confirm("Delete Product?"))
+return;
+
+await deleteDoc(
+doc(db,"products",id)
+);
+
+await loadProductsData();
+
+loadProductsPage();
+
+}
+
+/* ==========================
+CATEGORIES PAGE
+========================== */
+
+function loadCategoriesPage(){
+
+let html = `
+
+<div class="module-title">
+
+🏷 Categories
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="createCategory()">
+
+Add Category
+
+</button>
+
+<br><br>
+
+<table>
+
+<tr>
+
+<th>Category Name</th>
+
+</tr>
+
+`;
+
+categoriesData.forEach(cat=>{
+
+html += `
+
+<tr>
+
+<td>${cat.name}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+CREATE CATEGORY
+========================== */
+
+window.createCategory =
+async function(){
+
+const name =
+prompt("Category Name");
+
+if(!name) return;
+
+await addDoc(
+collection(db,"categories"),
+{
+name:name,
+createdAt:Date.now()
+}
+);
+
+await loadCategoriesData();
+
+loadCategoriesPage();
+
+}
+
+/* ==========================
+PAYMENTS PAGE
+========================== */
+
+function loadPaymentsPage(){
+
+let revenue = 0;
+
+paymentsData.forEach(payment=>{
+
+revenue +=
+Number(payment.amount||0);
+
+});
+
+let html = `
+
+<div class="module-title">
+
+💳 Payments
+
+</div>
+
+<h3>
+
+Total Revenue:
+₹${revenue.toLocaleString()}
+
+</h3>
+
+<br>
+
+<table>
+
+<tr>
+
+<th>Payment ID</th>
+<th>Shop</th>
+<th>Amount</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+paymentsData.forEach(payment=>{
+
+html += `
+
+<tr>
+
+<td>${payment.id}</td>
+
+<td>${payment.shopName||"-"}</td>
+
+<td>₹${payment.amount||0}</td>
+
+<td>${payment.status||"-"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+COUPONS PAGE
+========================== */
+
+function loadCouponsPage(){
+
+let html = `
+
+<div class="module-title">
+
+🎟 Coupons
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="createCoupon()">
+
+Create Coupon
+
+</button>
+
+<br><br>
+
+<table>
+
+<tr>
+
+<th>Code</th>
+<th>Discount</th>
+
+</tr>
+
+`;
+
+couponsData.forEach(coupon=>{
+
+html += `
+
+<tr>
+
+<td>${coupon.code}</td>
+
+<td>${coupon.discount}%</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+CREATE COUPON
+========================== */
+
+window.createCoupon =
+async function(){
+
+const code =
+prompt("Coupon Code");
+
+if(!code) return;
+
+const discount =
+prompt("Discount %");
+
+if(!discount) return;
+
+await addDoc(
+collection(db,"coupons"),
+{
+code,
+discount:Number(discount),
+createdAt:Date.now()
+}
+);
+
+await loadCouponsData();
+
+loadCouponsPage();
+
+}
+/* ==========================
+ANALYTICS
+========================== */
+
+
+/* ==========================
+ANALYTICS PAGE
+========================== */
+
+function loadAnalyticsPage(){
+
+let totalRevenue = 0;
+
+paymentsData.forEach(payment=>{
+
+totalRevenue +=
+Number(payment.amount || 0);
+
+});
+
+const approvedProducts =
+productsData.filter(
+p=>p.approved
+).length;
+
+let html = `
+
+<div class="module-title">
+
+📊 Marketplace Analytics
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card blue">
+<div class="stat-title">
+Total Revenue
+</div>
+<div class="stat-value">
+₹${totalRevenue.toLocaleString()}
+</div>
+</div>
+
+<div class="stat-card green">
+<div class="stat-title">
+Orders
+</div>
+<div class="stat-value">
+${ordersData.length}
+</div>
+</div>
+
+<div class="stat-card orange">
+<div class="stat-title">
+Products
+</div>
+<div class="stat-value">
+${productsData.length}
+</div>
+</div>
+
+<div class="stat-card red">
+<div class="stat-title">
+Approved Products
+</div>
+<div class="stat-value">
+${approvedProducts}
+</div>
+</div>
+
+</div>
+
+<br>
+
+<h3>Top Shopkeepers</h3>
+
+<table>
+
+<tr>
+<th>Shop Name</th>
+<th>Status</th>
+</tr>
+
+`;
+
+shopkeepersData.forEach(shop=>{
+
+html += `
+
+<tr>
+
+<td>${shop.shopName||"-"}</td>
+
+<td>${shop.status||"-"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+NOTIFICATIONS
+========================== */
+
+function loadNotificationsPage(){
+
+let html = `
+
+<div class="module-title">
+
+🔔 Notifications
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="createNotification()">
+
+Send Notification
+
+</button>
+
+<br><br>
+
+`;
+
+notificationsData.forEach(item=>{
+
+html += `
+
+<div style="
+background:#f8fafc;
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+">
+
+${item.message || ""}
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+CREATE NOTIFICATION
+========================== */
+
+window.createNotification =
+async function(){
+
+const message =
+prompt(
+"Notification Message"
+);
+
+if(!message) return;
+
+await addDoc(
+collection(
+db,
+"notifications"
+),
+{
+message,
+createdAt:Date.now()
+}
+);
+
+await loadNotificationsData();
+
+loadNotificationsPage();
+
+}
+
+/* ==========================
+SETTINGS
+========================== */
+
+function loadSettingsPage(){
+
+let html = `
+
+<div class="module-title">
+
+⚙ Platform Settings
+
+</div>
+
+<table>
+
+<tr>
+<td>Marketplace Name</td>
+<td>
+${settingsData.marketplaceName || "OnShop"}
+</td>
+</tr>
+
+<tr>
+<td>Platform Fee</td>
+<td>
+${settingsData.platformFee || 0}%
+</td>
+</tr>
+
+</table>
+
+<br>
+
+<button
+class="btn btn-primary"
+onclick="updatePlatformFee()">
+
+Update Platform Fee
+
+</button>
+
+<br><br>
+
+<button
+class="btn btn-success"
+onclick="exportData()">
+
+Export Backup
+
+</button>
+
+<br><br>
+
+<button
+class="btn btn-danger"
+onclick="logoutAdmin()">
+
+Logout
+
+</button>
+
+`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+UPDATE PLATFORM FEE
+========================== */
+
+window.updatePlatformFee =
+async function(){
+
+const fee =
+prompt(
+"Enter Platform Fee %"
+);
+
+if(!fee) return;
+
+await updateDoc(
+doc(
+db,
+"settings",
+"platform"
+),
+{
+platformFee:Number(fee)
+}
+);
+
+await loadSettingsData();
+
+loadSettingsPage();
+
+}
+
+/* ==========================
+EXPORT DATA
+========================== */
+
+window.exportData =
+function(){
+
+const backup = {
+
+users:usersData,
+
+shopkeepers:shopkeepersData,
+
+couriers:couriersData,
+
+deliveryPartners:
+deliveryPartnersData,
+
+orders:ordersData,
+
+products:productsData,
+
+categories:categoriesData,
+
+payments:paymentsData,
+
+coupons:couponsData,
+
+notifications:
+notificationsData
+
+};
+
+const blob =
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const url =
+URL.createObjectURL(
+blob
+);
+
+const a =
+document.createElement(
+"a"
+);
+
+a.href = url;
+
+a.download =
+"onshop-backup.json";
+
+a.click();
+
+}
+
+/* ==========================
+ADMIN LOGOUT
+========================== */
+
+window.logoutAdmin =
+async function(){
+
+const ok =
+confirm(
+"Logout Admin?"
+);
+
+if(!ok) return;
+
+await signOut(auth);
+
+location.href =
+"admin-login.html";
+
+}
+
+/* ==========================
+AUTO OPEN DASHBOARD
+========================== */
+
+showDashboard();
+
+</script>
+
+</body>
+</html>

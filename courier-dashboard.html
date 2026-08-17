@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>OnShop Courier Dashboard</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+:root{
+
+--primary:#2563eb;
+--success:#10b981;
+--warning:#f59e0b;
+--danger:#ef4444;
+
+--sidebar:#0f172a;
+--sidebar-hover:#1e293b;
+
+--bg:#f1f5f9;
+--card:#ffffff;
+
+--text:#0f172a;
+--muted:#64748b;
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:var(--bg);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+position:fixed;
+
+left:0;
+top:0;
+
+width:270px;
+height:100vh;
+
+background:var(--sidebar);
+
+overflow:auto;
+
+}
+
+.logo{
+
+padding:25px;
+
+font-size:26px;
+
+font-weight:700;
+
+color:white;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.logo span{
+color:#60a5fa;
+}
+
+.nav{
+
+padding:15px;
+
+}
+
+.nav button{
+
+width:100%;
+
+padding:14px;
+
+margin-bottom:8px;
+
+background:none;
+
+border:none;
+
+border-radius:12px;
+
+color:white;
+
+cursor:pointer;
+
+text-align:left;
+
+font-size:15px;
+
+}
+
+.nav button:hover{
+
+background:var(--sidebar-hover);
+
+}
+
+.nav button i{
+
+width:25px;
+
+}
+
+/* MAIN */
+
+.main{
+
+margin-left:270px;
+
+min-height:100vh;
+
+}
+
+/* TOPBAR */
+
+.topbar{
+
+background:white;
+
+padding:18px 25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+border-bottom:1px solid #e5e7eb;
+
+}
+
+.company-box{
+
+background:#eff6ff;
+
+padding:10px 15px;
+
+border-radius:12px;
+
+font-weight:600;
+
+}
+
+/* CONTENT */
+
+.content{
+
+padding:25px;
+
+}
+
+/* CARDS */
+
+.cards{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-bottom:25px;
+
+}
+
+.card{
+
+background:white;
+
+padding:22px;
+
+border-radius:18px;
+
+box-shadow:
+0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.card-title{
+
+color:var(--muted);
+
+margin-bottom:10px;
+
+}
+
+.card-value{
+
+font-size:34px;
+
+font-weight:700;
+
+}
+
+/* MODULE */
+
+.module{
+
+background:white;
+
+padding:25px;
+
+border-radius:20px;
+
+min-height:500px;
+
+box-shadow:
+0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.module-title{
+
+font-size:24px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+}
+
+/* TABLE */
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+th{
+
+background:#f8fafc;
+
+padding:12px;
+
+text-align:left;
+
+}
+
+td{
+
+padding:12px;
+
+border-bottom:1px solid #eee;
+
+}
+
+/* BUTTONS */
+
+.btn{
+
+padding:10px 14px;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+.btn-primary{
+
+background:var(--primary);
+
+color:white;
+
+}
+
+.btn-success{
+
+background:var(--success);
+
+color:white;
+
+}
+
+.btn-danger{
+
+background:var(--danger);
+
+color:white;
+
+}
+
+@media(max-width:900px){
+
+.sidebar{
+width:80px;
+}
+
+.sidebar span{
+display:none;
+}
+
+.main{
+margin-left:80px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+
+🚚 <span>Courier</span>
+
+</div>
+
+<div class="nav">
+
+<button onclick="showSection('dashboard')">
+<i class="fas fa-chart-line"></i>
+<span>Dashboard</span>
+</button>
+
+<button onclick="showSection('orders')">
+<i class="fas fa-box"></i>
+<span>Orders</span>
+</button>
+
+<button onclick="showSection('partners')">
+<i class="fas fa-motorcycle"></i>
+<span>Delivery Partners</span>
+</button>
+
+<button onclick="showSection('earnings')">
+<i class="fas fa-wallet"></i>
+<span>Earnings</span>
+</button>
+
+<button onclick="logoutCourier()">
+<i class="fas fa-sign-out-alt"></i>
+<span>Logout</span>
+</button>
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<h2>Courier Dashboard</h2>
+
+<div
+class="company-box"
+id="companyName">
+
+Courier Company
+
+</div>
+
+</div>
+
+<div class="content">
+
+<div class="cards">
+
+<div class="card">
+<div class="card-title">
+Total Orders
+</div>
+<div class="card-value"
+id="totalOrders">
+0
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">
+Pending Pickup
+</div>
+<div class="card-value"
+id="pendingOrders">
+0
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">
+In Transit
+</div>
+<div class="card-value"
+id="transitOrders">
+0
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">
+Delivered
+</div>
+<div class="card-value"
+id="deliveredOrders">
+0
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">
+Partners
+</div>
+<div class="card-value"
+id="totalPartners">
+0
+</div>
+</div>
+
+</div>
+
+<div
+class="module"
+id="mainContent">
+
+<div class="module-title">
+
+Welcome Courier
+
+</div>
+
+<p>
+
+Loading dashboard...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<script type="module">
+
+/* ==========================
+FIREBASE IMPORTS
+========================== */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ==========================
+FIREBASE CONFIG
+REPLACE WITH YOUR CONFIG
+========================== */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+/* ==========================
+GLOBAL DATA
+========================== */
+
+let courierData = null;
+
+let ordersData = [];
+
+let deliveryPartnersData = [];
+
+/* ==========================
+AUTH CHECK
+========================== */
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+location.href =
+"courier-login.html";
+
+return;
+
+}
+
+try{
+
+const userDoc = await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(!userDoc.exists()){
+
+alert("Account not found");
+
+await signOut(auth);
+
+location.href =
+"courier-login.html";
+
+return;
+
+}
+
+const data = userDoc.data();
+
+if(data.role !== "courier"){
+
+alert("Access Denied");
+
+await signOut(auth);
+
+location.href =
+"courier-company-login.html";
+
+return;
+
+}
+
+if(data.status !== "approved"){
+
+alert(
+"Admin approval pending"
+);
+
+await signOut(auth);
+
+location.href =
+"courier-company-login.html";
+
+return;
+
+}
+
+if(data.onshopAccess !== true){
+
+alert(
+"OnShop access disabled"
+);
+
+await signOut(auth);
+
+location.href =
+"courier-company-login.html";
+
+return;
+
+}
+
+courierData = data;
+
+/* company name */
+
+document.getElementById(
+"companyName"
+).innerText =
+data.companyName ||
+"Courier Company";
+
+/* load data */
+
+await loadOrders();
+
+await loadDeliveryPartners();
+
+showDashboard();
+
+}
+catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+});
+
+/* ==========================
+LOAD ORDERS
+========================== */
+
+async function loadOrders(){
+
+ordersData = [];
+
+try{
+
+const snap = await getDocs(
+collection(db,"orders")
+);
+
+snap.forEach(docSnap=>{
+
+const data = docSnap.data();
+
+/* only courier orders */
+
+if(
+data.courierId === auth.currentUser.uid
+){
+
+ordersData.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+}
+
+});
+
+updateDashboardCards();
+
+}
+catch(error){
+
+console.error(error);
+
+}
+
+}
+
+/* ==========================
+LOAD DELIVERY PARTNERS
+========================== */
+
+async function loadDeliveryPartners(){
+
+deliveryPartnersData = [];
+
+try{
+
+const snap = await getDocs(
+collection(db,"users")
+);
+
+snap.forEach(docSnap=>{
+
+const data = docSnap.data();
+
+if(
+data.role === "delivery"
+){
+
+deliveryPartnersData.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+}
+
+});
+
+updateDashboardCards();
+
+}
+catch(error){
+
+console.error(error);
+
+}
+
+}
+
+/* ==========================
+UPDATE CARDS
+========================== */
+
+function updateDashboardCards(){
+
+document.getElementById(
+"totalOrders"
+).innerText =
+ordersData.length;
+
+document.getElementById(
+"pendingOrders"
+).innerText =
+ordersData.filter(
+o=>o.status==="pending"
+).length;
+
+document.getElementById(
+"transitOrders"
+).innerText =
+ordersData.filter(
+o=>o.status==="in_transit"
+).length;
+
+document.getElementById(
+"deliveredOrders"
+).innerText =
+ordersData.filter(
+o=>o.status==="delivered"
+).length;
+
+document.getElementById(
+"totalPartners"
+).innerText =
+deliveryPartnersData.length;
+
+}
+
+/* ==========================
+LOGOUT
+========================== */
+
+window.logoutCourier =
+async function(){
+
+const ok =
+confirm("Logout?");
+
+if(!ok) return;
+
+await signOut(auth);
+
+location.href =
+"courier-login.html";
+
+};
+/* ==========================
+SECTION ROUTER
+========================== */
+
+window.showSection = function(section){
+
+if(section==="dashboard"){
+showDashboard();
+return;
+}
+
+if(section==="orders"){
+showOrdersPage();
+return;
+}
+
+if(section==="partners"){
+showPartnersPage();
+return;
+}
+
+if(section==="earnings"){
+showEarningsPage();
+return;
+}
+
+};
+
+/* ==========================
+DASHBOARD PAGE
+========================== */
+
+function showDashboard(){
+
+let html = `
+
+<div class="module-title">
+
+🚚 Courier Dashboard
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+">
+
+<div class="card">
+
+<div class="card-title">
+Pending Pickup
+</div>
+
+<div class="card-value">
+${ordersData.filter(
+o=>o.status==="pending"
+).length}
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-title">
+In Transit
+</div>
+
+<div class="card-value">
+${ordersData.filter(
+o=>o.status==="in_transit"
+).length}
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-title">
+Delivered
+</div>
+
+<div class="card-value">
+${ordersData.filter(
+o=>o.status==="delivered"
+).length}
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<h3>
+
+Recent Orders
+
+</h3>
+
+<br>
+
+<table>
+
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Status</th>
+</tr>
+
+`;
+
+ordersData
+.slice(0,10)
+.forEach(order=>{
+
+html += `
+
+<tr>
+
+<td>${order.orderId||order.id}</td>
+
+<td>${order.customerName||"-"}</td>
+
+<td>${order.status||"pending"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += `</table>`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+ORDERS PAGE
+========================== */
+
+
+/* ==========================
+DELIVERY PARTNERS PAGE
+========================== */
+
+function showPartnersPage(){
+
+let html = `
+
+<div class="module-title">
+
+🏍 Delivery Partners
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Name</th>
+<th>Mobile</th>
+<th>Status</th>
+<th>Email</th>
+
+</tr>
+
+`;
+
+deliveryPartnersData.forEach(partner=>{
+
+html += `
+
+<tr>
+
+<td>${partner.name||"-"}</td>
+
+<td>${partner.mobile||"-"}</td>
+
+<td>${partner.status||"-"}</td>
+
+<td>${partner.email||"-"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+EARNINGS PAGE
+========================== */
+
+/* ==========================
+ASSIGN PARTNER
+========================== */
+
+window.assignPartner =
+async function(orderId){
+
+if(
+deliveryPartnersData.length===0
+){
+
+alert(
+"No Delivery Partners Found"
+);
+
+return;
+
+}
+
+let options = "";
+
+deliveryPartnersData.forEach(
+partner=>{
+
+options +=
+`${partner.name}
+(${partner.id})\n`;
+
+});
+
+const selectedId =
+prompt(
+
+"Enter Partner ID:\n\n"
++
+options
+
+);
+
+if(!selectedId) return;
+
+const partner =
+deliveryPartnersData.find(
+p=>p.id===selectedId
+);
+
+if(!partner){
+
+alert(
+"Invalid Partner ID"
+);
+
+return;
+
+}
+
+try{
+
+await updateDoc(
+doc(db,"orders",orderId),
+{
+
+deliveryPartnerId:
+partner.id,
+
+deliveryPartnerName:
+partner.name,
+
+courierId:
+auth.currentUser.uid,
+
+status:"assigned"
+
+}
+);
+
+await loadOrders();
+
+showOrdersPage();
+
+alert(
+"Partner Assigned"
+);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(error.message);
+
+}
+
+};
+/* ==========================
+ORDER SEARCH
+========================== */
+
+window.searchOrders = function(){
+
+const keyword =
+document
+.getElementById("orderSearch")
+.value
+.toLowerCase();
+
+const filtered =
+ordersData.filter(order=>{
+
+return (
+(order.orderId || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(order.customerName || "")
+.toLowerCase()
+.includes(keyword)
+
+||
+
+(order.shopName || "")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+});
+
+renderFilteredOrders(filtered);
+
+};
+
+/* ==========================
+RENDER FILTERED ORDERS
+========================== */
+
+function renderFilteredOrders(filtered){
+
+let html = `
+
+<div class="module-title">
+
+📦 Search Results
+
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+margin-bottom:20px;
+">
+
+<input
+id="orderSearch"
+placeholder="Search Orders..."
+style="
+padding:12px;
+width:300px;
+border:1px solid #ddd;
+border-radius:10px;
+">
+
+<button
+class="btn btn-primary"
+onclick="searchOrders()">
+
+Search
+
+</button>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Order ID</th>
+<th>Customer</th>
+<th>Shop</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+filtered.forEach(order=>{
+
+html += `
+
+<tr>
+
+<td>${order.orderId || order.id}</td>
+
+<td>${order.customerName || "-"}</td>
+
+<td>${order.shopName || "-"}</td>
+
+<td>${order.status || "-"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += `</table>`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+ORDER STATUS UPDATE
+========================== */
+
+window.markPickedUp =
+async function(orderId){
+
+try{
+
+await updateDoc(
+doc(db,"orders",orderId),
+{
+status:"picked_up"
+}
+);
+
+await loadOrders();
+
+showOrdersPage();
+
+}
+catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+window.markTransit =
+async function(orderId){
+
+try{
+
+await updateDoc(
+doc(db,"orders",orderId),
+{
+status:"in_transit"
+}
+);
+
+await loadOrders();
+
+showOrdersPage();
+
+}
+catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+window.markDelivered =
+async function(orderId){
+
+try{
+
+await updateDoc(
+doc(db,"orders",orderId),
+{
+status:"delivered",
+deliveredAt:Date.now()
+}
+);
+
+await loadOrders();
+
+showOrdersPage();
+
+}
+catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+/* ==========================
+MODERN ORDERS PAGE
+========================== */
+
+function showOrdersPage(){
+
+let html = `
+
+<div class="module-title">
+
+📦 Orders Management
+
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+margin-bottom:20px;
+">
+
+<input
+id="orderSearch"
+placeholder="Search Orders..."
+style="
+padding:12px;
+width:300px;
+border:1px solid #ddd;
+border-radius:10px;
+">
+
+<button
+class="btn btn-primary"
+onclick="searchOrders()">
+
+Search
+
+</button>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Order</th>
+<th>Customer</th>
+<th>Status</th>
+<th>Partner</th>
+<th>Actions</th>
+
+</tr>
+
+`;
+
+ordersData.forEach(order=>{
+
+html += `
+
+<tr>
+
+<td>
+${order.orderId || order.id}
+</td>
+
+<td>
+${order.customerName || "-"}
+</td>
+
+<td>
+${order.status || "pending"}
+</td>
+
+<td>
+${order.deliveryPartnerName || "Unassigned"}
+</td>
+
+<td>
+
+<button
+class="btn btn-success"
+onclick="markPickedUp('${order.id}')">
+
+Pickup
+
+</button>
+
+<button
+class="btn btn-primary"
+onclick="markTransit('${order.id}')">
+
+Transit
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="markDelivered('${order.id}')">
+
+Delivered
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += `</table>`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+COURIER ANALYTICS
+========================== */
+
+function loadCourierAnalytics(){
+
+const pending =
+ordersData.filter(
+o=>o.status==="pending"
+).length;
+
+const pickup =
+ordersData.filter(
+o=>o.status==="picked_up"
+).length;
+
+const transit =
+ordersData.filter(
+o=>o.status==="in_transit"
+).length;
+
+const delivered =
+ordersData.filter(
+o=>o.status==="delivered"
+).length;
+
+console.log({
+
+pending,
+pickup,
+transit,
+delivered
+
+});
+
+}
+
+/* ==========================
+AUTO ANALYTICS
+========================== */
+
+setInterval(()=>{
+
+loadCourierAnalytics();
+
+},5000);
+/* ==========================
+REALTIME ORDERS LISTENER
+========================== */
+
+import {
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+function startRealtimeOrders(){
+
+onSnapshot(
+collection(db,"orders"),
+(snapshot)=>{
+
+ordersData = [];
+
+snapshot.forEach(docSnap=>{
+
+const data = docSnap.data();
+
+if(
+data.courierId === auth.currentUser.uid
+){
+
+ordersData.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+}
+
+});
+
+updateDashboardCards();
+
+});
+
+}
+
+/* ==========================
+DELIVERY PARTNER PERFORMANCE
+========================== */
+
+function showPartnerPerformance(){
+
+let html = `
+
+<div class="module-title">
+
+🏍 Partner Performance
+
+</div>
+
+<table>
+
+<tr>
+
+<th>Name</th>
+<th>Delivered Orders</th>
+<th>Status</th>
+
+</tr>
+
+`;
+
+deliveryPartnersData.forEach(partner=>{
+
+const delivered =
+ordersData.filter(order=>
+
+order.deliveryPartnerId===partner.id
+
+&&
+
+order.status==="delivered"
+
+).length;
+
+html += `
+
+<tr>
+
+<td>${partner.name||"-"}</td>
+
+<td>${delivered}</td>
+
+<td>${partner.status||"-"}</td>
+
+</tr>
+
+`;
+
+});
+
+html += `</table>`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+COURIER SETTINGS
+========================== */
+
+function showSettingsPage(){
+
+let html = `
+
+<div class="module-title">
+
+⚙ Courier Settings
+
+</div>
+
+<div class="card">
+
+<h3>
+
+Company Name
+
+</h3>
+
+<p>
+
+${courierData.companyName || "-"}
+
+</p>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h3>
+
+Email
+
+</h3>
+
+<p>
+
+${courierData.email || "-"}
+
+</p>
+
+</div>
+
+<br>
+
+<button
+class="btn btn-danger"
+onclick="logoutCourier()">
+
+Logout
+
+</button>
+
+`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+NOTIFICATIONS
+========================== */
+
+function showNotificationsPage(){
+
+let html = `
+
+<div class="module-title">
+
+🔔 Notifications
+
+</div>
+
+<div class="card">
+
+No Notifications Yet
+
+</div>
+
+`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+ACTUAL EARNINGS
+========================== */
+
+function calculateEarnings(){
+
+let total = 0;
+
+ordersData.forEach(order=>{
+
+if(order.status==="delivered"){
+
+total += Number(
+order.deliveryCharge || 0
+);
+
+}
+
+});
+
+return total;
+
+}
+
+/* ==========================
+IMPROVED EARNINGS PAGE
+========================== */
+
+function showEarningsPage(){
+
+const delivered =
+ordersData.filter(
+o=>o.status==="delivered"
+).length;
+
+const earnings =
+calculateEarnings();
+
+let html = `
+
+<div class="module-title">
+
+💰 Earnings
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<div class="card-title">
+
+Delivered Orders
+
+</div>
+
+<div class="card-value">
+
+${delivered}
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-title">
+
+Total Earnings
+
+</div>
+
+<div class="card-value">
+
+₹${earnings}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+document
+.getElementById("mainContent")
+.innerHTML = html;
+
+}
+
+/* ==========================
+EXTEND ROUTER
+========================== */
+
+const oldShowSection =
+window.showSection;
+
+
+/* ==========================
+START REALTIME
+========================== */
+
+startRealtimeOrders();
+
+/* ==========================
+DEFAULT PAGE
+========================== */
+
+showDashboard();
+
+</script>
+
+</body>
+</html>
