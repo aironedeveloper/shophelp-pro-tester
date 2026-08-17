@@ -262,6 +262,168 @@ border:1px solid rgba(0,0,0,0.05);
 
 </div>
 <script type="module">
+  <!-- LANGUAGE SYSTEM -->
+<script>
+const SHOPHELP_TRANSLATIONS = {
+  "Billing": "बिलिंग",
+  "Inventory": "इन्वेंटरी",
+  "Customers": "ग्राहक",
+  "Expenses": "खर्च",
+  "About Us": "हमारे बारे में",
+  "Logout": "लॉगआउट",
+  "Business Login": "बिज़नेस लॉगिन",
+  "Signup": "साइन अप",
+  "Login": "लॉगिन",
+  "Shop Name": "दुकान का नाम",
+  "Email": "ईमेल",
+  "Password": "पासवर्ड",
+  "Add Product": "उत्पाद जोड़ें",
+  "Search product...": "उत्पाद खोजें...",
+  "Select customer...": "ग्राहक चुनें...",
+  "Search customer...": "ग्राहक खोजें...",
+  "Enter Barcode & press Enter": "बारकोड दर्ज करें और Enter दबाएं",
+  "Scan Barcode": "बारकोड स्कैन करें",
+  "Item": "वस्तु",
+  "Qty": "मात्रा",
+  "Price": "कीमत",
+  "Action": "कार्य",
+  "Total Items:": "कुल वस्तुएं:",
+  "Discount ₹": "छूट ₹",
+  "No GST": "कोई GST नहीं",
+  "5% GST": "5% GST",
+  "12% GST": "12% GST",
+  "18% GST": "18% GST",
+  "Save": "सेव करें",
+  "Edit": "संपादित करें",
+  "Delete": "हटाएं",
+  "Cancel": "रद्द करें",
+  "Close": "बंद करें",
+  "Yes": "हाँ",
+  "No": "नहीं",
+  "Total": "कुल",
+  "Product": "उत्पाद",
+  "Products": "उत्पाद",
+  "Customer": "ग्राहक",
+  "Phone": "फोन",
+  "Sales": "बिक्री",
+  "Expenses": "खर्च",
+  "Settings": "सेटिंग्स",
+  "Clear": "साफ करें",
+  "Clear Chat": "चैट साफ करें",
+  "Message ShopHelp Pro AI...": "ShopHelp Pro AI को संदेश भेजें..."
+};
+
+let shophelpLanguage =
+  localStorage.getItem("shophelp_language") || "en";
+
+const shophelpOriginalTexts = new WeakMap();
+
+function translateShopHelpText() {
+  const root = document.body;
+
+  const walker = document.createTreeWalker(
+    root,
+    NodeFilter.SHOW_TEXT
+  );
+
+  const nodes = [];
+
+  while (walker.nextNode()) {
+    nodes.push(walker.currentNode);
+  }
+
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+
+    if (!parent) return;
+
+    // Never translate user-entered or data-generated values
+    if (
+      parent.closest("script,style,textarea") ||
+      parent.tagName === "INPUT"
+    ) {
+      return;
+    }
+
+    let original = shophelpOriginalTexts.get(node);
+
+    if (!original) {
+      original = node.nodeValue;
+      shophelpOriginalTexts.set(node, original);
+    }
+
+    const clean = original.trim();
+
+    if (!clean) return;
+
+    if (shophelpLanguage === "hi") {
+      const translated = SHOPHELP_TRANSLATIONS[clean];
+
+      if (translated) {
+        node.nodeValue =
+          original.replace(clean, translated);
+      }
+    } else {
+      node.nodeValue = original;
+    }
+  });
+
+  // Translate placeholders
+  document.querySelectorAll("input, textarea").forEach(el => {
+
+    if (!el.dataset.originalPlaceholder) {
+      el.dataset.originalPlaceholder =
+        el.placeholder || "";
+    }
+
+    const original = el.dataset.originalPlaceholder;
+
+    if (shophelpLanguage === "hi") {
+      if (SHOPHELP_TRANSLATIONS[original]) {
+        el.placeholder =
+          SHOPHELP_TRANSLATIONS[original];
+      }
+    } else {
+      el.placeholder = original;
+    }
+  });
+}
+
+function setShopHelpLanguage(language) {
+  shophelpLanguage = language;
+
+  localStorage.setItem(
+    "shophelp_language",
+    language
+  );
+
+  translateShopHelpText();
+
+  const selector =
+    document.getElementById("shophelpLanguage");
+
+  if (selector) {
+    selector.value = language;
+  }
+}
+
+window.setShopHelpLanguage = setShopHelpLanguage;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  translateShopHelpText();
+
+  const observer = new MutationObserver(() => {
+    translateShopHelpText();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+});
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { 
