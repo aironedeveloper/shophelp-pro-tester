@@ -651,42 +651,19 @@ window.loginUser = async function(){
 
   try{
 
-    // Login to Firebase
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+await signInWithEmailAndPassword(auth, email, password);
 
-    console.log(
-      "Firebase login successful:",
-      auth.currentUser.uid
-    );
+loginPage.classList.add("hidden");
+appDiv.classList.remove("hidden");
 
-    // IMPORTANT:
-    // Load Firebase shop data BEFORE showing the app.
-    await loadData();
+await loadData();
 
-    // Now show the application
-    loginPage.classList.add("hidden");
-    appDiv.classList.remove("hidden");
+loadChatUI();
+checkLowStock();
 
-    loadChatUI();
-    checkLowStock();
-
-    renderAll();
-    renderFinances();
-    renderChart();
-
-  }catch(error){
-
-    console.error("Login error:", error);
-
-    alert(error.message);
-
-  }
-
-}
+renderAll();
+renderFinances();
+renderChart();
 await loadData();
 
 
