@@ -492,45 +492,99 @@ await setDoc(doc(db, "shops", userId), {
 
 async function loadData(){
 
-  if(!auth.currentUser) return;
+  if(!auth.currentUser){
+    console.error("loadData: No authenticated user");
+    return false;
+  }
 
-  const userId = auth.currentUser.uid;
+  try{
 
-  const docRef = doc(db, "shops", userId);
+    const userId = auth.currentUser.uid;
 
-  const snap = await getDoc(docRef);
+    console.log("Loading shop data for UID:", userId);
 
-  if(snap.exists()){
+    const docRef = doc(db, "shops", userId);
+
+    const snap = await getDoc(docRef);
+
+    if(!snap.exists()){
+
+      console.warn("Shop document does not exist for UID:", userId);
+
+      // IMPORTANT:
+      // Do NOT replace the shop name with "My Shop".
+      // Keep the actual shop name already known from signup/login.
+      
+      return false;
+    }
 
     const data = snap.data();
-shopName = data.shopName?.trim() || "My Shop";
 
-document.querySelector("#shopTitle h1").innerText = shopName;
-document.title = shopName;
+    console.log("Firebase shop data:", data);
 
-    console.log("Loaded shop name:", shopName);
+    // Load the real shop name from Firebase
+    const firebaseShopName = String(data.shopName || "").trim();
 
-    // ✅ LOAD DATA
-    products = data.products || [];
-    customers = data.customers || [];
-    sales = data.sales || [];
-    expenses = data.expenses || [];
-    chatHistory = data.chatHistory || [];
+    if(firebaseShopName){
 
-    // ✅ FIX OLD CUSTOMERS
-    customers.forEach(c=>{
+      shopName = firebaseShopName;
+
+      const titleElement = document.querySelector("#shopTitle h1");
+
+      if(titleElement){
+        titleElement.innerText = shopName;
+      }
+
+      document.title = shopName;
+
+      console.log("Loaded shop name:", shopName);
+
+    }else{
+
+      console.warn("Firebase shop document has no shopName.");
+
+    }
+
+    // Load shop data safely
+    products = Array.isArray(data.products)
+      ? data.products
+      : [];
+
+    customers = Array.isArray(data.customers)
+      ? data.customers
+      : [];
+
+    sales = Array.isArray(data.sales)
+      ? data.sales
+      : [];
+
+    expenses = Array.isArray(data.expenses)
+      ? data.expenses
+      : [];
+
+    chatHistory = Array.isArray(data.chatHistory)
+      ? data.chatHistory
+      : [];
+
+    // Fix old customers
+    customers.forEach(c => {
+
       if(c.debt === undefined){
         c.debt = 0;
       }
+
     });
 
-  } else {
+    return true;
 
-    shopName = "My Shop";
-    document.querySelector("#shopTitle h1").innerText = shopName;
+  }catch(error){
 
+    console.error("Firebase loadData error:", error);
+
+    showToast("Unable to load shop data.");
+
+    return false;
   }
-
 }
 
 // --- AUTH ---
@@ -586,15 +640,53 @@ document.querySelector("#shopTitle h1").innerText = shopName;
 }
 
 window.loginUser = async function(){
-  const email = emailEl.value;
+
+  const email = emailEl.value.trim();
   const password = passwordEl.value;
 
-  try{
-    await signInWithEmailAndPassword(auth, email, password);
+  if(!email || !password){
+    showToast("Enter email and password");
+    return;
+  }
 
+  try{
+
+    // Login to Firebase
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    console.log(
+      "Firebase login successful:",
+      auth.currentUser.uid
+    );
+
+    // IMPORTANT:
+    // Load Firebase shop data BEFORE showing the app.
+    await loadData();
+
+    // Now show the application
     loginPage.classList.add("hidden");
     appDiv.classList.remove("hidden");
 
+    loadChatUI();
+    checkLowStock();
+
+    renderAll();
+    renderFinances();
+    renderChart();
+
+  }catch(error){
+
+    console.error("Login error:", error);
+
+    alert(error.message);
+
+  }
+
+}
 await loadData();
 
 
