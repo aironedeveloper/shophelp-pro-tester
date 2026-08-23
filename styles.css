@@ -1,2153 +1,1743 @@
-```css
 /* =========================================================
-   SHOPHELP — OUTSTANDING PREMIUM UI
-   FUTURISTIC POS • PREMIUM BUSINESS APP • MOBILE FIRST
-   CSS ONLY — EXISTING HTML + JS CAN STAY THE SAME
+   SHOPHELP PRO — COMPLETE UI REDESIGN
+   Drop-in styles.css
+   Designed for the existing ShopHelp Pro HTML/JS
    ========================================================= */
 
 
 /* =========================================================
-   DESIGN SYSTEM
+   1. DESIGN TOKENS
    ========================================================= */
 
-:root{
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #eff6ff;
 
-  --bg:#f4f7fb;
-  --bg-dark:#090d18;
+  --navy: #0f172a;
+  --navy-2: #172554;
 
-  --nav:#0b1020;
-  --nav-2:#11182c;
+  --text: #0f172a;
+  --text-soft: #475569;
+  --text-muted: #64748b;
 
-  --primary:#635bff;
-  --primary-2:#8b5cf6;
+  --background: #f4f7fb;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
 
-  --cyan:#22d3ee;
-  --blue:#3b82f6;
+  --border: #e2e8f0;
+  --border-light: #eef2f7;
 
-  --green:#10b981;
-  --green-2:#34d399;
+  --success: #16a34a;
+  --success-light: #f0fdf4;
 
-  --red:#ef4444;
-  --orange:#f59e0b;
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
 
-  --text:#101828;
-  --text-soft:#667085;
+  --warning: #d97706;
+  --warning-light: #fffbeb;
 
-  --white:#ffffff;
+  --purple: #7c3aed;
 
-  --card:rgba(255,255,255,.78);
-  --card-solid:#ffffff;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 8px 25px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
 
-  --line:rgba(15,23,42,.08);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 
-  --shadow:
-    0 18px 50px rgba(15,23,42,.09);
-
-  --shadow-big:
-    0 30px 90px rgba(15,23,42,.15);
-
-  --glow:
-    0 15px 40px rgba(99,91,255,.25);
-
-  --radius:24px;
-
+  --transition: 0.2s ease;
 }
 
 
 /* =========================================================
-   RESET
+   2. RESET
    ========================================================= */
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-html{
-  scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
 }
 
-body{
+body {
+  margin: 0;
+  min-height: 100vh;
 
   font-family:
     Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
     "Segoe UI",
-    Arial,
     sans-serif;
 
-  color:var(--text);
-
-  min-height:100vh;
-
-  padding:24px;
-
-  max-width:1550px;
-
-  margin:auto;
-
-  overflow-x:hidden;
+  color: var(--text);
 
   background:
-
     radial-gradient(
-      circle at 5% 5%,
-      rgba(99,91,255,.15),
+      circle at 10% 0%,
+      rgba(37, 99, 235, 0.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(124, 58, 237, 0.06),
       transparent 25%
     ),
+    var(--background);
 
-    radial-gradient(
-      circle at 95% 10%,
-      rgba(34,211,238,.13),
-      transparent 25%
-    ),
+  line-height: 1.5;
+}
 
-    radial-gradient(
-      circle at 50% 100%,
-      rgba(139,92,246,.12),
-      transparent 28%
-    ),
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
 
-    linear-gradient(
-      135deg,
-      #f8fafc,
-      #eef2ff 45%,
-      #ecfeff
-    );
+button {
+  cursor: pointer;
+}
 
-  background-size:
-    160% 160%;
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
 
-  animation:
-    backgroundMove 18s ease infinite;
-
+a:hover {
+  text-decoration: underline;
 }
 
 
 /* =========================================================
-   BACKGROUND
+   3. SCROLLBAR
    ========================================================= */
 
-@keyframes backgroundMove{
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
 
-  0%{
-    background-position:0% 20%;
-  }
+::-webkit-scrollbar-track {
+  background: #eef2f7;
+}
 
-  50%{
-    background-position:100% 80%;
-  }
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
 
-  100%{
-    background-position:0% 20%;
-  }
-
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 
 /* =========================================================
-   GENERAL ANIMATIONS
+   4. GLOBAL UTILITIES
    ========================================================= */
 
-@keyframes appear{
-
-  from{
-    opacity:0;
-    transform:
-      translateY(18px)
-      scale(.98);
-  }
-
-  to{
-    opacity:1;
-    transform:
-      translateY(0)
-      scale(1);
-  }
-
-}
-
-@keyframes slide{
-
-  from{
-    opacity:0;
-    transform:translateY(25px);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-
-}
-
-@keyframes glow{
-
-  0%,100%{
-    box-shadow:
-      0 0 0 0 rgba(99,91,255,0);
-  }
-
-  50%{
-    box-shadow:
-      0 0 0 10px rgba(99,91,255,.08);
-  }
-
-}
-
-@keyframes shine{
-
-  0%{
-    left:-120%;
-  }
-
-  100%{
-    left:130%;
-  }
-
-}
-
-@keyframes typing{
-
-  0%,100%{
-    opacity:.3;
-    transform:translateY(0);
-  }
-
-  50%{
-    opacity:1;
-    transform:translateY(-3px);
-  }
-
+.hidden {
+  display: none !important;
 }
 
 
 /* =========================================================
-   SCROLLBAR
+   5. SHOP TITLE / BRAND
    ========================================================= */
 
-::-webkit-scrollbar{
-  width:9px;
-  height:9px;
+#shopTitle {
+  width: min(1180px, calc(100% - 32px));
+  margin: 32px auto 24px !important;
+
+  padding: 22px 26px;
+
+  justify-content: flex-start !important;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border: 1px solid rgba(226, 232, 240, 0.8);
+
+  border-radius: var(--radius-xl);
+
+  box-shadow: var(--shadow-md);
+
+  backdrop-filter: blur(18px);
 }
 
-::-webkit-scrollbar-track{
-  background:rgba(255,255,255,.5);
+#shopTitle img {
+  width: 64px !important;
+  height: 64px !important;
+
+  border-radius: 17px !important;
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.18),
+    0 0 0 5px rgba(37, 99, 235, 0.06);
+
+  transition: transform var(--transition);
 }
 
-::-webkit-scrollbar-thumb{
-
-  border-radius:20px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #635bff,
-      #22d3ee
-    );
-
+#shopTitle img:hover {
+  transform: translateY(-2px) rotate(-2deg);
 }
 
-::-webkit-scrollbar-thumb:hover{
+#shopTitle h1 {
+  font-size: clamp(26px, 4vw, 38px) !important;
 
-  background:
-    linear-gradient(
-      180deg,
-      #4f46e5,
-      #06b6d4
-    );
+  letter-spacing: -1.5px;
 
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #2563eb
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
 }
 
 
 /* =========================================================
-   HEADINGS
+   6. MAIN APP WIDTH
    ========================================================= */
 
-h1,
-h2,
-h3,
-h4{
-
-  margin-bottom:15px;
-
-  letter-spacing:-.6px;
-
-}
-
-h1{
-  font-weight:850;
-}
-
-h2{
-  font-weight:800;
-}
-
-h3{
-  font-weight:750;
+#app {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto 60px;
 }
 
 
 /* =========================================================
-   PREMIUM CARD
+   7. LOGIN SCREEN
    ========================================================= */
 
-.card{
+#loginPage {
+  width: min(430px, calc(100% - 32px));
 
-  position:relative;
+  margin: 25px auto 70px !important;
 
-  overflow:hidden;
+  padding: 34px !important;
 
   background:
     linear-gradient(
       145deg,
-      rgba(255,255,255,.92),
-      rgba(255,255,255,.68)
+      rgba(255,255,255,0.96),
+      rgba(248,250,252,0.96)
     );
 
-  -webkit-backdrop-filter:blur(25px);
-  backdrop-filter:blur(25px);
+  border: 1px solid rgba(226,232,240,0.9);
 
-  border:
-    1px solid rgba(255,255,255,.85);
+  border-radius: 26px !important;
 
-  border-radius:var(--radius);
+  box-shadow:
+    0 25px 70px rgba(15,23,42,0.13),
+    0 2px 10px rgba(15,23,42,0.04);
 
-  padding:25px;
+  position: relative;
 
-  margin-bottom:22px;
+  overflow: hidden;
+}
 
-  box-shadow:var(--shadow);
+#loginPage::before {
+  content: "";
 
-  animation:
-    appear .45s ease;
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  right: -70px;
+  top: -70px;
+
+  background: rgba(37,99,235,0.08);
+
+  border-radius: 50%;
+}
+
+#loginPage::after {
+  content: "";
+
+  position: absolute;
+
+  width: 120px;
+  height: 120px;
+
+  left: -60px;
+  bottom: -60px;
+
+  background: rgba(124,58,237,0.07);
+
+  border-radius: 50%;
+}
+
+#loginPage h2 {
+  margin: 0 0 24px;
+
+  font-size: 26px;
+
+  letter-spacing: -0.5px;
+}
+
+#loginPage input {
+  width: 100%;
+  margin-bottom: 13px;
+}
+
+#loginPage .btn-main {
+  width: 100%;
+  margin-top: 8px;
+}
+
+
+/* =========================================================
+   8. NAVIGATION
+   ========================================================= */
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 8px;
+
+  margin-bottom: 20px;
+
+  background: rgba(255,255,255,0.88);
+
+  border: 1px solid var(--border);
+
+  border-radius: 17px;
+
+  box-shadow: var(--shadow-sm);
+
+  backdrop-filter: blur(18px);
+
+  position: sticky;
+  top: 12px;
+
+  z-index: 100;
+}
+
+.menu button {
+  border: 0;
+
+  background: transparent;
+
+  color: var(--text-soft);
+
+  padding: 11px 15px;
+
+  border-radius: 11px;
+
+  font-weight: 650;
 
   transition:
-    transform .35s ease,
-    box-shadow .35s ease,
-    border-color .35s ease;
-
+    background var(--transition),
+    color var(--transition),
+    transform var(--transition);
 }
 
-
-/* top light */
-
-.card::before{
-
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:0;
-
-  width:100%;
-  height:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(99,91,255,.5),
-      rgba(34,211,238,.5),
-      transparent
-    );
-
+.menu button i {
+  margin-right: 5px;
 }
 
-
-/* corner glow */
-
-.card::after{
-
-  content:"";
-
-  position:absolute;
-
-  width:150px;
-  height:150px;
-
-  right:-80px;
-  top:-80px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(99,91,255,.13),
-      transparent 70%
-    );
-
-  pointer-events:none;
-
+.menu button:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: translateY(-1px);
 }
 
-
-.card:hover{
-
-  transform:
-    translateY(-6px);
-
-  box-shadow:
-    var(--shadow-big);
-
-  border-color:
-    rgba(99,91,255,.15);
-
-}
-
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
-
-#loginPage{
-
-  max-width:440px;
-
-  margin:65px auto;
-
-  text-align:center;
-
-  animation:
-    slide .7s ease;
-
-}
-
-#loginPage .card{
-
-  padding:38px;
-
-  box-shadow:
-    0 35px 100px rgba(15,23,42,.18);
-
-}
-
-
-/* =========================================================
-   MENU — PREMIUM DARK CONTROL BAR
-   ========================================================= */
-
-.menu{
-
-  position:sticky;
-
-  top:12px;
-
-  z-index:100;
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:8px;
-
-  padding:10px;
-
-  margin-bottom:28px;
-
-  border-radius:22px;
+.menu button.active {
+  color: white;
 
   background:
     linear-gradient(
       135deg,
-      rgba(10,15,30,.96),
-      rgba(18,25,45,.94)
+      var(--primary),
+      var(--primary-dark)
     );
-
-  border:
-    1px solid rgba(255,255,255,.08);
 
   box-shadow:
-    0 20px 55px rgba(15,23,42,.22);
-
-  -webkit-backdrop-filter:
-    blur(25px);
-
-  backdrop-filter:
-    blur(25px);
-
+    0 5px 14px rgba(37,99,235,0.25);
 }
 
-
-/* menu glow */
-
-.menu::before{
-
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  border-radius:inherit;
-
-  padding:1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(99,91,255,.5),
-      transparent 35%,
-      transparent 65%,
-      rgba(34,211,238,.4)
-    );
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-
-  -webkit-mask-composite:xor;
-
-  mask-composite:exclude;
-
-  pointer-events:none;
-
+.menu .delete-btn {
+  margin-left: auto;
 }
 
 
 /* =========================================================
-   MENU BUTTONS
+   9. CARDS
    ========================================================= */
 
-.menu button{
+.card {
+  background: rgba(255,255,255,0.94);
 
-  display:flex;
+  border: 1px solid var(--border);
 
-  align-items:center;
+  border-radius: var(--radius-lg);
 
-  justify-content:center;
+  padding: 26px;
 
-  gap:9px;
+  margin-bottom: 20px;
 
-  color:#aab4c8;
+  box-shadow: var(--shadow-md);
 
-  background:
-    transparent;
-
-  border:
-    1px solid transparent;
-
-  box-shadow:none;
-
-  padding:
-    11px 17px;
-
-  border-radius:14px;
-
+  animation: pageIn 0.25s ease;
 }
 
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
 
-.menu button:hover{
-
-  color:#ffffff;
-
-  background:
-    rgba(255,255,255,.07);
-
-  box-shadow:
-    none;
-
-  transform:
-    translateY(-1px);
-
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+.card h2,
+.card h3 {
+  margin-top: 0;
 
-/* ACTIVE MENU */
+  letter-spacing: -0.5px;
+}
 
-.menu button.active{
+.card h3 {
+  font-size: 22px;
 
-  color:#ffffff;
+  padding-bottom: 15px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #635bff,
-      #7c3aed
-    );
-
-  border:
-    1px solid rgba(255,255,255,.14);
-
-  box-shadow:
-    0 8px 25px rgba(99,91,255,.4);
-
+  border-bottom: 1px solid var(--border-light);
 }
 
 
 /* =========================================================
-   INPUTS
+   10. INPUTS
    ========================================================= */
 
 input,
-select{
+select,
+textarea {
+  width: 100%;
 
-  width:100%;
+  min-height: 44px;
 
-  max-width:220px;
+  padding: 10px 13px;
 
-  padding:
-    14px 16px;
+  margin: 5px 0;
 
-  margin:6px 0;
+  color: var(--text);
 
-  border-radius:15px;
+  background: #fff;
 
-  border:
-    1px solid rgba(148,163,184,.22);
+  border: 1px solid #d8e0ea;
 
-  background:
-    rgba(255,255,255,.82);
+  border-radius: 11px;
 
-  color:#172033;
-
-  font-size:15px;
+  outline: none;
 
   transition:
-    all .25s ease;
-
-  box-shadow:
-    inset 0 1px 2px rgba(15,23,42,.03);
-
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
 }
 
-input::placeholder{
-
-  color:#98a2b3;
-
+input::placeholder {
+  color: #94a3b8;
 }
 
 input:hover,
-select:hover{
-
-  background:#ffffff;
-
-  border-color:
-    rgba(99,91,255,.25);
-
+select:hover {
+  border-color: #bfccdb;
 }
 
 input:focus,
-select:focus{
-
-  outline:none;
-
-  background:#ffffff;
-
-  border-color:
-    #635bff;
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
 
   box-shadow:
-    0 0 0 4px rgba(99,91,255,.11),
-    0 10px 30px rgba(99,91,255,.08);
+    0 0 0 4px rgba(37,99,235,0.09);
 
-  transform:
-    translateY(-1px);
-
+  background: #fff;
 }
 
 
 /* =========================================================
-   BUTTONS
+   11. FORMS IN APP
    ========================================================= */
 
-button{
+#billingPage > input,
+#billingPage > select,
+#inventoryPage > input,
+#inventoryPage > select,
+#customersPage > input,
+#expensesPage > input,
+#expensesPage > select {
+  max-width: 420px;
+}
 
-  position:relative;
+#billingPage > input,
+#billingPage > select {
+  display: block;
+}
 
-  overflow:hidden;
+#inventoryPage > input {
+  display: inline-block;
+  width: calc(50% - 8px);
+}
 
-  padding:
-    12px 20px;
+#customersPage > input {
+  max-width: 420px;
+}
 
-  min-height:43px;
+#expensesPage > input,
+#expensesPage > select {
+  max-width: 420px;
+}
 
-  border:none;
 
-  border-radius:14px;
+/* =========================================================
+   12. BUTTON SYSTEM
+   ========================================================= */
 
-  cursor:pointer;
+button {
+  border: 0;
 
-  color:#ffffff;
+  border-radius: 10px;
 
-  font-weight:700;
+  padding: 10px 15px;
 
-  letter-spacing:.05px;
+  font-weight: 650;
 
-  background:
-    linear-gradient(
-      135deg,
-      #635bff,
-      #4f46e5
-    );
+  color: var(--text);
 
-  box-shadow:
-    0 9px 22px rgba(99,91,255,.22);
+  background: #eef2f7;
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    filter .25s ease;
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition),
+    opacity var(--transition);
+}
 
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
 }
 
 
-/* shine */
+/* Primary */
 
-button::before{
-
-  content:"";
-
-  position:absolute;
-
-  top:-100%;
-
-  left:-120%;
-
-  width:70%;
-
-  height:300%;
-
-  transform:
-    rotate(25deg);
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.4),
-      transparent
-    );
-
-  transition:
-    left .7s ease;
-
-}
-
-button:hover::before{
-
-  left:140%;
-
-}
-
-button:hover{
-
-  transform:
-    translateY(-3px);
-
-  box-shadow:
-    0 16px 35px rgba(99,91,255,.32);
-
-  filter:
-    brightness(1.06);
-
-}
-
-button:active{
-
-  transform:
-    scale(.96);
-
-}
-
-
-/* =========================================================
-   MAIN BUTTON
-   ========================================================= */
-
-.btn-main{
+.btn-main {
+  color: white !important;
 
   background:
     linear-gradient(
       135deg,
-      #635bff,
-      #8b5cf6,
-      #3b82f6
-    );
+      var(--primary),
+      var(--primary-dark)
+    ) !important;
 
   box-shadow:
-    0 12px 30px rgba(99,91,255,.28);
+    0 5px 14px rgba(37,99,235,0.18);
+}
 
+.btn-main:hover {
+  box-shadow:
+    0 8px 20px rgba(37,99,235,0.28);
 }
 
 
-/* =========================================================
-   SAVE BILL
-   ========================================================= */
+/* Save */
 
-.btn-save{
-
-  width:100%;
-
-  padding:17px;
-
-  font-size:18px;
+.btn-save {
+  color: white !important;
 
   background:
     linear-gradient(
       135deg,
-      #059669,
-      #10b981,
-      #34d399
-    );
+      #16a34a,
+      #15803d
+    ) !important;
 
   box-shadow:
-    0 14px 35px rgba(16,185,129,.28);
-
+    0 5px 14px rgba(22,163,74,0.18);
 }
 
-.btn-save:hover{
-
+.btn-save:hover {
   box-shadow:
-    0 20px 45px rgba(16,185,129,.38);
-
+    0 8px 20px rgba(22,163,74,0.28);
 }
 
 
-/* =========================================================
-   DELETE
-   ========================================================= */
+/* Delete */
 
-.delete-btn{
-
-  background:
-    linear-gradient(
-      135deg,
-      #dc2626,
-      #ef4444
-    );
-
-  box-shadow:
-    0 9px 22px rgba(239,68,68,.2);
-
-}
-
-.delete-btn:hover{
-
-  background:
-    linear-gradient(
-      135deg,
-      #ef4444,
-      #f87171
-    );
-
-  box-shadow:
-    0 16px 35px rgba(239,68,68,.32);
-
-}
-
-
-/* =========================================================
-   TABLE — PREMIUM
-   ========================================================= */
-
-table{
-
-  width:100%;
-
-  border-collapse:separate;
-
-  border-spacing:0;
-
-  margin-top:18px;
-
-  overflow:hidden;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,.82);
-
-  border:
-    1px solid rgba(226,232,240,.7);
-
-  box-shadow:
-    0 15px 40px rgba(15,23,42,.07);
-
-}
-
-
-th{
-
-  color:#ffffff;
-
-  font-weight:750;
-
-  background:
-    linear-gradient(
-      135deg,
-      #101828,
-      #172033
-    );
-
-}
-
-
-th,
-td{
-
-  padding:14px;
-
-  border-bottom:
-    1px solid rgba(226,232,240,.65);
-
-  text-align:left;
-
-  white-space:nowrap;
-
-}
-
-
-tbody tr{
-
-  transition:
-    background .2s ease,
-    transform .2s ease;
-
-}
-
-
-tbody tr:hover{
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(99,91,255,.06),
-      rgba(34,211,238,.035)
-    );
-
-}
-
-
-tbody tr:last-child td{
-
-  border-bottom:none;
-
-}
-
-
-td{
-
-  vertical-align:middle;
-
-  color:#344054;
-
-}
-
-
-/* =========================================================
-   INVENTORY
-   ========================================================= */
-
-#invTable th{
-
-  background:
-    linear-gradient(
-      135deg,
-      #f8fafc,
-      #eef2ff
-    );
-
-  color:#344054;
-
-}
-
-#invTable td{
-
-  background:
-    rgba(255,255,255,.72);
-
-}
-
-#invTable tr:hover{
-
-  background:#f8faff;
-
-}
-
-#invTable input{
-
-  max-width:80px;
-
-  padding:9px 10px;
-
-}
-
-
-/* =========================================================
-   BILLING
-   ========================================================= */
-
-#billingPage table{
-
-  table-layout:fixed;
-
-}
-
-#billingPage table th:nth-child(1),
-#billingPage table td:nth-child(1){
-
-  width:60%;
-
-}
-
-#billingPage table th:nth-child(2),
-#billingPage table td:nth-child(2){
-
-  width:20%;
-
-  text-align:center;
-
-}
-
-#billingPage table th:nth-child(3),
-#billingPage table td:nth-child(3){
-
-  width:20%;
-
-  text-align:right;
-
-}
-
-#billBody button{
-
-  min-width:32px;
-
-  padding:6px 10px;
-
-  border-radius:10px;
-
-}
-
-
-/* =========================================================
-   PRODUCT GRID
-   ========================================================= */
-
-.billing-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(145px,1fr)
-    );
-
-  gap:14px;
-
-  margin:18px 0;
-
-}
-
-
-.p-item{
-
-  position:relative;
-
-  overflow:hidden;
-
-  padding:18px 14px;
-
-  border-radius:18px;
-
-  text-align:center;
-
-  cursor:pointer;
-
-  color:#172033;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #f6f8ff
-    );
-
-  border:
-    1px solid rgba(99,91,255,.08);
-
-  box-shadow:
-    0 8px 25px rgba(15,23,42,.07);
-
-  transition:
-    transform .3s ease,
-    box-shadow .3s ease,
-    border-color .3s ease;
-
-}
-
-
-.p-item::before{
-
-  content:"";
-
-  position:absolute;
-
-  left:0;
-  top:0;
-
-  width:100%;
-
-  height:3px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #635bff,
-      #22d3ee
-    );
-
-  opacity:.7;
-
-}
-
-
-.p-item:hover{
-
-  transform:
-    translateY(-7px)
-    scale(1.02);
-
-  border-color:
-    rgba(99,91,255,.25);
-
-  box-shadow:
-    0 18px 40px rgba(99,91,255,.14);
-
-}
-
-
-/* =========================================================
-   STAT BOXES
-   ========================================================= */
-
-.stat-box{
-
-  position:relative;
-
-  overflow:hidden;
-
-  flex:1;
-
-  min-width:200px;
-
-  padding:24px;
-
-  border-radius:20px;
-
-  text-align:center;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.9),
-      rgba(255,255,255,.68)
-    );
-
-  border:
-    1px solid rgba(255,255,255,.85);
-
-  box-shadow:
-    0 15px 40px rgba(15,23,42,.08);
-
-  transition:
-    transform .3s ease,
-    box-shadow .3s ease;
-
-}
-
-
-.stat-box::before{
-
-  content:"";
-
-  position:absolute;
-
-  left:0;
-  top:0;
-
-  width:100%;
-  height:4px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #635bff,
-      #8b5cf6,
-      #22d3ee
-    );
-
-}
-
-
-.stat-box::after{
-
-  content:"";
-
-  position:absolute;
-
-  width:100px;
-  height:100px;
-
-  right:-50px;
-  bottom:-50px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(99,91,255,.13),
-      transparent 70%
-    );
-
-}
-
-
-.stat-box:hover{
-
-  transform:
-    translateY(-7px);
-
-  box-shadow:
-    0 22px 50px rgba(99,91,255,.14);
-
-}
-
-
-/* =========================================================
-   DROPDOWNS
-   ========================================================= */
-
-#productDropdown,
-#custDropdown{
-
-  position:absolute;
-
-  top:100%;
-  left:0;
-  right:0;
-
-  background:
-    rgba(255,255,255,.97);
-
-  -webkit-backdrop-filter:
-    blur(25px);
-
-  backdrop-filter:
-    blur(25px);
-
-  border:
-    1px solid rgba(226,232,240,.8);
-
-  border-radius:16px;
-
-  max-height:220px;
-
-  overflow-y:auto;
-
-  display:none;
-
-  z-index:9999;
-
-  box-shadow:
-    0 25px 60px rgba(15,23,42,.18);
-
-  animation:
-    appear .2s ease;
-
-}
-
-#productDropdown div,
-#custDropdown div{
-
-  padding:14px 16px;
-
-  cursor:pointer;
-
-  border-bottom:
-    1px solid rgba(226,232,240,.55);
-
-  transition:
-    all .2s ease;
-
-}
-
-#productDropdown div:hover,
-#custDropdown div:hover{
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(99,91,255,.08),
-      rgba(34,211,238,.05)
-    );
-
-  padding-left:21px;
-
-}
-
-
-/* =========================================================
-   CHAT — FUTURISTIC AI
-   ========================================================= */
-
-#chatApp{
-
-  position:fixed;
-
-  bottom:92px;
-
-  right:22px;
-
-  width:380px;
-
-  height:550px;
-
-  display:none;
-
-  flex-direction:column;
-
-  overflow:hidden;
-
-  z-index:99999;
-
-  border-radius:28px;
-
-  background:
-    rgba(248,250,252,.96);
-
-  border:
-    1px solid rgba(255,255,255,.9);
-
-  -webkit-backdrop-filter:
-    blur(30px);
-
-  backdrop-filter:
-    blur(30px);
-
-  box-shadow:
-    0 35px 100px rgba(15,23,42,.28);
-
-  animation:
-    chatOpen .3s cubic-bezier(.2,.8,.2,1);
-
-}
-
-
-@keyframes chatOpen{
-
-  from{
-
-    opacity:0;
-
-    transform:
-      translateY(25px)
-      scale(.92);
-
-  }
-
-  to{
-
-    opacity:1;
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-}
-
-
-/* =========================================================
-   CHAT HEADER
-   ========================================================= */
-
-#chatTop{
-
-  position:relative;
-
-  padding:17px 18px;
-
-  color:#ffffff;
-
-  font-weight:750;
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #080d1c,
-      #17134b,
-      #075985
-    );
-
-  box-shadow:
-    0 10px 30px rgba(15,23,42,.2);
-
-}
-
-
-#chatTop::after{
-
-  content:"";
-
-  position:absolute;
-
-  left:0;
-  bottom:0;
-
-  width:100%;
-  height:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #635bff,
-      #22d3ee,
-      #8b5cf6
-    );
-
-}
-
-
-/* =========================================================
-   CHAT MESSAGES
-   ========================================================= */
-
-#chatMessages{
-
-  flex:1;
-
-  padding:18px;
-
-  overflow-y:auto;
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:12px;
-
-  background:
-
-    radial-gradient(
-      circle at 10% 10%,
-      rgba(99,91,255,.06),
-      transparent 25%
-    ),
-
-    radial-gradient(
-      circle at 90% 90%,
-      rgba(34,211,238,.05),
-      transparent 25%
-    ),
-
-    #f8fafc;
-
-}
-
-
-.msg{
-
-  max-width:78%;
-
-  padding:
-    11px 15px;
-
-  border-radius:18px;
-
-  font-size:14px;
-
-  line-height:1.5;
-
-  word-wrap:break-word;
-
-  animation:
-    appear .25s ease;
-
-}
-
-
-.user{
-
-  align-self:flex-end;
-
-  color:#ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #635bff,
-      #4f46e5
-    );
-
-  border-bottom-right-radius:5px;
-
-  box-shadow:
-    0 8px 22px rgba(99,91,255,.2);
-
-}
-
-
-.bot{
-
-  align-self:flex-start;
-
-  color:#172033;
-
-  background:#ffffff;
-
-  border:
-    1px solid rgba(226,232,240,.8);
-
-  border-bottom-left-radius:5px;
-
-  box-shadow:
-    0 5px 15px rgba(15,23,42,.05);
-
-}
-
-
-/* =========================================================
-   TYPING
-   ========================================================= */
-
-.typing{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:5px;
-
-}
-
-.typing span{
-
-  width:7px;
-  height:7px;
-
-  border-radius:50%;
-
-  background:#635bff;
-
-  animation:
-    typing 1s infinite;
-
-}
-
-
-/* =========================================================
-   CHAT INPUT
-   ========================================================= */
-
-#chatInputArea{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  padding:11px;
-
-  background:
-    rgba(255,255,255,.96);
-
-  border-top:
-    1px solid rgba(226,232,240,.8);
-
-}
-
-
-#chatInput{
-
-  flex:1;
-
-  min-width:0;
-
-  height:44px;
-
-  padding:
-    0 16px;
-
-  border-radius:25px;
-
-  border:
-    1px solid rgba(148,163,184,.22);
-
-  background:
-    #f7f8fc;
-
-  outline:none;
-
-}
-
-
-#chatInputArea button{
-
-  width:44px;
-
-  height:44px;
-
-  min-width:44px;
-
-  padding:0;
-
-  border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-}
-
-
-#chatInputArea button:last-child{
-
-  width:auto;
-
-  min-width:auto;
-
-  padding:
-    0 15px;
-
-  border-radius:22px;
-
-  font-size:13px;
-
-}
-
-
-/* =========================================================
-   FLOATING AI BUTTON
-   ========================================================= */
-
-#chatToggleBtn{
-
-  position:fixed;
-
-  right:22px;
-
-  bottom:22px;
-
-  width:68px;
-
-  height:68px;
-
-  padding:0;
-
-  margin:0;
-
-  border:none;
-
-  border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  overflow:hidden;
-
-  z-index:999999;
-
-  font-size:0;
-
-  color:#ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #635bff,
-      #8b5cf6,
-      #22d3ee
-    );
-
-  box-shadow:
-    0 15px 40px rgba(99,91,255,.4);
-
-  animation:
-    glow 2.5s infinite;
-
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease;
-
-}
-
-
-#chatToggleBtn::before{
-
-  display:none !important;
-
-}
-
-
-#chatToggleBtn:hover{
-
-  transform:
-    scale(1.12)
-    rotate(4deg);
-
-  box-shadow:
-    0 20px 55px rgba(99,91,255,.5);
-
-}
-
-
-#chatToggleBtn span{
-
-  position:absolute;
-
-  inset:0;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-size:30px;
-
-}
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-#toast{
-
-  position:fixed;
-
-  top:24px;
-
-  right:24px;
-
-  z-index:999;
-
-  display:none;
-
-  padding:
-    14px 20px;
-
-  border-radius:15px;
-
-  color:#ffffff;
-
-  font-weight:700;
+.delete-btn {
+  color: white !important;
 
   background:
     linear-gradient(
       135deg,
       #ef4444,
       #dc2626
-    );
+    ) !important;
+}
 
-  border:
-    1px solid rgba(255,255,255,.2);
-
+.delete-btn:hover {
   box-shadow:
-    0 20px 45px rgba(239,68,68,.28);
-
-  animation:
-    appear .3s ease;
-
+    0 7px 18px rgba(220,38,38,0.22);
 }
 
 
 /* =========================================================
-   HIDDEN
+   13. BILLING PAGE
    ========================================================= */
 
-.hidden{
+#billingPage {
+  position: relative;
+}
 
-  display:none !important;
+#billingPage h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
 
+#billingPage h3::before {
+  content: "🧾";
+
+  display: inline-flex;
+
+  width: 36px;
+  height: 36px;
+
+  align-items: center;
+  justify-content: center;
+
+  background: var(--primary-light);
+
+  border-radius: 10px;
+
+  font-size: 18px;
+}
+
+
+/* Search containers */
+
+#billingPage > div[style*="position:relative"] {
+  width: 100%;
+  max-width: 430px !important;
+
+  margin-bottom: 8px;
+}
+
+#custDropdown,
+#productDropdown {
+  position: absolute !important;
+
+  left: 0;
+  right: 0;
+
+  top: calc(100% + 3px);
+
+  max-height: 250px;
+
+  overflow-y: auto;
+
+  background: white !important;
+
+  border: 1px solid var(--border) !important;
+
+  border-radius: 12px !important;
+
+  box-shadow: var(--shadow-lg) !important;
+
+  z-index: 500;
+}
+
+#custDropdown > div,
+#productDropdown > div {
+  padding: 12px !important;
+
+  transition: background var(--transition);
+}
+
+#custDropdown > div:hover,
+#productDropdown > div:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+
+/* Barcode */
+
+#manualBarcode {
+  max-width: 430px;
+}
+
+
+/* Scanner */
+
+#reader {
+  margin: 12px 0;
+}
+
+#scannerBox {
+  background: var(--surface-soft);
+
+  border: 1px solid var(--border);
+
+  padding: 12px;
+
+  border-radius: 17px;
+
+  box-shadow: var(--shadow-sm);
 }
 
 
 /* =========================================================
-   SELECTION
+   14. TABLES
    ========================================================= */
 
-::selection{
+table {
+  width: 100%;
 
-  color:#312e81;
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  margin-top: 20px;
+
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  padding: 13px 14px;
+
+  text-align: left;
+
+  color: #475569;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 13px 14px;
+
+  border-bottom: 1px solid var(--border-light);
+
+  color: #334155;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background var(--transition);
+}
+
+tbody tr:hover {
+  background: #f8fbff;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td button {
+  margin: 2px;
+
+  padding: 7px 10px;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   15. BILL TABLE
+   ========================================================= */
+
+#billBody td {
+  font-size: 14px;
+}
+
+#billBody button {
+  min-width: 30px;
+
+  min-height: 30px;
+
+  padding: 4px 8px;
+}
+
+#billBody td:last-child button {
+  color: #dc2626;
+
+  background: #fef2f2;
+}
+
+
+/* =========================================================
+   16. TOTAL AREA
+   ========================================================= */
+
+#billingPage > p {
+  margin: 20px 0 5px;
+
+  color: var(--text-muted);
+
+  font-weight: 600;
+}
+
+#billingPage > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+
+  margin: 8px 0 18px;
+
+  padding: 18px;
+
+  color: var(--navy);
 
   background:
-    rgba(99,91,255,.2);
+    linear-gradient(
+      135deg,
+      #eff6ff,
+      #f8fafc
+    );
 
+  border: 1px solid #dbeafe;
+
+  border-radius: 15px;
+
+  font-size: 25px;
+}
+
+#billingPage > h2 #totalDisplay {
+  color: var(--primary);
+}
+
+#billingPage > h3:last-of-type {
+  padding: 17px;
+
+  margin: 15px 0;
+
+  color: var(--success);
+
+  background: var(--success-light);
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: 14px;
+}
+
+
+/* Billing buttons */
+
+#billingPage > button {
+  margin: 5px 4px 5px 0;
 }
 
 
 /* =========================================================
-   ACCESSIBILITY
+   17. INVENTORY
+   ========================================================= */
+
+#inventoryPage h3::before {
+  content: "📦";
+
+  margin-right: 8px;
+}
+
+#invTable input {
+  min-height: 35px;
+
+  padding: 5px 8px;
+
+  margin: 0;
+
+  border-radius: 8px;
+}
+
+#lowStockWarning {
+  padding: 12px 15px;
+
+  margin-bottom: 15px !important;
+
+  color: #92400e !important;
+
+  background: var(--warning-light);
+
+  border: 1px solid #fde68a;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+}
+
+#lowStockWarning:empty {
+  display: none;
+}
+
+
+/* =========================================================
+   18. CUSTOMER PAGE
+   ========================================================= */
+
+#customersPage h3::before {
+  content: "👥";
+
+  margin-right: 8px;
+}
+
+#custTable td:nth-child(3) {
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   19. EXPENSES / FINANCE
+   ========================================================= */
+
+#expensesPage h3::before {
+  content: "📊";
+
+  margin-right: 8px;
+}
+
+#expensesPage > div[style*="display:flex"] {
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 15px !important;
+}
+
+.stat-box {
+  padding: 20px;
+
+  min-height: 115px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fafc
+    );
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-sm);
+
+  transition: transform var(--transition);
+}
+
+.stat-box:hover {
+  transform: translateY(-3px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.stat-box h4 {
+  margin: 0 0 10px;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+}
+
+.stat-box p {
+  margin: 0;
+
+  color: var(--navy);
+
+  font-size: 27px;
+
+  font-weight: 800;
+}
+
+
+/* Chart */
+
+#salesChart {
+  margin-top: 22px;
+
+  padding: 15px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px;
+}
+
+
+/* Invoice search */
+
+#invoiceSearch {
+  margin-top: 22px;
+
+  max-width: 400px !important;
+}
+
+
+/* =========================================================
+   20. ABOUT PAGE
+   ========================================================= */
+
+#aboutPage {
+  max-width: 900px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#aboutPage h2:first-child {
+  font-size: 28px;
+}
+
+#aboutPage p {
+  color: var(--text-soft) !important;
+}
+
+#aboutPage > div {
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fafc
+    ) !important;
+
+  border: 1px solid var(--border) !important;
+
+  box-shadow: var(--shadow-md) !important;
+}
+
+#aboutPage b {
+  color: var(--navy);
+}
+
+
+/* =========================================================
+   21. LANGUAGE MENU
+   ========================================================= */
+
+#shophelpLanguageMenu {
+  width: 240px;
+
+  background: rgba(255,255,255,0.98) !important;
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px !important;
+
+  box-shadow: var(--shadow-lg) !important;
+
+  backdrop-filter: blur(15px);
+}
+
+#shophelpLanguageMenu label {
+  color: var(--text-soft);
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+#shophelpLanguage {
+  margin-top: 5px;
+}
+
+
+/* =========================================================
+   22. TOAST
+   ========================================================= */
+
+#toast {
+  top: 20px !important;
+  right: 20px !important;
+
+  max-width: min(400px, calc(100vw - 40px));
+
+  padding: 13px 17px !important;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1e293b
+    ) !important;
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  border-radius: 12px !important;
+
+  box-shadow:
+    0 15px 35px rgba(15,23,42,0.25) !important;
+
+  font-size: 13px;
+
+  z-index: 9999 !important;
+}
+
+
+/* =========================================================
+   23. AI ASSISTANT
+   ========================================================= */
+
+#chatApp {
+  position: fixed;
+
+  right: 22px;
+  bottom: 22px;
+
+  width: min(390px, calc(100vw - 30px));
+
+  height: min(600px, calc(100vh - 120px));
+
+  display: flex;
+  flex-direction: column;
+
+  background: rgba(255,255,255,0.97);
+
+  border: 1px solid rgba(226,232,240,0.9);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 25px 70px rgba(15,23,42,0.22);
+
+  overflow: hidden;
+
+  z-index: 2000;
+
+  backdrop-filter: blur(20px);
+}
+
+
+/* AI Header */
+
+#chatTop {
+  min-height: 62px;
+
+  padding: 0 16px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1d4ed8
+    ) !important;
+
+  font-size: 15px;
+
+  font-weight: 750;
+
+  box-shadow:
+    0 5px 20px rgba(15,23,42,0.15);
+}
+
+#chatTop button {
+  color: white !important;
+
+  opacity: 0.85;
+
+  transition: opacity var(--transition);
+}
+
+#chatTop button:hover {
+  opacity: 1;
+}
+
+
+/* Chat messages */
+
+#chatMessages {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 18px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(37,99,235,0.05),
+      transparent 35%
+    ),
+    #f8fafc;
+}
+
+.msg {
+  max-width: 84%;
+
+  padding: 10px 13px;
+
+  margin: 7px 0;
+
+  border-radius: 15px;
+
+  font-size: 13px;
+
+  line-height: 1.55;
+
+  word-break: break-word;
+
+  animation: messageIn 0.2s ease;
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.msg.user {
+  margin-left: auto;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--primary-dark)
+    );
+
+  border-bottom-right-radius: 5px;
+
+  box-shadow:
+    0 5px 12px rgba(37,99,235,0.15);
+}
+
+.msg.bot {
+  margin-right: auto;
+
+  color: var(--text);
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-bottom-left-radius: 5px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* Typing animation */
+
+.typing {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  height: 16px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+
+  background: #94a3b8;
+
+  border-radius: 50%;
+
+  animation: typing 1.2s infinite ease-in-out;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-4px);
+  }
+}
+
+
+/* Chat input */
+
+#chatInputArea {
+  display: flex !important;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 10px;
+
+  background: white;
+
+  border-top: 1px solid var(--border);
+}
+
+#chatInputArea input {
+  flex: 1;
+
+  min-width: 0;
+
+  margin: 0;
+}
+
+#chatInputArea button {
+  min-width: 38px;
+
+  min-height: 38px;
+
+  padding: 7px;
+
+  border-radius: 10px;
+
+  background: #f1f5f9;
+}
+
+#chatInputArea button:hover {
+  background: var(--primary-light);
+
+  color: var(--primary);
+}
+
+#chatInputArea button:last-of-type {
+  color: white;
+
+  background: var(--primary);
+}
+
+
+/* Clear chat */
+
+#chatInputArea button[onclick="clearChat()"] {
+  display: none;
+}
+
+
+/* Floating AI button */
+
+#chatToggleBtn {
+  position: fixed;
+
+  right: 22px;
+  bottom: 22px;
+
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #7c3aed
+    );
+
+  border: 4px solid white;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 12px 30px rgba(37,99,235,0.3);
+
+  cursor: pointer;
+
+  z-index: 1999;
+
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+#chatToggleBtn:hover {
+  transform: translateY(-4px) scale(1.04);
+
+  box-shadow:
+    0 17px 35px rgba(37,99,235,0.38);
+}
+
+#chatToggleBtn span {
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   24. EMPTY STATES
+   ========================================================= */
+
+table td[colspan] {
+  padding: 30px !important;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  font-style: italic;
+}
+
+
+/* =========================================================
+   25. SELECTION
+   ========================================================= */
+
+::selection {
+  color: white;
+
+  background: var(--primary);
+}
+
+
+/* =========================================================
+   26. FOCUS ACCESSIBILITY
    ========================================================= */
 
 button:focus-visible,
 input:focus-visible,
-select:focus-visible{
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(37,99,235,0.22);
 
-  outline:
-    3px solid rgba(99,91,255,.2);
-
-  outline-offset:2px;
-
+  outline-offset: 2px;
 }
 
 
 /* =========================================================
-   MOBILE — APP-LIKE EXPERIENCE
+   27. MOBILE — TABLET
    ========================================================= */
 
-@media(max-width:600px){
+@media (max-width: 850px) {
 
-  body{
-
-    padding:10px;
-
-    background:
-
-      radial-gradient(
-        circle at 0% 0%,
-        rgba(99,91,255,.13),
-        transparent 35%
-      ),
-
-      radial-gradient(
-        circle at 100% 100%,
-        rgba(34,211,238,.1),
-        transparent 35%
-      ),
-
-      #f4f7fb;
-
+  #app {
+    width: min(100% - 20px, 700px);
   }
 
+  #shopTitle {
+    width: calc(100% - 20px);
 
-  /* NAV */
+    padding: 17px;
 
-  .menu{
+    justify-content: center !important;
 
-    flex-direction:column;
-
-    gap:7px;
-
-    padding:9px;
-
-    top:7px;
-
-    border-radius:19px;
-
+    text-align: center;
   }
 
+  .menu {
+    overflow-x: auto;
 
-  .menu button{
+    justify-content: flex-start;
 
-    width:100%;
+    scrollbar-width: none;
 
-    min-height:45px;
-
-    border-radius:13px;
-
+    top: 7px;
   }
 
-
-  /* CARDS */
-
-  .card{
-
-    padding:17px;
-
-    border-radius:19px;
-
-    margin-bottom:16px;
-
+  .menu::-webkit-scrollbar {
+    display: none;
   }
 
+  .menu button {
+    white-space: nowrap;
 
-  /* INPUT */
+    flex-shrink: 0;
 
-  input,
-  select{
-
-    max-width:100%;
-
-    width:100%;
-
-    font-size:16px;
-
-    min-height:46px;
-
+    padding: 10px 13px;
   }
 
-
-  /* BUTTON */
-
-  button{
-
-    min-height:45px;
-
+  .menu .delete-btn {
+    margin-left: 0;
   }
 
+  .card {
+    padding: 19px;
 
-  /* TABLE */
-
-  table{
-
-    display:block;
-
-    overflow-x:auto;
-
-    white-space:nowrap;
-
-    font-size:13px;
-
-    border-radius:16px;
-
+    border-radius: 17px;
   }
 
+  #inventoryPage > input {
+    width: 100%;
+  }
+
+  #expensesPage > div[style*="display:flex"] {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  table {
+    display: block;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+  }
+
+  #chatApp {
+    right: 10px;
+    bottom: 10px;
+
+    width: calc(100vw - 20px);
+
+    height: min(650px, calc(100vh - 80px));
+  }
+
+  #chatToggleBtn {
+    right: 15px;
+    bottom: 15px;
+  }
+}
+
+
+/* =========================================================
+   28. MOBILE — PHONE
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+  body {
+    font-size: 14px;
+  }
+
+  #shopTitle {
+    margin-top: 14px !important;
+    margin-bottom: 14px !important;
+
+    border-radius: 18px;
+  }
+
+  #shopTitle img {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  #shopTitle h1 {
+    font-size: 26px !important;
+  }
+
+  #app {
+    width: calc(100% - 14px);
+
+    margin-bottom: 35px;
+  }
+
+  .menu {
+    margin-bottom: 12px;
+
+    border-radius: 13px;
+  }
+
+  .menu button {
+    font-size: 12px;
+
+    padding: 9px 10px;
+  }
+
+  .menu button i {
+    margin-right: 3px;
+  }
+
+  .card {
+    padding: 15px;
+
+    border-radius: 15px;
+  }
+
+  .card h3 {
+    font-size: 19px;
+  }
+
+  #loginPage {
+    width: calc(100% - 20px);
+
+    padding: 24px !important;
+
+    margin-top: 15px !important;
+  }
+
+  #billingPage > button {
+    width: 100%;
+
+    margin: 4px 0;
+  }
+
+  #billingPage > h2 {
+    font-size: 22px;
+  }
+
+  #expensesPage > div[style*="display:flex"] {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-box p {
+    font-size: 24px;
+  }
 
   th,
-  td{
+  td {
+    padding: 10px;
 
-    padding:9px;
-
+    font-size: 12px;
   }
 
+  #chatApp {
+    right: 7px;
+    bottom: 7px;
 
-  /* PRODUCT GRID */
+    width: calc(100vw - 14px);
 
-  .billing-grid{
+    height: calc(100vh - 80px);
 
-    grid-template-columns:
-      repeat(2,1fr);
-
-    gap:9px;
-
+    border-radius: 18px;
   }
 
+  #chatToggleBtn {
+    width: 54px;
+    height: 54px;
 
-  .p-item{
-
-    padding:14px 9px;
-
-    border-radius:15px;
-
+    right: 13px;
+    bottom: 13px;
   }
 
-
-  /* STATS */
-
-  .stat-box{
-
-    min-width:100%;
-
-    padding:19px;
-
-    border-radius:17px;
-
+  #chatInputArea {
+    gap: 4px;
   }
 
+  #chatInputArea button {
+    min-width: 35px;
 
-  /* CHAT */
-
-  #chatApp{
-
-    left:8px;
-
-    right:8px;
-
-    bottom:82px;
-
-    width:auto;
-
-    height:76vh;
-
-    border-radius:23px;
-
+    padding: 5px;
   }
 
-
-  #chatToggleBtn{
-
-    right:15px;
-
-    bottom:15px;
-
-    width:61px;
-
-    height:61px;
-
+  #chatInputArea input {
+    font-size: 12px;
   }
 
+  .msg {
+    max-width: 90%;
 
-  #chatToggleBtn span{
-
-    font-size:27px;
-
+    font-size: 12px;
   }
 
+  #shophelpLanguageMenu {
+    top: 60px !important;
 
-  /* CHAT INPUT */
+    right: 10px !important;
 
-  #chatInputArea{
-
-    gap:6px;
-
-    padding:8px;
-
+    width: 220px;
   }
-
-
-  #chatInput{
-
-    height:41px;
-
-    font-size:15px;
-
-  }
-
-
-  #chatInputArea button{
-
-    width:40px;
-
-    height:40px;
-
-    min-width:40px;
-
-  }
-
-
-  #chatInputArea button:last-child{
-
-    padding:
-      0 10px;
-
-    font-size:12px;
-
-  }
-
-
-  /* DROPDOWN */
-
-  #productDropdown,
-  #custDropdown{
-
-    max-height:150px;
-
-    font-size:14px;
-
-  }
-
-
-  /* INVENTORY */
-
-  #invTable td,
-  #invTable th{
-
-    font-size:12px;
-
-  }
-
-
-  /* LOGIN */
-
-  #loginPage{
-
-    margin:
-      35px auto;
-
-  }
-
-
-  #loginPage .card{
-
-    padding:25px 18px;
-
-  }
-
-
-  /* TOAST */
-
-  #toast{
-
-    left:12px;
-
-    right:12px;
-
-    top:12px;
-
-    text-align:center;
-
-  }
-
 }
 
 
 /* =========================================================
-   EXTRA SMALL PHONES
+   29. REDUCED MOTION
    ========================================================= */
 
-@media(max-width:380px){
+@media (prefers-reduced-motion: reduce) {
 
-  body{
-    padding:7px;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+
+    scroll-behavior: auto !important;
+
+    transition-duration: 0.01ms !important;
   }
-
-  .card{
-    padding:14px;
-  }
-
-  .billing-grid{
-    gap:7px;
-  }
-
-  .p-item{
-    padding:12px 6px;
-    font-size:13px;
-  }
-
 }
 
 
 /* =========================================================
-   FINAL POLISH
+   30. PRINT
    ========================================================= */
 
-button,
-.menu button,
-.p-item{
+@media print {
 
-  -webkit-tap-highlight-color:
-    transparent;
+  body {
+    background: white;
+  }
 
+  .menu,
+  #chatApp,
+  #chatToggleBtn,
+  #toast {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+
+    border: 0;
+  }
 }
-
-#billingPage,
-#inventoryPage,
-#customersPage,
-#expensesPage,
-#dashboardPage{
-
-  animation:
-    slide .35s ease;
-
-}
-```
