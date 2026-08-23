@@ -1,58 +1,85 @@
-/* =========================================================
+/* ============================================================
    SHOPHELP PRO
-   POLISHED UI — SAFE DROP-IN CSS
-   ---------------------------------------------------------
-   IMPORTANT:
-   - No HTML changes required
-   - No JavaScript changes required
-   - Existing IDs/classes preserved
-   - Keeps the original ShopHelp Pro feel
-   - Focuses on clean spacing, hierarchy and usability
-   ========================================================= */
+   COMPLETE PREMIUM CSS
+   ------------------------------------------------------------
+   VERSION: Premium Landing + Professional Dashboard
+   HTML / JS SAFE
+   ============================================================ */
 
 
-/* =========================================================
-   1. CORE
-   ========================================================= */
+/* ============================================================
+   01 — DESIGN SYSTEM
+   ============================================================ */
 
 :root {
-  --blue: #2563eb;
-  --blue-dark: #1d4ed8;
-  --blue-soft: #eff6ff;
 
-  --green: #16a34a;
-  --green-soft: #f0fdf4;
+  /* Brand */
+  --sh-blue: #2563eb;
+  --sh-blue-dark: #1d4ed8;
+  --sh-blue-deep: #1e40af;
+  --sh-blue-light: #eff6ff;
 
-  --red: #dc2626;
-  --red-soft: #fef2f2;
+  --sh-cyan: #0ea5e9;
 
-  --orange: #d97706;
-  --orange-soft: #fffbeb;
+  /* Core */
+  --sh-navy: #0f172a;
+  --sh-navy-2: #172554;
 
-  --dark: #0f172a;
-  --text: #1e293b;
-  --muted: #64748b;
+  --sh-text: #0f172a;
+  --sh-text-2: #334155;
+  --sh-muted: #64748b;
 
-  --bg: #f6f8fc;
-  --white: #ffffff;
+  --sh-bg: #f4f7fb;
+  --sh-white: #ffffff;
 
-  --border: #e2e8f0;
-  --border-soft: #eef2f6;
+  --sh-border: #e2e8f0;
+  --sh-border-light: #eef2f7;
 
-  --shadow-1: 0 2px 8px rgba(15, 23, 42, 0.05);
-  --shadow-2: 0 8px 25px rgba(15, 23, 42, 0.07);
-  --shadow-3: 0 18px 45px rgba(15, 23, 42, 0.11);
+  /* Status */
+  --sh-green: #16a34a;
+  --sh-green-dark: #15803d;
+  --sh-green-light: #f0fdf4;
 
-  --radius: 14px;
-  --radius-small: 10px;
+  --sh-red: #dc2626;
+  --sh-red-dark: #b91c1c;
+  --sh-red-light: #fef2f2;
 
-  --transition: 0.18s ease;
+  --sh-orange: #d97706;
+  --sh-orange-light: #fffbeb;
+
+  --sh-purple: #7c3aed;
+
+  /* Shadows */
+  --sh-shadow-xs:
+    0 1px 3px rgba(15, 23, 42, 0.04);
+
+  --sh-shadow-sm:
+    0 4px 12px rgba(15, 23, 42, 0.06);
+
+  --sh-shadow-md:
+    0 10px 28px rgba(15, 23, 42, 0.08);
+
+  --sh-shadow-lg:
+    0 20px 55px rgba(15, 23, 42, 0.12);
+
+  --sh-shadow-blue:
+    0 12px 30px rgba(37, 99, 235, 0.18);
+
+  /* Radius */
+  --sh-radius-sm: 9px;
+  --sh-radius-md: 13px;
+  --sh-radius-lg: 18px;
+  --sh-radius-xl: 24px;
+  --sh-radius-2xl: 30px;
+
+  /* Motion */
+  --sh-transition: 180ms ease;
 }
 
 
-/* =========================================================
-   2. RESET
-   ========================================================= */
+/* ============================================================
+   02 — RESET
+   ============================================================ */
 
 * {
   box-sizing: border-box;
@@ -64,14 +91,12 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
-
-  background: var(--bg);
-
-  color: var(--text);
+  min-height: 100vh;
 
   font-family:
     Inter,
+    ui-sans-serif,
+    system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -79,14 +104,29 @@ body {
     Arial,
     sans-serif;
 
+  color: var(--sh-text);
+
   line-height: 1.5;
+
+  background:
+    radial-gradient(
+      circle at 5% 0%,
+      rgba(37, 99, 235, 0.075),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 95% 5%,
+      rgba(14, 165, 233, 0.055),
+      transparent 24%
+    ),
+    var(--sh-bg);
 }
 
 button,
 input,
 select,
 textarea {
-  font-family: inherit;
+  font: inherit;
 }
 
 button {
@@ -101,10 +141,15 @@ img {
   display: none !important;
 }
 
+::selection {
+  color: #fff;
+  background: var(--sh-blue);
+}
 
-/* =========================================================
-   3. SCROLLBAR
-   ========================================================= */
+
+/* ============================================================
+   03 — SCROLLBAR
+   ============================================================ */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -112,12 +157,12 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #eef2f7;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 20px;
+  border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -125,146 +170,387 @@ img {
 }
 
 
-/* =========================================================
-   4. TOP BRAND
-   Keep existing ShopHelp logo/header style
-   ========================================================= */
+/* ============================================================
+   04 — OUTSIDE / BRAND AREA
+   ============================================================ */
+
+/*
+   The original HTML has:
+   #shopTitle
+   logo.jpeg
+   ShopHelp Pro
+*/
 
 #shopTitle {
-  width: min(1100px, calc(100% - 30px));
 
-  margin: 25px auto 20px !important;
+  position: relative;
 
-  padding: 10px 0;
+  width: min(1120px, calc(100% - 32px));
 
-  gap: 14px !important;
+  min-height: 145px;
+
+  margin: 24px auto 18px !important;
+
+  padding: 24px 28px;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  gap: 20px !important;
+
+  flex-wrap: wrap;
+
+  overflow: hidden;
+
+  border-radius: var(--sh-radius-2xl);
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.98),
+      rgba(248,250,252,0.96)
+    );
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+
+  isolation: isolate;
 }
 
+
+/* Decorative blue glow */
+
+#shopTitle::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  left: -120px;
+  top: -170px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(37,99,235,0.15),
+      rgba(37,99,235,0)
+    );
+
+  pointer-events: none;
+}
+
+
+/* Decorative cyan glow */
+
+#shopTitle::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 230px;
+  height: 230px;
+
+  right: -100px;
+  bottom: -160px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(14,165,233,0.12),
+      rgba(14,165,233,0)
+    );
+
+  pointer-events: none;
+}
+
+
+/* Logo */
+
 #shopTitle img {
+
+  position: relative;
+  z-index: 1;
+
   width: 78px !important;
   height: 78px !important;
 
-  border-radius: 18px !important;
-
   object-fit: contain;
 
-  box-shadow:
-    0 5px 18px rgba(37, 99, 235, 0.12);
-}
-
-#shopTitle h1 {
-  font-size: 38px !important;
-
-  font-weight: 850 !important;
-
-  color: var(--dark) !important;
-
-  letter-spacing: -1px;
-}
-
-
-/* =========================================================
-   5. LOGIN
-   DO NOT CHANGE THE GOOD PART
-   ========================================================= */
-
-#loginPage {
-  max-width: 400px !important;
-
-  margin: 25px auto 50px !important;
-
-  padding: 28px !important;
-
-  text-align: center;
-
-  background: #ffffff;
-
-  border: 1px solid var(--border);
-
-  border-radius: 18px !important;
-
-  box-shadow:
-    0 12px 35px rgba(15, 23, 42, 0.08);
-}
-
-#loginPage h2 {
-  margin: 0 0 20px;
-
-  color: var(--dark);
-
-  font-size: 24px;
-
-  font-weight: 750;
-}
-
-#loginPage input {
-  width: 100%;
-
-  margin: 7px 0;
-
-  padding: 12px 14px;
-
-  border: 1px solid #d8e0ea;
-
-  border-radius: 10px;
+  border-radius: 20px !important;
 
   background: #fff;
 
-  color: var(--text);
+  box-shadow:
+    0 12px 28px rgba(37, 99, 235, 0.16),
+    0 0 0 6px rgba(37, 99, 235, 0.045);
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+#shopTitle img:hover {
+
+  transform:
+    translateY(-3px)
+    rotate(-1deg);
+
+  box-shadow:
+    0 16px 34px rgba(37, 99, 235, 0.22),
+    0 0 0 7px rgba(37, 99, 235, 0.055);
+}
+
+
+/* Brand name */
+
+#shopTitle h1 {
+
+  position: relative;
+  z-index: 1;
+
+  margin: 0 !important;
+
+  font-size: clamp(32px, 5vw, 44px) !important;
+
+  line-height: 1;
+
+  font-weight: 900 !important;
+
+  letter-spacing: -1.8px;
+
+  color: var(--sh-navy) !important;
+
+  text-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+
+/* ============================================================
+   05 — LOGIN
+   ============================================================ */
+
+#loginPage {
+
+  position: relative;
+
+  width: min(420px, calc(100% - 32px));
+
+  margin: 18px auto 55px !important;
+
+  padding: 31px !important;
+
+  overflow: hidden;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.98),
+      rgba(248,250,252,0.98)
+    ) !important;
+
+  border: 1px solid rgba(226,232,240,0.9);
+
+  border-radius: var(--sh-radius-xl) !important;
+
+  box-shadow:
+    0 25px 70px rgba(15,23,42,0.11),
+    0 4px 14px rgba(15,23,42,0.04);
+}
+
+
+/* Login decorative glow */
+
+#loginPage::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  right: -90px;
+  top: -90px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(37,99,235,0.12),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+#loginPage::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 130px;
+  height: 130px;
+
+  left: -70px;
+  bottom: -70px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(124,58,237,0.07),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+#loginPage h2 {
+
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 22px;
+
+  color: var(--sh-navy);
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* Login fields */
+
+#loginPage input {
+
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+
+  height: 46px;
+
+  margin: 6px 0;
+
+  padding: 11px 14px;
+
+  color: var(--sh-text);
+
+  background: #ffffff;
+
+  border: 1px solid #d8e1eb;
+
+  border-radius: 11px;
 
   outline: none;
 
-  transition: var(--transition);
+  transition:
+    border-color var(--sh-transition),
+    box-shadow var(--sh-transition),
+    transform var(--sh-transition);
+}
+
+#loginPage input:hover {
+
+  border-color: #bfcddd;
 }
 
 #loginPage input:focus {
-  border-color: var(--blue);
+
+  border-color: var(--sh-blue);
 
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.10);
+    0 0 0 4px rgba(37,99,235,0.09);
 }
+
+
+/* Login buttons */
 
 #loginPage .btn-main {
-  min-width: 105px;
+
+  position: relative;
+  z-index: 1;
+
+  min-width: 112px;
 
   margin: 4px;
+
+  padding: 11px 18px;
+
+  border-radius: 10px;
 }
 
 
-/* =========================================================
-   6. MAIN APPLICATION
-   ========================================================= */
+/* ============================================================
+   06 — APP CONTAINER
+   ============================================================ */
 
 #app {
-  width: min(1100px, calc(100% - 30px));
 
-  margin: 0 auto 50px;
+  width: min(1120px, calc(100% - 32px));
+
+  margin: 0 auto 60px;
 }
 
 
-/* =========================================================
-   7. NAVIGATION
-   Keep it simple — no unnecessary redesign
-   ========================================================= */
+/* ============================================================
+   07 — APP NAVIGATION
+   ============================================================ */
 
 .menu {
+
+  position: sticky;
+
+  top: 12px;
+
+  z-index: 1000;
+
   display: flex;
 
   align-items: center;
 
-  gap: 5px;
+  gap: 6px;
+
+  width: 100%;
+
+  margin-bottom: 20px;
 
   padding: 7px;
 
-  margin-bottom: 18px;
+  background:
+    rgba(255,255,255,0.92);
 
-  background: #ffffff;
+  border: 1px solid rgba(226,232,240,0.92);
 
-  border: 1px solid var(--border);
+  border-radius: 15px;
 
-  border-radius: 13px;
+  box-shadow:
+    0 8px 25px rgba(15,23,42,0.07);
 
-  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(18px);
 
   overflow-x: auto;
 
@@ -275,117 +561,165 @@ img {
   display: none;
 }
 
+
 .menu button {
+
   flex-shrink: 0;
 
   padding: 10px 13px;
 
   border: none;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background: transparent;
 
   color: #475569;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  font-weight: 650;
+  font-weight: 700;
 
   white-space: nowrap;
 
   transition:
-    background var(--transition),
-    color var(--transition);
+    background var(--sh-transition),
+    color var(--sh-transition),
+    transform var(--sh-transition);
 }
 
 .menu button:hover {
-  background: #f1f5f9;
 
-  color: var(--blue);
+  color: var(--sh-blue);
+
+  background: var(--sh-blue-light);
+
+  transform: translateY(-1px);
 }
 
+
 .menu button.active {
+
   color: #ffffff;
 
-  background: var(--blue);
+  background:
+    linear-gradient(
+      135deg,
+      var(--sh-blue),
+      var(--sh-blue-dark)
+    );
 
   box-shadow:
-    0 3px 9px rgba(37, 99, 235, 0.20);
+    0 5px 14px rgba(37,99,235,0.22);
 }
 
 .menu button i {
   margin-right: 4px;
 }
 
+
+/* Logout */
+
 .menu .delete-btn {
+
   margin-left: auto;
 }
 
 
-/* =========================================================
-   8. MAIN CARDS
-   ========================================================= */
+/* ============================================================
+   08 — MAIN CARDS
+   ============================================================ */
 
 .card {
-  margin-bottom: 18px;
 
-  padding: 23px;
+  position: relative;
 
-  background: #ffffff;
+  margin-bottom: 20px;
 
-  border: 1px solid var(--border);
+  padding: 25px;
 
-  border-radius: 15px;
+  background:
+    rgba(255,255,255,0.97);
 
-  box-shadow: var(--shadow-1);
+  border: 1px solid var(--sh-border);
+
+  border-radius: var(--sh-radius-lg);
+
+  box-shadow: var(--sh-shadow-sm);
+
+  animation:
+    shophelpPageIn 220ms ease;
 }
+
+@keyframes shophelpPageIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .card h2 {
+
   margin-top: 0;
 
-  color: var(--dark);
+  color: var(--sh-navy);
+
+  letter-spacing: -0.6px;
 }
 
+
 .card h3 {
-  margin: 0 0 18px;
 
-  padding-bottom: 13px;
+  margin: 0 0 20px;
 
-  color: var(--dark);
+  padding-bottom: 14px;
+
+  color: var(--sh-navy);
 
   font-size: 21px;
 
-  font-weight: 750;
+  font-weight: 800;
 
-  border-bottom: 1px solid var(--border-soft);
+  letter-spacing: -0.4px;
+
+  border-bottom:
+    1px solid var(--sh-border-light);
 }
 
 
-/* =========================================================
-   9. GENERAL INPUTS
-   ========================================================= */
+/* ============================================================
+   09 — FORM CONTROLS
+   ============================================================ */
 
 input,
 select,
 textarea {
-  min-height: 42px;
+
+  min-height: 43px;
 
   padding: 9px 12px;
 
-  border: 1px solid #d7e0ea;
-
-  border-radius: 9px;
+  color: var(--sh-text);
 
   background: #ffffff;
 
-  color: var(--text);
+  border: 1px solid #d7e0ea;
+
+  border-radius: 10px;
 
   outline: none;
 
   transition:
-    border-color var(--transition),
-    box-shadow var(--transition);
+    border-color var(--sh-transition),
+    box-shadow var(--sh-transition),
+    background var(--sh-transition);
 }
 
 input::placeholder {
@@ -395,236 +729,374 @@ input::placeholder {
 input:hover,
 select:hover,
 textarea:hover {
-  border-color: #c5d0dd;
+
+  border-color: #bfccda;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--blue);
+
+  border-color: var(--sh-blue);
 
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.09);
+    0 0 0 4px rgba(37,99,235,0.08);
+
+  background: #fff;
 }
 
 
-/* =========================================================
-   10. BUTTONS
-   ========================================================= */
+/* ============================================================
+   10 — BUTTON SYSTEM
+   ============================================================ */
 
 button {
+
   border: none;
 
   border-radius: 9px;
 
-  padding: 9px 13px;
+  padding: 9px 14px;
+
+  color: var(--sh-text);
 
   background: #eef2f7;
 
-  color: var(--text);
-
-  font-weight: 650;
+  font-weight: 700;
 
   transition:
-    background var(--transition),
-    color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    background var(--sh-transition),
+    color var(--sh-transition),
+    box-shadow var(--sh-transition),
+    transform var(--sh-transition);
 }
 
 button:hover {
+
   transform: translateY(-1px);
 }
 
 button:active {
+
   transform: translateY(0);
+}
+
+button:disabled {
+
+  opacity: .55;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 
 
 /* Primary */
 
 .btn-main {
+
   color: #ffffff !important;
 
-  background: var(--blue) !important;
+  background:
+    linear-gradient(
+      135deg,
+      var(--sh-blue),
+      var(--sh-blue-dark)
+    ) !important;
 
   box-shadow:
-    0 3px 9px rgba(37, 99, 235, 0.16);
+    0 5px 13px rgba(37,99,235,0.18);
 }
 
 .btn-main:hover {
-  background: var(--blue-dark) !important;
 
   box-shadow:
-    0 5px 13px rgba(37, 99, 235, 0.22);
+    0 8px 20px rgba(37,99,235,0.25);
 }
 
 
 /* Save */
 
 .btn-save {
+
   color: #ffffff !important;
 
-  background: var(--green) !important;
-}
+  background:
+    linear-gradient(
+      135deg,
+      var(--sh-green),
+      var(--sh-green-dark)
+    ) !important;
 
-.btn-save:hover {
-  background: #15803d !important;
+  box-shadow:
+    0 4px 12px rgba(22,163,74,0.14);
 }
 
 
 /* Delete */
 
 .delete-btn {
+
   color: #ffffff !important;
 
-  background: var(--red) !important;
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      var(--sh-red)
+    ) !important;
 }
 
-.delete-btn:hover {
-  background: #b91c1c !important;
-}
 
-
-/* =========================================================
-   11. BILLING
-   ========================================================= */
+/* ============================================================
+   11 — BILLING PAGE
+   ============================================================ */
 
 #billingPage h3 {
+
   display: flex;
 
   align-items: center;
 
-  gap: 8px;
+  gap: 9px;
 }
 
 #billingPage h3::before {
-  content: "🛒";
+
+  content: "🧾";
+
+  width: 35px;
+  height: 35px;
 
   display: inline-flex;
 
   align-items: center;
   justify-content: center;
 
-  width: 32px;
-  height: 32px;
+  border-radius: 10px;
 
-  border-radius: 9px;
+  background: var(--sh-blue-light);
 
-  background: var(--blue-soft);
-
-  font-size: 16px;
+  font-size: 17px;
 }
 
 
-/* Billing search fields */
+/* Search wrapper */
 
-#billingPage input {
-  max-width: 100%;
+#billingPage
+div[style*="position:relative"] {
+
+  position: relative;
+
+  width: 100%;
+
+  max-width: 430px !important;
+
+  margin-bottom: 9px;
 }
 
 
-/* Customer/product dropdown */
+/* Billing search */
+
+#billingPage #custSearch,
+#billingPage #productSearch {
+
+  width: 100%;
+
+  min-height: 45px;
+}
+
+
+/* Dropdowns */
 
 #custDropdown,
 #productDropdown {
-  background: #ffffff !important;
 
-  border: 1px solid var(--border) !important;
+  position: absolute !important;
 
-  border-radius: 10px !important;
+  left: 0;
 
-  box-shadow: var(--shadow-3) !important;
+  right: 0;
+
+  top: calc(100% + 4px);
+
+  max-height: 260px;
 
   overflow-y: auto;
 
-  z-index: 1000;
+  padding: 5px;
+
+  background: #ffffff !important;
+
+  border: 1px solid var(--sh-border) !important;
+
+  border-radius: 12px !important;
+
+  box-shadow:
+    0 18px 45px rgba(15,23,42,0.14) !important;
+
+  z-index: 5000;
 }
 
-#custDropdown div,
-#productDropdown div {
-  padding: 10px 12px !important;
+#custDropdown > div,
+#productDropdown > div {
 
-  border-bottom: 1px solid var(--border-soft);
+  padding: 11px 12px !important;
+
+  border-radius: 8px;
 
   cursor: pointer;
 
-  transition: background var(--transition);
+  transition:
+    background var(--sh-transition),
+    color var(--sh-transition);
 }
 
-#custDropdown div:hover,
-#productDropdown div:hover {
-  background: var(--blue-soft);
+#custDropdown > div:hover,
+#productDropdown > div:hover {
+
+  color: var(--sh-blue);
+
+  background: var(--sh-blue-light);
 }
 
 
-/* Billing table */
+/* Barcode */
 
-#billTable {
-  margin-top: 16px;
+#manualBarcode {
+
+  max-width: 430px;
+
+  margin-top: 4px;
 }
 
 
-/* Billing totals */
+/* Scanner */
 
-#billingPage > p {
-  margin-bottom: 4px;
+#reader {
 
-  color: var(--muted);
-
-  font-size: 13px;
-
-  font-weight: 650;
+  margin-top: 13px;
 }
 
-#billingPage > h2 {
-  margin: 8px 0 14px;
+#scannerBox {
 
-  padding: 14px 16px;
+  position: relative;
 
-  color: var(--dark);
+  width: 100% !important;
+
+  max-width: 390px !important;
+
+  margin: 12px auto !important;
+
+  padding: 12px !important;
 
   background: #f8fafc;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--sh-border);
+
+  border-radius: 16px !important;
+
+  box-shadow: var(--sh-shadow-sm);
+}
+
+#scanner {
 
   border-radius: 11px;
 
-  font-size: 23px;
+  overflow: hidden;
+}
+
+
+/* Bill table */
+
+#billTable {
+
+  margin-top: 18px;
+}
+
+
+/* Total */
+
+#billingPage > p {
+
+  margin: 20px 0 5px;
+
+  color: var(--sh-muted);
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+#billingPage > h2 {
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 5px;
+
+  margin: 7px 0 15px;
+
+  padding: 16px 18px;
+
+  color: var(--sh-navy);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #f8fafc
+    );
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 13px;
+
+  font-size: 25px;
 }
 
 #totalDisplay,
 #finalTotal {
-  color: var(--blue);
+
+  color: var(--sh-blue);
 }
 
+
+/* Final total */
+
 #billingPage > h3:last-of-type {
+
   margin-top: 12px;
 
-  padding: 13px 15px;
+  padding: 15px;
 
-  color: var(--green);
+  color: var(--sh-green);
 
-  background: var(--green-soft);
+  background: var(--sh-green-light);
 
-  border: 1px solid #bbf7d0;
+  border:
+    1px solid #bbf7d0;
 
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 
 /* Billing action buttons */
 
 #billingPage > button {
-  margin: 3px 3px 3px 0;
+
+  margin: 4px 4px 4px 0;
 }
 
 
-/* =========================================================
-   12. BILL QUANTITY CONTROLS
-   ========================================================= */
+/* ============================================================
+   12 — BILL TABLE
+   ============================================================ */
 
 #billBody button {
+
   min-width: 29px;
 
   min-height: 29px;
@@ -636,19 +1108,16 @@ button:active {
   font-size: 12px;
 }
 
-#billBody button:hover {
-  background: #e2e8f0;
-}
 
-
-/* =========================================================
-   13. TABLE SYSTEM
-   ========================================================= */
+/* ============================================================
+   13 — ALL TABLES
+   ============================================================ */
 
 table {
+
   width: 100%;
 
-  margin-top: 16px;
+  margin-top: 18px;
 
   border-collapse: separate;
 
@@ -656,60 +1125,82 @@ table {
 
   background: #ffffff;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--sh-border);
 
-  border-radius: 11px;
+  border-radius: 13px;
 
   overflow: hidden;
+
+  box-shadow: var(--sh-shadow-xs);
 }
 
-thead,
-table tr:first-child {
+
+thead {
+
   background: #f8fafc;
 }
 
-th {
-  padding: 11px 13px;
 
-  text-align: left;
+th {
+
+  padding: 12px 14px;
 
   color: #475569;
 
   background: #f8fafc;
 
-  border-bottom: 1px solid var(--border);
+  text-align: left;
 
-  font-size: 12px;
+  font-size: 11px;
 
-  font-weight: 750;
+  font-weight: 800;
 
-  white-space: nowrap;
+  letter-spacing: .045em;
+
+  text-transform: uppercase;
+
+  border-bottom:
+    1px solid var(--sh-border);
 }
 
+
 td {
-  padding: 11px 13px;
+
+  padding: 12px 14px;
 
   color: #334155;
 
-  border-bottom: 1px solid var(--border-soft);
-
   font-size: 13px;
+
+  border-bottom:
+    1px solid var(--sh-border-light);
 
   vertical-align: middle;
 }
 
-tbody tr:last-child td {
-  border-bottom: none;
+
+tbody tr {
+
+  transition:
+    background var(--sh-transition);
 }
 
 tbody tr:hover {
-  background: #fafcff;
+
+  background: #f8fbff;
+}
+
+tbody tr:last-child td {
+
+  border-bottom: none;
 }
 
 
-/* Table action buttons */
+/* Action buttons */
 
 td button {
+
   margin: 2px;
 
   padding: 7px 10px;
@@ -718,176 +1209,213 @@ td button {
 }
 
 
-/* =========================================================
-   14. INVENTORY
-   ========================================================= */
+/* ============================================================
+   14 — INVENTORY
+   ============================================================ */
 
 #inventoryPage h3::before {
+
   content: "📦";
 
-  margin-right: 7px;
+  margin-right: 8px;
 }
 
 #inventoryPage > input {
-  margin: 3px;
 
-  max-width: 220px;
+  max-width: 240px;
+
+  margin: 3px;
 }
 
+
 #invTable input {
-  width: 70px;
+
+  width: 70px !important;
 
   min-height: 34px;
 
-  padding: 5px 7px;
+  padding: 5px 8px;
 
   margin: 0;
-}
 
-#invTable td:nth-child(4) input {
   text-align: center;
+
+  border-radius: 8px;
 }
 
 
 /* Low stock */
 
 #lowStockWarning {
+
   margin: 10px 0 !important;
 
-  padding: 10px 13px;
+  padding: 11px 14px;
 
   color: #92400e !important;
 
-  background: var(--orange-soft);
+  background: var(--sh-orange-light);
 
-  border: 1px solid #fde68a;
+  border:
+    1px solid #fde68a;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   font-size: 13px;
 
-  font-weight: 650;
+  font-weight: 700;
 }
 
 #lowStockWarning:empty {
+
   display: none;
 }
 
 
-/* =========================================================
-   15. CUSTOMERS
-   ========================================================= */
+/* ============================================================
+   15 — CUSTOMERS
+   ============================================================ */
 
 #customersPage h3::before {
+
   content: "👥";
 
-  margin-right: 7px;
+  margin-right: 8px;
 }
 
 #customersPage > input {
-  max-width: 300px;
+
+  max-width: 320px;
 }
+
+
+/* Customer debt */
 
 #custTable td:nth-child(3) {
-  font-weight: 700;
+
+  font-weight: 800;
 }
 
 
-/* Debt colours generated inline by JS remain intact */
-
-
-/* =========================================================
-   16. EXPENSES / FINANCES
-   ========================================================= */
+/* ============================================================
+   16 — EXPENSES / FINANCE
+   ============================================================ */
 
 #expensesPage h3::before {
+
   content: "📊";
 
-  margin-right: 7px;
+  margin-right: 8px;
 }
+
+
+/* Expense inputs */
 
 #expensesPage > input,
 #expensesPage > select {
+
   max-width: 300px;
 
   margin: 3px;
 }
 
 
-/* Finance summary boxes */
+/* Stats */
 
 .stat-box {
-  padding: 16px;
 
-  background: #ffffff;
+  min-height: 110px;
 
-  border: 1px solid var(--border);
+  padding: 18px;
 
-  border-radius: 12px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fafc
+    );
 
-  box-shadow: var(--shadow-1);
+  border:
+    1px solid var(--sh-border);
+
+  border-radius: 15px;
+
+  box-shadow: var(--sh-shadow-sm);
 
   transition:
-    box-shadow var(--transition),
-    transform var(--transition);
+    transform var(--sh-transition),
+    box-shadow var(--sh-transition);
 }
 
 .stat-box:hover {
+
   transform: translateY(-2px);
 
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--sh-shadow-md);
 }
 
 .stat-box h4 {
-  margin: 0 0 6px;
 
-  color: var(--muted);
+  margin: 0 0 8px;
+
+  color: var(--sh-muted);
 
   font-size: 12px;
 
-  font-weight: 700;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: .035em;
 }
 
 .stat-box p {
+
   margin: 0;
 
-  color: var(--dark);
+  color: var(--sh-navy);
 
-  font-size: 23px;
+  font-size: 27px;
 
-  font-weight: 800;
+  font-weight: 850;
 }
 
 
 /* Chart */
 
 #salesChart {
-  display: block;
 
   width: 100% !important;
 
-  max-height: 330px;
-
   margin-top: 20px;
 
-  padding: 10px;
+  padding: 8px;
+
+  background: #ffffff;
+
+  border:
+    1px solid var(--sh-border);
+
+  border-radius: 13px;
 }
 
 
 /* Invoice search */
 
 #invoiceSearch {
-  max-width: 300px !important;
 
-  margin-top: 15px;
+  max-width: 320px !important;
+
+  margin-top: 17px;
 }
 
 
-/* =========================================================
-   17. ABOUT PAGE
-   ========================================================= */
+/* ============================================================
+   17 — ABOUT
+   ============================================================ */
 
 #aboutPage {
+
   max-width: 900px;
 
   margin-left: auto;
@@ -896,136 +1424,154 @@ td button {
 }
 
 #aboutPage > p {
+
   line-height: 1.8 !important;
 
-  color: #475569 !important;
+  color: #334155 !important;
 }
 
 #aboutPage > div {
-  padding: 22px !important;
 
-  background: #f8fafc !important;
+  position: relative;
 
-  border: 1px solid var(--border) !important;
+  overflow: hidden;
 
-  border-radius: 15px !important;
+  margin-top: 25px;
 
-  box-shadow: none !important;
+  padding: 25px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #f8fbff
+    ) !important;
+
+  border:
+    1px solid var(--sh-border) !important;
+
+  border-radius: 20px !important;
+
+  box-shadow:
+    0 10px 30px rgba(15,23,42,0.07) !important;
 }
 
-#aboutPage a {
-  color: var(--blue);
+#aboutPage > div::before {
 
-  font-weight: 600;
+  content: "";
+
+  position: absolute;
+
+  width: 160px;
+  height: 160px;
+
+  right: -80px;
+  top: -80px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(37,99,235,0.055);
 }
 
 
-/* =========================================================
-   18. LANGUAGE MENU
-   ========================================================= */
+/* ============================================================
+   18 — LANGUAGE MENU
+   ============================================================ */
 
 #shophelpLanguageMenu {
-  min-width: 210px;
 
-  padding: 14px !important;
+  min-width: 225px;
 
-  background: #ffffff !important;
+  padding: 15px !important;
 
-  border: 1px solid var(--border);
+  background:
+    rgba(255,255,255,0.98) !important;
 
-  border-radius: 12px !important;
-
-  box-shadow: var(--shadow-3) !important;
-}
-
-#shophelpLanguageMenu label {
-  color: var(--text);
-
-  font-size: 13px;
-
-  font-weight: 700;
-}
-
-#shophelpLanguageMenu select {
-  width: 100%;
-
-  margin-top: 4px !important;
-}
-
-
-/* =========================================================
-   19. SCANNER
-   ========================================================= */
-
-#reader {
-  margin-top: 12px;
-}
-
-#scannerBox {
-  padding: 12px !important;
-
-  background: #f8fafc;
-
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--sh-border);
 
   border-radius: 13px !important;
 
-  box-shadow: var(--shadow-1);
+  box-shadow:
+    0 18px 45px rgba(15,23,42,0.14) !important;
+
+  backdrop-filter: blur(18px);
 }
 
-#scanner {
-  border-radius: 10px;
+#shophelpLanguageMenu label {
 
-  overflow: hidden;
-}
+  display: block;
 
-#scannerBox p {
-  color: var(--muted);
+  margin-bottom: 8px;
+
+  color: var(--sh-text);
 
   font-size: 13px;
+
+  font-weight: 750;
+}
+
+#shophelpLanguageMenu select {
+
+  width: 100%;
+
+  margin: 0 !important;
 }
 
 
-/* =========================================================
-   20. TOAST
-   ========================================================= */
+/* ============================================================
+   19 — TOAST
+   ============================================================ */
 
 #toast {
-  top: 18px !important;
 
-  right: 18px !important;
+  top: 20px !important;
 
-  padding: 11px 16px !important;
+  right: 20px !important;
 
-  background: #0f172a !important;
+  max-width:
+    min(420px, calc(100vw - 40px));
+
+  padding: 12px 18px !important;
 
   color: #ffffff !important;
 
-  border-radius: 9px !important;
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1e293b
+    ) !important;
 
-  box-shadow: var(--shadow-3) !important;
+  border-radius: 11px !important;
+
+  box-shadow:
+    0 15px 35px rgba(15,23,42,0.23) !important;
 
   font-size: 13px;
+
+  font-weight: 650;
 
   z-index: 10000 !important;
 }
 
 
-/* =========================================================
-   21. AI CHAT
-   Keep the existing good AI design, only polish it
-   ========================================================= */
+/* ============================================================
+   20 — AI ASSISTANT
+   ============================================================ */
 
 #chatApp {
+
   position: fixed;
 
-  right: 20px;
+  right: 22px;
 
-  bottom: 20px;
+  bottom: 22px;
 
-  width: 370px;
+  width: 390px;
 
-  height: 560px;
+  height: 590px;
 
   display: flex;
 
@@ -1033,112 +1579,171 @@ td button {
 
   overflow: hidden;
 
-  background: #ffffff;
+  background:
+    rgba(255,255,255,0.98);
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--sh-border);
 
-  border-radius: 17px;
+  border-radius: 20px;
 
   box-shadow:
-    0 20px 50px rgba(15, 23, 42, 0.18);
+    0 25px 65px rgba(15,23,42,0.20);
 
   z-index: 5000;
+
+  backdrop-filter: blur(20px);
 }
 
 
-/* Chat top */
+/* AI header */
 
 #chatTop {
-  min-height: 58px;
 
-  padding: 0 15px;
+  min-height: 62px;
 
-  background: var(--dark) !important;
+  padding: 0 16px;
 
   color: #ffffff;
 
-  border-bottom: 1px solid #1e293b;
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1d4ed8
+    ) !important;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.08);
 }
 
 #chatTop span {
-  font-weight: 700;
+
+  font-weight: 750;
+
+  letter-spacing: -.1px;
 }
 
 #chatTop button {
+
   padding: 5px 7px !important;
 
   color: #ffffff !important;
 
   background: transparent !important;
 
-  font-size: 17px;
+  font-size: 17px !important;
+
+  box-shadow: none !important;
 }
 
 
-/* Messages */
+/* Chat messages */
 
 #chatMessages {
+
   flex: 1;
 
   overflow-y: auto;
 
-  padding: 15px;
+  padding: 17px;
 
-  background: #f8fafc;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(37,99,235,0.055),
+      transparent 32%
+    ),
+    #f8fafc;
 }
 
-.msg {
-  max-width: 82%;
 
-  padding: 9px 12px;
+.msg {
+
+  max-width: 83%;
+
+  padding: 10px 13px;
 
   margin: 7px 0;
 
-  border-radius: 12px;
+  border-radius: 14px;
 
   font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.55;
 
-  word-wrap: break-word;
+  word-break: break-word;
+
+  animation:
+    shophelpMessageIn 180ms ease;
 }
 
+@keyframes shophelpMessageIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 .msg.user {
+
   margin-left: auto;
 
   color: #ffffff;
 
-  background: var(--blue);
+  background:
+    linear-gradient(
+      135deg,
+      var(--sh-blue),
+      var(--sh-blue-dark)
+    );
 
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 5px;
+
+  box-shadow:
+    0 5px 13px rgba(37,99,235,0.14);
 }
 
+
 .msg.bot {
+
   margin-right: auto;
 
-  color: var(--text);
+  color: var(--sh-text);
 
   background: #ffffff;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--sh-border);
 
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 5px;
 
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--sh-shadow-xs);
 }
 
 
 /* Typing */
 
 .typing {
+
   display: flex;
 
   align-items: center;
 
   gap: 4px;
+
+  height: 15px;
 }
 
 .typing span {
+
   width: 6px;
 
   height: 6px;
@@ -1147,7 +1752,8 @@ td button {
 
   border-radius: 50%;
 
-  animation: shophelpTyping 1.2s infinite ease-in-out;
+  animation:
+    shophelpTyping 1.15s infinite ease-in-out;
 }
 
 .typing span:nth-child(2) {
@@ -1159,6 +1765,7 @@ td button {
 }
 
 @keyframes shophelpTyping {
+
   0%,
   60%,
   100% {
@@ -1174,62 +1781,68 @@ td button {
 /* Chat input */
 
 #chatInputArea {
+
   display: flex !important;
 
   align-items: center;
 
-  gap: 5px;
+  gap: 6px;
 
-  padding: 8px;
+  padding: 9px;
 
   background: #ffffff;
 
-  border-top: 1px solid var(--border);
+  border-top:
+    1px solid var(--sh-border);
 }
 
 #chatInputArea input {
+
   flex: 1;
 
   min-width: 0;
 
-  min-height: 38px;
+  min-height: 39px;
 
   margin: 0;
 }
 
 #chatInputArea button {
-  min-width: 36px;
 
-  min-height: 36px;
+  min-width: 38px;
+
+  min-height: 38px;
 
   padding: 6px;
 
-  background: #f1f5f9;
+  border-radius: 9px;
 
-  border-radius: 8px;
+  background: #f1f5f9;
 }
 
 #chatInputArea button:hover {
-  color: var(--blue);
 
-  background: var(--blue-soft);
+  color: var(--sh-blue);
+
+  background: var(--sh-blue-light);
 }
 
 
-/* =========================================================
-   22. FLOATING AI BUTTON
-   ========================================================= */
+/* ============================================================
+   21 — FLOATING AI BUTTON
+   ============================================================ */
 
 #chatToggleBtn {
+
   position: fixed;
 
-  right: 20px;
+  right: 22px;
 
-  bottom: 20px;
+  bottom: 22px;
 
-  width: 56px;
+  width: 60px;
 
-  height: 56px;
+  height: 60px;
 
   display: flex;
 
@@ -1237,113 +1850,137 @@ td button {
 
   justify-content: center;
 
-  background: var(--blue);
-
   color: #ffffff;
 
-  border: 3px solid #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      var(--sh-blue),
+      var(--sh-purple)
+    );
+
+  border:
+    4px solid #ffffff;
 
   border-radius: 50%;
 
   box-shadow:
-    0 8px 22px rgba(37, 99, 235, 0.25);
+    0 12px 30px rgba(37,99,235,0.30);
 
   z-index: 4999;
 
   transition:
-    transform var(--transition),
-    box-shadow var(--transition);
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 #chatToggleBtn:hover {
-  transform: translateY(-2px);
+
+  transform:
+    translateY(-3px)
+    scale(1.03);
 
   box-shadow:
-    0 12px 27px rgba(37, 99, 235, 0.32);
+    0 17px 38px rgba(37,99,235,0.37);
 }
 
 
-/* =========================================================
-   23. LINKS
-   ========================================================= */
+/* ============================================================
+   22 — EMPTY TABLE STATES
+   ============================================================ */
 
-a {
-  color: var(--blue);
+table td[colspan] {
 
-  text-decoration: none;
+  padding: 30px !important;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  font-style: italic;
 }
 
-a:hover {
-  text-decoration: underline;
-}
 
-
-/* =========================================================
-   24. FOCUS
-   ========================================================= */
+/* ============================================================
+   23 — ACCESSIBILITY
+   ============================================================ */
 
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(37, 99, 235, 0.30);
+
+  outline:
+    3px solid rgba(37,99,235,0.20);
 
   outline-offset: 2px;
 }
 
 
-/* =========================================================
-   25. MOBILE
-   ========================================================= */
+/* ============================================================
+   24 — TABLET
+   ============================================================ */
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
 
   #shopTitle {
+
     width: calc(100% - 20px);
 
-    margin-top: 15px !important;
+    min-height: 125px;
+
+    padding: 20px;
   }
 
   #shopTitle img {
-    width: 65px !important;
-    height: 65px !important;
+
+    width: 66px !important;
+
+    height: 66px !important;
   }
 
   #shopTitle h1 {
-    font-size: 31px !important;
+
+    font-size: 34px !important;
   }
 
+
   #app {
+
     width: calc(100% - 20px);
   }
 
+
   .menu {
-    align-items: stretch;
+
+    top: 7px;
+
+    overflow-x: auto;
   }
+
 
   .menu button {
-    font-size: 13px;
 
     padding: 9px 11px;
+
+    font-size: 12px;
   }
 
+
   .menu .delete-btn {
+
     margin-left: 0;
   }
 
+
   .card {
-    padding: 18px;
+
+    padding: 20px;
   }
 
-  #expensesPage > div[style*="display:flex"] {
-    flex-wrap: wrap !important;
-  }
-
-  .stat-box {
-    flex: 1 1 200px !important;
-  }
 
   table {
+
     display: block;
 
     overflow-x: auto;
@@ -1351,17 +1988,19 @@ textarea:focus-visible {
     white-space: nowrap;
   }
 
-  #chatApp {
-    width: 350px;
 
-    max-width: calc(100vw - 24px);
+  #chatApp {
+
+    width: min(390px, calc(100vw - 24px));
 
     right: 12px;
 
     bottom: 12px;
   }
 
+
   #chatToggleBtn {
+
     right: 14px;
 
     bottom: 14px;
@@ -1369,125 +2008,204 @@ textarea:focus-visible {
 }
 
 
-/* =========================================================
-   26. SMALL PHONES
-   ========================================================= */
+/* ============================================================
+   25 — MOBILE
+   ============================================================ */
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
+
+  body {
+
+    background:
+      radial-gradient(
+        circle at 50% 0%,
+        rgba(37,99,235,0.06),
+        transparent 30%
+      ),
+      var(--sh-bg);
+  }
+
 
   #shopTitle {
-    gap: 9px !important;
+
+    width: calc(100% - 16px);
+
+    min-height: 108px;
+
+    margin-top: 10px !important;
 
     margin-bottom: 12px !important;
+
+    padding: 17px;
+
+    gap: 12px !important;
+
+    border-radius: 19px;
   }
+
 
   #shopTitle img {
-    width: 52px !important;
-    height: 52px !important;
 
-    border-radius: 13px !important;
+    width: 54px !important;
+
+    height: 54px !important;
+
+    border-radius: 14px !important;
   }
+
 
   #shopTitle h1 {
-    font-size: 25px !important;
+
+    font-size: 27px !important;
+
+    letter-spacing: -1px;
   }
+
 
   #loginPage {
+
     width: calc(100% - 20px);
 
-    padding: 22px !important;
+    padding: 24px !important;
+
+    margin-top: 12px !important;
   }
 
+
   #loginPage .btn-main {
+
     width: 100%;
 
     margin: 4px 0;
   }
 
+
   #app {
+
     width: calc(100% - 12px);
+
+    margin-bottom: 30px;
   }
 
-  .card {
-    padding: 14px;
+
+  .menu {
+
+    margin-bottom: 12px;
 
     border-radius: 12px;
   }
 
-  .card h3 {
-    font-size: 19px;
+
+  .menu button {
+
+    font-size: 11px;
+
+    padding: 9px 9px;
   }
 
+
+  .menu button i {
+
+    margin-right: 2px;
+  }
+
+
+  .card {
+
+    padding: 15px;
+
+    border-radius: 15px;
+  }
+
+
+  .card h3 {
+
+    font-size: 19px;
+
+    margin-bottom: 16px;
+  }
+
+
   #billingPage > button {
-    margin: 3px 2px 3px 0;
 
     padding: 8px 10px;
 
-    font-size: 12px;
-  }
-
-  #expensesPage > div[style*="display:flex"] {
-    display: block !important;
-  }
-
-  .stat-box {
-    width: 100%;
-
-    margin-bottom: 8px;
-  }
-
-  #chatApp {
-    width: calc(100vw - 12px);
-
-    max-width: none;
-
-    right: 6px;
-
-    bottom: 6px;
-
-    height: calc(100vh - 90px);
-
-    border-radius: 14px;
-  }
-
-  #chatToggleBtn {
-    right: 10px;
-
-    bottom: 10px;
-
-    width: 52px;
-
-    height: 52px;
-  }
-
-  .msg {
-    max-width: 90%;
+    margin: 3px 2px 3px 0;
 
     font-size: 12px;
   }
+
+
+  #billingPage > h2 {
+
+    font-size: 21px;
+
+    padding: 13px;
+  }
+
 
   th,
   td {
+
     padding: 9px 10px;
 
     font-size: 12px;
   }
 
+
+  #chatApp {
+
+    right: 6px;
+
+    bottom: 6px;
+
+    width: calc(100vw - 12px);
+
+    height: calc(100vh - 85px);
+
+    border-radius: 16px;
+  }
+
+
+  #chatToggleBtn {
+
+    right: 10px;
+
+    bottom: 10px;
+
+    width: 53px;
+
+    height: 53px;
+  }
+
+
+  .msg {
+
+    max-width: 90%;
+
+    font-size: 12px;
+  }
+
+
   #shophelpLanguageMenu {
+
     right: 8px !important;
 
-    top: 60px !important;
+    top: 62px !important;
+
+    min-width: 205px;
   }
 }
 
 
-/* =========================================================
-   27. PRINT
-   ========================================================= */
+/* ============================================================
+   26 — PRINT
+   ============================================================ */
 
 @media print {
 
   body {
+
     background: #ffffff;
   }
 
@@ -1496,10 +2214,12 @@ textarea:focus-visible {
   #chatApp,
   #chatToggleBtn,
   #toast {
+
     display: none !important;
   }
 
   .card {
+
     border: none;
 
     box-shadow: none;
@@ -1507,15 +2227,16 @@ textarea:focus-visible {
 }
 
 
-/* =========================================================
-   28. REDUCED MOTION
-   ========================================================= */
+/* ============================================================
+   27 — REDUCED MOTION
+   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
   *::after {
+
     animation-duration: 0.01ms !important;
 
     animation-iteration-count: 1 !important;
