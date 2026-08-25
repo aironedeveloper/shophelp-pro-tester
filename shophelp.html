@@ -270,7 +270,7 @@ box-shadow:0 10px 30px rgba(0,0,0,0.08);
 border:1px solid rgba(0,0,0,0.05);
 ">
 
-<h2 data-i18n="Our Partner">Our Partner</h2>
+<h2 data-i18n="Our Supporter">Our Supporter</h2>
 
 <p style="margin-top:10px;line-height:1.8;color:#334155;">
 
@@ -492,99 +492,45 @@ await setDoc(doc(db, "shops", userId), {
 
 async function loadData(){
 
-  if(!auth.currentUser){
-    console.error("loadData: No authenticated user");
-    return false;
-  }
+  if(!auth.currentUser) return;
 
-  try{
+  const userId = auth.currentUser.uid;
 
-    const userId = auth.currentUser.uid;
+  const docRef = doc(db, "shops", userId);
 
-    console.log("Loading shop data for UID:", userId);
+  const snap = await getDoc(docRef);
 
-    const docRef = doc(db, "shops", userId);
-
-    const snap = await getDoc(docRef);
-
-    if(!snap.exists()){
-
-      console.warn("Shop document does not exist for UID:", userId);
-
-      // IMPORTANT:
-      // Do NOT replace the shop name with "My Shop".
-      // Keep the actual shop name already known from signup/login.
-      
-      return false;
-    }
+  if(snap.exists()){
 
     const data = snap.data();
+shopName = data.shopName?.trim() || "My Shop";
 
-    console.log("Firebase shop data:", data);
+document.querySelector("#shopTitle h1").innerText = shopName;
+document.title = shopName;
 
-    // Load the real shop name from Firebase
-    const firebaseShopName = String(data.shopName || "").trim();
+    console.log("Loaded shop name:", shopName);
 
-    if(firebaseShopName){
+    // ✅ LOAD DATA
+    products = data.products || [];
+    customers = data.customers || [];
+    sales = data.sales || [];
+    expenses = data.expenses || [];
+    chatHistory = data.chatHistory || [];
 
-      shopName = firebaseShopName;
-
-      const titleElement = document.querySelector("#shopTitle h1");
-
-      if(titleElement){
-        titleElement.innerText = shopName;
-      }
-
-      document.title = shopName;
-
-      console.log("Loaded shop name:", shopName);
-
-    }else{
-
-      console.warn("Firebase shop document has no shopName.");
-
-    }
-
-    // Load shop data safely
-    products = Array.isArray(data.products)
-      ? data.products
-      : [];
-
-    customers = Array.isArray(data.customers)
-      ? data.customers
-      : [];
-
-    sales = Array.isArray(data.sales)
-      ? data.sales
-      : [];
-
-    expenses = Array.isArray(data.expenses)
-      ? data.expenses
-      : [];
-
-    chatHistory = Array.isArray(data.chatHistory)
-      ? data.chatHistory
-      : [];
-
-    // Fix old customers
-    customers.forEach(c => {
-
+    // ✅ FIX OLD CUSTOMERS
+    customers.forEach(c=>{
       if(c.debt === undefined){
         c.debt = 0;
       }
-
     });
 
-    return true;
+  } else {
 
-  }catch(error){
+    shopName = "My Shop";
+    document.querySelector("#shopTitle h1").innerText = shopName;
 
-    console.error("Firebase loadData error:", error);
-
-    showToast("Unable to load shop data.");
-
-    return false;
   }
+
 }
 
 // --- AUTH ---
@@ -640,30 +586,15 @@ document.querySelector("#shopTitle h1").innerText = shopName;
 }
 
 window.loginUser = async function(){
-
-  const email = emailEl.value.trim();
+  const email = emailEl.value;
   const password = passwordEl.value;
 
-  if(!email || !password){
-    showToast("Enter email and password");
-    return;
-  }
-
   try{
+    await signInWithEmailAndPassword(auth, email, password);
 
-await signInWithEmailAndPassword(auth, email, password);
+    loginPage.classList.add("hidden");
+    appDiv.classList.remove("hidden");
 
-loginPage.classList.add("hidden");
-appDiv.classList.remove("hidden");
-
-await loadData();
-
-loadChatUI();
-checkLowStock();
-
-renderAll();
-renderFinances();
-renderChart();
 await loadData();
 
 
@@ -1365,7 +1296,7 @@ Customers: ${customers.map(c=>`${c.name}:${c.debt}`).join(", ")}
 
   try{
   const res = await fetch(
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=",
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAF0y0of0PrLGGykM6RvubNxpUhS_as9YQ",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1519,7 +1450,7 @@ window.addEventListener("DOMContentLoaded", () => {
         chat.innerHTML += `<div id="loading">🤖 analyzing image...</div>`;
 
         const res = await fetch(
-          "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=",
+          "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyAF0y0of0PrLGGykM6RvubNxpUhS_as9YQ",
           {
             method:"POST",
             headers:{ "Content-Type":"application/json" },
