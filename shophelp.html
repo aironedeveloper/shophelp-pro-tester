@@ -612,29 +612,67 @@ await loadData();
   }
 }
 window.googleLogin = async function(){
-try {
-const provider = new GoogleAuthProvider();
-const result = await signInWithPopup(auth, provider);
-const user = result.user;
-loginPage.classList.add("hidden");
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-appDiv.classList.remove("hidden");
+    // Check whether this Google account already has a shop
+    const shopRef = doc(db, "shops", user.uid);
+    const shopSnap = await getDoc(shopRef);
 
-await loadData();
+    // New Google account: ask for shop name
+    if (!shopSnap.exists() || !shopSnap.data().shopName?.trim()) {
 
-loadChatUI();
+      const enteredName = prompt(
+        "Welcome to ShopHelp Pro!\n\nPlease enter your shop name:"
+      );
 
-checkLowStock();
+      const shopName = enteredName ? enteredName.trim() : "";
 
-renderAll();
+      // Shop name is required
+      if (!shopName) {
+        await signOut(auth);
+        alert("Shop name is required. Please sign in again.");
+        return;
+      }
 
-renderFinances();
+      // Save the shop name
+      await setDoc(shopRef, {
+        shopName: shopName,
+        products: [],
+        customers: [],
+        sales: [],
+        expenses: [],
+        chatHistory: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }, { merge: true });
 
-renderChart();
-} catch(error) {
-console.error("Google login error:", error);
-alert("Google login failed: " + error.message);
-}
+      // Also save it against the user
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email || "",
+        shopName: shopName,
+        ownerName: user.displayName || "",
+        role: "shopkeeper"
+      }, { merge: true });
+    }
+
+    // Continue into ShopHelp
+    loginPage.classList.add("hidden");
+    appDiv.classList.remove("hidden");
+
+    await loadData();
+    loadChatUI();
+    checkLowStock();
+    renderAll();
+    renderFinances();
+    renderChart();
+
+  } catch(error) {
+    console.error("Google login error:", error);
+    alert("Google login failed: " + error.message);
+  }
 };
 window.logoutUser = async function(){
 await signOut(auth);
