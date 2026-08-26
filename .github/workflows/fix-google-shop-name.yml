@@ -2,8 +2,7 @@ name: Fix Google Shop Name
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: write
@@ -15,108 +14,93 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch Google login
+      - name: Patch shophelp.html
         shell: python
         run: |
           from pathlib import Path
+          import re
           import subprocess
 
           path = Path("shophelp.html")
           text = path.read_text(encoding="utf-8")
 
-          old = '''window.googleLogin = async function(){
-try {
-const provider = new GoogleAuthProvider();
-const result = await signInWithPopup(auth, provider);
-const user = result.user;
-loginPage.classList.add("hidden");
+          start = text.find("window.googleLogin = async function(){")
+          if start == -1:
+              raise SystemExit("googleLogin function not found")
 
-appDiv.classList.remove("hidden");
-
-await loadData();
-
-loadChatUI();
-
-checkLowStock();
-
-renderAll();
-
-renderFinances();
-
-renderChart();
-} catch(error) {
-console.error("Google login error:", error);
-alert("Google login failed: " + error.message);
-}
-};'''
+          end = text.find("\n};", start)
+          if end == -1:
+              raise SystemExit("googleLogin function end not found")
+          end += 3
 
           new = '''window.googleLogin = async function(){
 try {
-const provider = new GoogleAuthProvider();
-const result = await signInWithPopup(auth, provider);
-const user = result.user;
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  const user = result.user;
 
-// Google users need a shop name the first time they enter ShopHelp Pro.
-const shopRef = doc(db, "shops", user.uid);
-const shopSnap = await getDoc(shopRef);
+  // Ask new Google users for their shop name before entering the dashboard.
+  const shopRef = doc(db, "shops", user.uid);
+  const shopSnap = await getDoc(shopRef);
 
-if(!shopSnap.exists()){
-  const enteredShopName = prompt("Welcome to ShopHelp Pro!\\n\\nPlease enter your shop name:");
-  const newShopName = enteredShopName?.trim();
+  if(!shopSnap.exists()){
+    const enteredShopName = prompt("Welcome to ShopHelp Pro!\\n\\nPlease enter your shop name:");
+    const newShopName = enteredShopName ? enteredShopName.trim() : "";
 
-  if(!newShopName){
-    await signOut(auth);
-    alert("Shop name is required. Please sign in again and enter your shop name.");
-    return;
+    if(!newShopName){
+      await signOut(auth);
+      alert("Shop name is required. Please sign in again and enter your shop name.");
+      return;
+    }
+
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email || "",
+      shopName: newShopName,
+      ownerName: user.displayName || "",
+      phone: user.phoneNumber || "",
+      role: "shopkeeper",
+      status: "pending",
+      shophelpAccess: true,
+      onshopAccess: false,
+      createdAt: Date.now()
+    }, { merge: true });
+
+    await setDoc(shopRef, {
+      shopName: newShopName,
+      products: [],
+      customers: [],
+      sales: [],
+      expenses: [],
+      chatHistory: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
   }
 
-  await setDoc(doc(db, "users", user.uid), {
-    email: user.email || "",
-    shopName: newShopName,
-    ownerName: "",
-    phone: "",
-    address: "",
-    gstNumber: "",
-    role: "shopkeeper",
-    status: "pending",
-    shophelpAccess: true,
-    onshopAccess: false,
-    createdAt: Date.now()
-  }, { merge: true });
+  loginPage.classList.add("hidden");
+  appDiv.classList.remove("hidden");
 
-  await setDoc(shopRef, {
-    shopName: newShopName,
-    products: [],
-    customers: [],
-    sales: [],
-    expenses: [],
-    chatHistory: [],
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  });
-}
-
-loginPage.classList.add("hidden");
-appDiv.classList.remove("hidden");
-
-await loadData();
-loadChatUI();
-checkLowStock();
-renderAll();
-renderFinances();
-renderChart();
+  await loadData();
+  loadChatUI();
+  checkLowStock();
+  renderAll();
+  renderFinances();
+  renderChart();
 } catch(error) {
-console.error("Google login error:", error);
-alert("Google login failed: " + error.message);
+  console.error("Google login error:", error);
+  alert("Google login failed: " + error.message);
 }
 };'''
 
-          if old not in text:
-              print("Google login block already patched or source changed; nothing to do.")
-          else:
-              path.write_text(text.replace(old, new, 1), encoding="utf-8")
-              subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
-              subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
-              subprocess.run(["git", "add", "shophelp.html", ".github/workflows/fix-google-shop-name.yml"], check=True)
+          patched = text[:start] + new + text[end:]
+          path.write_text(patched, encoding="utf-8")
+
+          subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
+          subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
+          subprocess.run(["git", "add", "shophelp.html"], check=True)
+          result = subprocess.run(["git", "diff", "--cached", "--quiet"])
+          if result.returncode != 0:
               subprocess.run(["git", "commit", "-m", "Fix Google login shop name prompt [skip ci]"], check=True)
               subprocess.run(["git", "push"], check=True)
+          else:
+              print("shophelp.html already contains the Google shop-name fix")
