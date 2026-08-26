@@ -57,6 +57,7 @@ ShopHelp Pro
 
   <button onclick="signupUser()" class="btn-main" data-i18n="Signup">Signup</button>
   <button onclick="loginUser()" class="btn-main" data-i18n="Login">Login</button>
+  <button onclick="googleLogin()" class="btn-main">Continue with Google</button>
 </div>
 
 <div id="app" class="hidden">
@@ -450,6 +451,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Firebase config
@@ -609,7 +612,17 @@ await loadData();
     alert(e.message);
   }
 }
-
+window.googleLogin = async function(){
+try {
+const provider = new GoogleAuthProvider();
+const result = await signInWithPopup(auth, provider);
+const user = result.user;
+alert("Google login successful: " + user.email);
+} catch(error) {
+console.error("Google login error:", error);
+alert("Google login failed: " + error.message);
+}
+};
 window.logoutUser = async function(){
 await signOut(auth);
 location.reload();
