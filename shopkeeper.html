@@ -2,647 +2,2659 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>OnShop Shopkeeper Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopHelp Pro</title>
+<link rel="icon" type="image/png" href="logo.jpeg">
+<link rel="stylesheet" href="styles.css">
+<meta name="description" content="ShopHelp Pro helps you manage billing, inventory, customers and expenses easily.">
+<meta property="og:title" content="ShopHelp Pro - Smart Business Manager">
+<meta property="og:description" content="Manage your shop easily with AI-powered tools.">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Poppins,sans-serif;
-}
-
-body{
-background:#f5f7fb;
-display:flex;
-min-height:100vh;
-}
-
-.sidebar{
-width:260px;
-background:#111827;
-color:#fff;
-position:fixed;
-left:0;
-top:0;
-bottom:0;
-padding:20px;
-overflow:auto;
-}
-
-.logo{
-font-size:24px;
-font-weight:700;
-margin-bottom:25px;
-}
-
-.menu button{
-width:100%;
-padding:14px;
-border:none;
-margin-bottom:10px;
-border-radius:12px;
-cursor:pointer;
-background:#1f2937;
-color:white;
-text-align:left;
-font-size:15px;
-}
-
-.menu button:hover{
-background:#2563eb;
-}
-
-.main{
-margin-left:260px;
-width:100%;
-padding:25px;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-.shopTitle{
-font-size:28px;
-font-weight:700;
-}
-
-.status{
-padding:8px 15px;
-border-radius:25px;
-font-size:13px;
-font-weight:600;
-}
-
-.approved{
-background:#dcfce7;
-color:#166534;
-}
-
-.pending{
-background:#fef3c7;
-color:#92400e;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-bottom:25px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:16px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-.card h4{
-color:#666;
-margin-bottom:10px;
-}
-
-.card h2{
-font-size:30px;
-}
-
-.page{
-background:white;
-padding:25px;
-border-radius:16px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-.hidden{
-display:none;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th,td{
-padding:12px;
-border-bottom:1px solid #eee;
-text-align:left;
-}
-
-.btn{
-padding:8px 14px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-}
-
-.primary{
-background:#2563eb;
-color:white;
-}
-
-.success{
-background:#16a34a;
-color:white;
-}
-
-.danger{
-background:#dc2626;
-color:white;
-}
-
-input,textarea{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
-margin-top:8px;
-margin-bottom:15px;
-}
-
-
-</style>
+<meta name="google-site-verification" content="wXuw6lAdt3fH1rDYIEEq7ucQ-4cETmH-KiByhInQztQ" />
+<link rel="canonical" href="https://shophelp-pro.vercel.app/" />
 </head>
+
 <body>
 
-<div class="sidebar">
+<div id="shopTitle" style="
+display:flex;
+align-items:center;
+justify-content:center;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
+">
+<img src="logo.jpeg" alt="ShopHelp Pro Logo" style="
+width:90px;
+height:90px;
+object-fit:contain;
+border-radius:20px;
+">
 
-<div class="logo">
-🛒 OnShop
+<h1 style="
+font-size:42px;
+font-weight:900;
+margin:0;
+color:#0f172a;
+">
+ShopHelp Pro
+</h1>
+
 </div>
+
+<div id="loginPage" class="card" style="max-width:400px;text-align:center;">
+<h2 data-i18n="Business Login">Business Login</h2>
+<input id="shopNameInput" data-i18n="Shop Name" data-i18n-type="placeholder" placeholder="Shop Name">
+<input id="email" data-i18n="Email" data-i18n-type="placeholder" placeholder="Email">
+<input id="password" data-i18n="Password" data-i18n-type="placeholder" type="password" placeholder="Password">
+<div style="margin:15px 0;"></div>
+
+  <button onclick="signupUser()" class="btn-main" data-i18n="Signup">Signup</button>
+  <button onclick="loginUser()" class="btn-main" data-i18n="Login">Login</button>
+  <button onclick="googleLogin()" class="btn-main">Continue with Google</button>
+</div>
+
+<div id="app" class="hidden">
 
 <div class="menu">
-
-<button onclick="showPage('dashboard')">
-🏠 <span data-i18n="dashboard">Dashboard</span>
+<button onclick="showPage('billing')" data-i18n="Billing">
+  <i class="fa-solid fa-cart-shopping"></i> Billing
 </button>
 
-<button onclick="showPage('products')">
-📦 <span data-i18n="products">Products</span>
+<button onclick="showPage('inventory')" data-i18n="Inventory">
+  <i class="fa-solid fa-box"></i> Inventory
 </button>
 
-<button onclick="showPage('orders')">
-🛍 <span data-i18n="orders">Orders</span>
+<button onclick="showPage('customers')" data-i18n="Customers">
+  <i class="fa-solid fa-users"></i> Customers
 </button>
 
-<button onclick="showPage('customers')">
-👥 <span data-i18n="customers">Customers</span>
+<button onclick="showPage('expenses')" data-i18n="Expenses">
+  <i class="fa-solid fa-chart-line"></i> Expenses
 </button>
 
-<button onclick="showPage('analytics')">
-📈 <span data-i18n="analytics">Analytics</span>
+<button onclick="showPage('about')" data-i18n="About Us">
+<i class="fa-solid fa-circle-info"></i>
+About Us
 </button>
 
-<button onclick="showPage('settings')">
-⚙ <span data-i18n="settings">Settings</span>
+<button type="button" onclick="toggleShopHelpLanguageMenu()" data-i18n="Language">
+  🌐 Language
 </button>
 
-<button onclick="logoutUser()">
-🚪 <span data-i18n="logout">Logout</span>
+<div id="shophelpLanguageMenu" style="
+  display:none;
+  position:fixed;
+  top:70px;
+  right:20px;
+  z-index:10000;
+  background:#fff;
+  padding:14px;
+  border-radius:12px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+">
+  <label for="shophelpLanguage" style="display:block;margin-bottom:8px;" data-i18n="Language / भाषा">Language / भाषा</label>
+  <select id="shophelpLanguage" onchange="setShopHelpLanguage(this.value)"
+    style="padding:8px 10px;border-radius:8px;">
+    <option value="en">English</option>
+    <option value="hi">हिंदी</option>
+  </select>
+</div>
+
+<button onclick="logoutUser()" class="delete-btn" data-i18n="Logout">
+  <i class="fa-solid fa-right-from-bracket"></i> Logout
 </button>
+</div>
+<div id="billingPage" class="card">
+<h3 data-i18n="Billing">Billing</h3>
+
+<div style="position:relative; max-width:300px;">
+<input 
+  id="custSearch" 
+  data-i18n="Select customer..." data-i18n-type="placeholder" placeholder="Select customer..." 
+  onclick="showCustDropdown()"
+  oninput="filterCustBilling()"  
+> 
+  <div id="custDropdown"></div>
+</div>
+<div style="position:relative; max-width:300px;">
+  <input 
+    id="productSearch" 
+    data-i18n="Search product..." data-i18n-type="placeholder" placeholder="Search product..." 
+    oninput="filterProducts()" 
+    onclick="showDropdown()"
+  >
+
+  <div id="productDropdown"></div>
+</div>
+<input 
+  id="manualBarcode" 
+  data-i18n="Enter Barcode & press Enter" data-i18n-type="placeholder" placeholder="Enter Barcode & press Enter"
+  onkeydown="handleManualBarcode(event)"
+>
+<button onclick="startBarcodeScanner()"><span data-i18n="Scan Barcode">📷 Scan Barcode</span></button>
+<div id="reader" style="width:300px;"></div>
+  <button type="button" class="btn" onclick="startBillingVoice()">
+  🎤 Add by Voice
+</button>
+<table>
+<thead>
+<tr>
+  <th data-i18n="Item">Item</th>
+  <th data-i18n="Qty">Qty</th>
+  <th data-i18n="Price">Price</th>
+  <th data-i18n="Action">Action</th>
+</tr>
+</thead>
+<tbody id="billBody"></tbody>
+</table>
+<p><span data-i18n="Total Items:">Total Items:</span> <span id="itemCount">0</span></p>
+<h2><span data-i18n="Total">Total</span> ₹<span id="totalDisplay">0.00</span></h2>
+<input id="discountInput" type="number" data-i18n="Discount ₹" data-i18n-type="placeholder" placeholder="Discount ₹">
+
+<select id="gstSelect" aria-label="GST Rate">
+  <option value="0" data-i18n="No GST">No GST</option>
+  <option value="5" data-i18n="5% GST">5% GST</option>
+  <option value="12" data-i18n="12% GST">12% GST</option>
+  <option value="18" data-i18n="18% GST">18% GST</option>
+</select>
+
+<h3><span data-i18n="Final Total">Final Total</span> ₹<span id="finalTotal">0.00</span></h3>
+<select id="paymentType" aria-label="Payment Type">
+  <option value="paid" data-i18n="Paid">Paid</option>
+  <option value="credit" data-i18n="Credit (Udhar)">Credit (Udhar)</option>
+</select>
+<button onclick="clearBill()" class="delete-btn" style="margin-bottom:10px;" data-i18n="Clear Bill">Clear Bill</button>
+<button onclick="saveAndPrint()" class="btn-save" data-i18n="Print & Save Bill">Print & Save Bill</button>
+<button onclick="downloadPDF()" class="btn-main" data-i18n="Download PDF">⬇ Download PDF</button>
+<button onclick="sendWhatsApp()" class="btn-main" data-i18n="WhatsApp Bill">📲 WhatsApp Bill</button>
+</div>
+
+<div id="inventoryPage" class="card hidden">
+  <div id="lowStockWarning" style="color:red;font-weight:bold;margin:10px 0;"></div>
+<h3 data-i18n="Inventory">Inventory</h3>
+<input id="searchProduct" placeholder="Search product..." oninput="searchProducts()">
+<input id="pBarcode" data-i18n="Barcode (Scan or Enter)" data-i18n-type="placeholder" placeholder="Barcode (Scan or Enter)">
+
+<input id="pName" data-i18n="Product Name" data-i18n-type="placeholder" placeholder="Product Name">
+<input id="pCP" type="number" data-i18n="Cost Price" data-i18n-type="placeholder" placeholder="Cost Price">
+<input id="pSP" type="number" data-i18n="Sell Price" data-i18n-type="placeholder" placeholder="Sell Price">
+<input id="pQty" type="number" data-i18n="Stock" data-i18n-type="placeholder" placeholder="Stock">
+
+
+<select id="pUnit" aria-label="Unit">
+<option data-i18n="PCS">PCS</option>
+<option data-i18n="KG">KG</option>
+<option data-i18n="L">L</option>
+</select>
+<button type="button" class="btn" onclick="startInventoryVoice()">
+  🎤 Fill by Voice
+</button>
+<button onclick="addItem()" class="btn-main" id="addBtn" data-i18n="Add Item">Add Item</button>
+<table id="invTable"></table>
+</div>
+
+<div id="customersPage" class="card hidden">
+<h3 data-i18n="Customers">Customers</h3>
+<input data-i18n="Search customer..." data-i18n-type="placeholder" placeholder="Search customer..." oninput="searchCust(this.value)">
+<input id="cName" data-i18n="Customer Name" data-i18n-type="placeholder" placeholder="Customer Name">
+<input id="cPhone" data-i18n="Phone" data-i18n-type="placeholder" placeholder="Phone">
+<button onclick="addCust()" class="btn-main" data-i18n="Add Customer">Add Customer</button>
+<table id="custTable"></table>
+</div>
+<div id="expensesPage" class="card hidden">
+<h3 data-i18n="Expenses">Expenses</h3>
+
+<input id="expenseName" data-i18n="Expense Name" data-i18n-type="placeholder" placeholder="Expense Name">
+<input id="expenseAmount" type="number" data-i18n="Amount" data-i18n-type="placeholder" placeholder="Amount">
+<input id="expenseDate" type="date" aria-label="Expense Date">
+
+<select id="expenseType" aria-label="Expense Type">
+<option value="daily" data-i18n="Daily">Daily</option>
+<option value="monthly" data-i18n="Monthly">Monthly</option>
+<option value="yearly" data-i18n="Yearly">Yearly</option>
+</select>
+
+<button onclick="addNewExpense()" class="btn-main" data-i18n="Save Expense">Save Expense</button>
+
+<div style="display:flex;gap:15px;flex-wrap:wrap;margin-top:20px;">
+<div class="stat-box"><h4 data-i18n="Gross Profit">Gross Profit</h4><p id="stProfit">₹0</p></div>
+<div class="stat-box"><h4 data-i18n="Expense">Expense</h4><p id="stExp">₹0</p></div>
+<div class="stat-box"><h4 data-i18n="Net Profit">Net Profit</h4><p id="stNet">₹0</p></div>
+</div>
+<canvas id="salesChart" height="100"></canvas>
+<input 
+  id="invoiceSearch" 
+  data-i18n="Search invoice (name, date, amount...)" data-i18n-type="placeholder"
+  placeholder="Search invoice (name, date, amount...)" 
+  oninput="searchInvoices()" 
+  style="max-width:300px;"
+>
+<table>
+<thead>
+<tr>
+<th data-i18n="Date">Date</th>
+<th data-i18n="Description">Description</th>
+<th data-i18n="Amount">Amount</th>
+<th data-i18n="Type">Type</th>
+<th data-i18n="Profit / Loss">Profit / Loss</th>  <!-- ✅ NEW -->
+<th data-i18n="Action">Action</th>
+</tr>
+</thead>
+<tbody id="finBody"></tbody>
+</table>
+</div>
+<!-- ABOUT PAGE -->
+<div id="aboutPage" class="card hidden">
+
+<h2 data-i18n="About Us">About Us</h2>
+
+<p style="margin-top:15px;line-height:1.8;color:#334155;font-size:16px;">
+
+Hi, I am <b>Avighna Rahangdale</b>, the founder of  ShopHelp Pro.
+
+I started building this website to help all shops manage their business more easily using technology.
+
+Later, <b>Yatharth Ukey</b> joined the project and contributed equally.
+
+We both started working on this project when we were in 7th standard. If you like our work, please support us by sharing this website with your friends and family who run shops. If you want more features in the website or want to give suggestions or feedback, please mail us at <a href="mailto:aironedeveloper@gmail.com">aironedeveloper@gmail.com</a>
+
+</p>
+
+<div style="
+margin-top:25px;
+padding:25px;
+border-radius:24px;
+background:linear-gradient(135deg,#ffffff,#f8fbff);
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+border:1px solid rgba(0,0,0,0.05);
+">
+
+<h2 data-i18n="Our Supporter">Our Supporter</h2>
+
+<p style="margin-top:10px;line-height:1.8;color:#334155;">
+
+<b>Rudra Biloriya</b> 
+
+</p>
 
 </div>
 
 </div>
 
-<div class="main">
 
-<div class="header">
-
-<div class="shopTitle" id="shopName">
-Loading...
-</div>
-
-<div id="approvalBadge" class="status pending" data-i18n="pending">Pending</div>
 
 </div>
-
-<div id="dashboardPage">
-
-<div class="cards">
-
-<div class="card">
-<h4 data-i18n="totalProducts">Total Products</h4>
-<h2 id="totalProducts">0</h2>
-</div>
-
-<div class="card">
-<h4 data-i18n="totalCustomers">Total Customers</h4>
-<h2 id="totalCustomers">0</h2>
-</div>
-
-<div class="card">
-<h4 data-i18n="totalSales">Total Sales</h4>
-<h2 id="totalSales">0</h2>
-</div>
-
-<div class="card">
-<h4 data-i18n="revenue">Revenue</h4>
-<h2 id="totalRevenue">₹0</h2>
-</div>
-
-</div>
-
-<div class="page">
-
-<h2 data-i18n="welcome">Welcome to OnShop</h2>
-<br>
-<p data-i18n="manage">Manage products, orders and customers from one dashboard.</p>
-
-</div>
-
-</div>
-
-<div id="productsPage" class="page hidden"></div>
-
-<div id="ordersPage" class="page hidden"></div>
-
-<div id="customersPage" class="page hidden"></div>
-
-<div id="analyticsPage" class="page hidden"></div>
-
-<div id="settingsPage" class="page hidden"></div>
 <script>
-/* SHOPKEEPER LANGUAGE SYSTEM - UI ONLY, NO FIRESTORE DATA TRANSLATION */
-const SHOPKEEPER_TEXT = {
-  en: {
-    language:"Language", dashboard:"Dashboard", products:"Products", orders:"Orders",
-    customers:"Customers", analytics:"Analytics", settings:"Settings", logout:"Logout",
-    pending:"Pending", approved:"Approved", revenue:"Revenue", totalProducts:"Total Products",
-    totalCustomers:"Total Customers", totalSales:"Total Sales", welcome:"Welcome to OnShop",
-    manage:"Manage products, orders and customers from one dashboard.", name:"Name", price:"Price",
-    stock:"Stock", onshop:"OnShop", action:"Action", live:"Live", off:"Off", enable:"Enable",
-    disable:"Disable", debt:"Debt", totalRevenue:"Total Revenue", storeSettings:"Store Settings",
-    shopName:"Shop Name", ownerName:"Owner Name", phone:"Phone", address:"Address",
-    saveSettings:"Save Settings", noOrders:"No orders yet",
-    ordersMessage:"Orders from OnShop customers will appear here.", settingsSaved:"Settings Saved",
-    userNotFound:"User not found", accessDenied:"Access denied"
-  },
-  hi: {
-    language:"भाषा", dashboard:"डैशबोर्ड", products:"उत्पाद", orders:"ऑर्डर",
-    customers:"ग्राहक", analytics:"विश्लेषण", settings:"सेटिंग्स", logout:"लॉगआउट",
-    pending:"लंबित", approved:"स्वीकृत", revenue:"राजस्व", totalProducts:"कुल उत्पाद",
-    totalCustomers:"कुल ग्राहक", totalSales:"कुल बिक्री", welcome:"OnShop में आपका स्वागत है",
-    manage:"एक ही डैशबोर्ड से उत्पाद, ऑर्डर और ग्राहकों को प्रबंधित करें।", name:"नाम", price:"कीमत",
-    stock:"स्टॉक", onshop:"OnShop", action:"कार्य", live:"लाइव", off:"बंद", enable:"सक्षम करें",
-    disable:"अक्षम करें", debt:"बकाया", totalRevenue:"कुल राजस्व", storeSettings:"दुकान की सेटिंग्स",
-    shopName:"दुकान का नाम", ownerName:"मालिक का नाम", phone:"फोन", address:"पता",
-    saveSettings:"सेटिंग्स सेव करें", noOrders:"अभी कोई ऑर्डर नहीं है",
-    ordersMessage:"OnShop ग्राहकों के ऑर्डर यहां दिखाई देंगे।", settingsSaved:"सेटिंग्स सेव हो गईं",
-    userNotFound:"यूज़र नहीं मिला", accessDenied:"पहुंच अस्वीकृत"
-  }
+/* =========================
+   ShopHelp Pro Language System
+   Only language is stored locally.
+   Firestore/backend code below is untouched.
+   ========================= */
+
+const SHOPHELP_TRANSLATIONS = {
+  "Language": "भाषा",
+  "Language / भाषा": "भाषा",
+  "Business Login": "बिज़नेस लॉगिन",
+  "Shop Name": "दुकान का नाम",
+  "Email": "ईमेल",
+  "Password": "पासवर्ड",
+  "Signup": "साइन अप",
+  "Login": "लॉगिन",
+  "Billing": "बिलिंग",
+  "Inventory": "इन्वेंटरी",
+  "Customers": "ग्राहक",
+  "Expenses": "खर्च",
+  "About Us": "हमारे बारे में",
+  "Logout": "लॉगआउट",
+  "Search product...": "उत्पाद खोजें...",
+  "Select customer...": "ग्राहक चुनें...",
+  "Enter Barcode & press Enter": "बारकोड दर्ज करें और Enter दबाएं",
+  "Scan Barcode": "बारकोड स्कैन करें",
+  "Item": "वस्तु",
+  "Qty": "मात्रा",
+  "Price": "कीमत",
+  "Action": "कार्य",
+  "Total": "कुल",
+  "Total Items:": "कुल वस्तुएं:",
+  "Final Total": "अंतिम कुल",
+  "Discount ₹": "छूट ₹",
+  "No GST": "कोई GST नहीं",
+  "Paid": "भुगतान किया",
+  "Credit (Udhar)": "उधार",
+  "Clear Bill": "बिल साफ करें",
+  "Print & Save Bill": "बिल प्रिंट और सेव करें",
+  "Download PDF": "PDF डाउनलोड करें",
+  "WhatsApp Bill": "WhatsApp बिल",
+  "Product": "उत्पाद",
+  "Products": "उत्पाद",
+  "Add Item": "आइटम जोड़ें",
+  "Add Customer": "ग्राहक जोड़ें",
+  "Barcode (Scan or Enter)": "बारकोड (स्कैन या दर्ज करें)",
+  "Product Name": "उत्पाद का नाम",
+  "Cost Price": "खरीद मूल्य",
+  "Sell Price": "बिक्री मूल्य",
+  "Stock": "स्टॉक",
+  "PCS": "पीस",
+  "KG": "किलोग्राम",
+  "L": "लीटर",
+  "Customer Name": "ग्राहक का नाम",
+  "Phone": "फोन",
+  "Search customer...": "ग्राहक खोजें...",
+  "Expense Name": "खर्च का नाम",
+  "Amount": "राशि",
+  "Expense Date": "खर्च की तारीख",
+  "Expense Type": "खर्च का प्रकार",
+  "Daily": "दैनिक",
+  "Monthly": "मासिक",
+  "Yearly": "वार्षिक",
+  "Save Expense": "खर्च सेव करें",
+  "Gross Profit": "सकल लाभ",
+  "Expense": "खर्च",
+  "Net Profit": "शुद्ध लाभ",
+  "Date": "तारीख",
+  "Description": "विवरण",
+  "Type": "प्रकार",
+  "Profit / Loss": "लाभ / हानि",
+  "Search invoice (name, date, amount...)": "इनवॉइस खोजें (नाम, तारीख, राशि...)",
+  "Message ShopHelp Pro AI...": "ShopHelp Pro AI को संदेश भेजें...",
+  "Clear Chat": "चैट साफ करें",
+  "Messages": "संदेश",
+  "Input": "इनपुट",
+  "Our Partner": "हमारे पार्टनर",
+  "Hi, I am": "नमस्ते, मैं हूँ",
+  "the founder of ShopHelp Pro.": "ShopHelp Pro का संस्थापक हूँ।",
+  "I started building this website to help all shops manage their business more easily using technology.": "मैंने यह वेबसाइट सभी दुकानों को तकनीक की मदद से अपना व्यवसाय आसानी से प्रबंधित करने में मदद करने के लिए बनाना शुरू किया।",
+  "Later,": "बाद में,",
+  "joined the project and contributed equally.": "इस प्रोजेक्ट में शामिल हुए और बराबर योगदान दिया।",
+  "Powered by ShopHelp Pro": "ShopHelp Pro द्वारा संचालित",
+  "Thank you for shopping": "खरीदारी के लिए धन्यवाद",
+  "Visit Again": "फिर आइए",
 };
-let shopkeeperLanguage = localStorage.getItem("shophelp_language") || "en";
-function st(key){ return (SHOPKEEPER_TEXT[shopkeeperLanguage] && SHOPKEEPER_TEXT[shopkeeperLanguage][key]) || SHOPKEEPER_TEXT.en[key] || key; }
-function applyShopkeeperLanguage(){
-  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent=st(el.dataset.i18n); });
-  const sel=document.getElementById("shopkeeperLanguage"); if(sel) sel.value=shopkeeperLanguage;
-}
-function setShopkeeperLanguage(lang){
-  shopkeeperLanguage = lang === "hi" ? "hi" : "en";
-  localStorage.setItem("shophelp_language", shopkeeperLanguage);
-  applyShopkeeperLanguage();
-  // Re-render only this page's static UI. Firestore data values are inserted unchanged.
-  if (typeof window.updateDashboard === "function") window.updateDashboard();
-  if (typeof window.renderProducts === "function") window.renderProducts();
-  if (typeof window.renderCustomers === "function") window.renderCustomers();
-  if (typeof window.renderAnalytics === "function") window.renderAnalytics();
-  if (typeof window.renderOrders === "function") window.renderOrders();
-  if (typeof window.renderSettings === "function") window.renderSettings();
 
-  applyShopkeeperLanguage();
+let shophelpLanguage = localStorage.getItem("shophelp_language") || "en";
+
+function shopHelpText(value) {
+  const key = String(value || "").trim();
+  return shophelpLanguage === "hi"
+    ? (SHOPHELP_TRANSLATIONS[key] || key)
+    : key;
 }
-window.setShopkeeperLanguage=setShopkeeperLanguage;
-document.addEventListener("DOMContentLoaded", applyShopkeeperLanguage);
+
+function translateShopHelpUI() {
+  /*
+    SAFE MODE:
+    Only elements explicitly marked data-i18n are translated.
+    Firestore data, products, customers, bills, prices and numbers
+    are never scanned or modified.
+  */
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (el.dataset.i18nType === "placeholder") {
+      el.placeholder = shopHelpText(key);
+      return;
+    }
+
+    // Preserve icons and any numeric/data child nodes.
+    const icon = el.querySelector("i");
+    if (icon) {
+      while (el.lastChild) el.removeChild(el.lastChild);
+      el.appendChild(icon);
+      el.appendChild(document.createTextNode(" " + shopHelpText(key)));
+    } else {
+      el.textContent = shopHelpText(key);
+    }
+  });
+
+  document.querySelectorAll("option[data-i18n]").forEach(option => {
+    option.textContent = shopHelpText(option.dataset.i18n);
+  });
+
+  const language = document.getElementById("shophelpLanguage");
+  if (language) language.value = shophelpLanguage;
+}
+
+function setShopHelpLanguage(language) {
+  shophelpLanguage = language === "hi" ? "hi" : "en";
+  localStorage.setItem("shophelp_language", shophelpLanguage);
+  translateShopHelpUI();
+
+  const menu = document.getElementById("shophelpLanguageMenu");
+  if (menu) menu.style.display = "none";
+}
+
+function toggleShopHelpLanguageMenu() {
+  const menu = document.getElementById("shophelpLanguageMenu");
+  if (!menu) return;
+
+  menu.style.display =
+    menu.style.display === "none" || menu.style.display === ""
+      ? "block"
+      : "none";
+
+  const selector = document.getElementById("shophelpLanguage");
+  if (selector) selector.value = shophelpLanguage;
+}
+
+window.setShopHelpLanguage = setShopHelpLanguage;
+window.toggleShopHelpLanguageMenu = toggleShopHelpLanguageMenu;
+
+document.addEventListener("DOMContentLoaded", translateShopHelpUI);
 </script>
+
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+// Firebase config
 const firebaseConfig = {
-apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
-authDomain: "shophelpay.firebaseapp.com",
-projectId: "shophelpay",
-storageBucket: "shophelpay.firebasestorage.app",
-messagingSenderId: "714326373961",
-appId: "1:714326373961:web:7df87c2fb87f08e69e7198"
+apiKey:"AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+authDomain:"shophelpay.firebaseapp.com",
+projectId:"shophelpay",
+appId:"1:714326373961:web:7df87c2fb87f08e69e7198"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
 const db = getFirestore(app);
+// --- DATA ---
+let customers=[], products=[], bill=[], expenses=[], sales=[], shopName="";
+let selectedCustomer = null; // ✅ ADD THIS
+let chatHistory = []; // ✅ ADD THIS
+async function saveData(){
+  try{
+    if(!auth.currentUser) return;
 
-let shopData = {};
-let userData = {};
-let products = [];
-let customers = [];
-let sales = [];
+    const userId = auth.currentUser.uid;
+await setDoc(doc(db, "shops", userId), {
+  shopName,
 
+  products,
+  customers,
+  sales,
+  expenses,
+
+  chatHistory,
+
+  updatedAt:Date.now()
+});
+  }catch(e){
+    console.error(e);
+  }
+}
+
+async function loadData(){
+
+  if(!auth.currentUser) return;
+
+  const userId = auth.currentUser.uid;
+
+  const docRef = doc(db, "shops", userId);
+
+  const snap = await getDoc(docRef);
+
+  if(snap.exists()){
+
+    const data = snap.data();
+shopName = data.shopName?.trim() || "My Shop";
+
+document.querySelector("#shopTitle h1").innerText = shopName;
+document.title = shopName;
+
+    console.log("Loaded shop name:", shopName);
+
+    // ✅ LOAD DATA
+    products = data.products || [];
+    customers = data.customers || [];
+    sales = data.sales || [];
+    expenses = data.expenses || [];
+    chatHistory = data.chatHistory || [];
+
+    // ✅ FIX OLD CUSTOMERS
+    customers.forEach(c=>{
+      if(c.debt === undefined){
+        c.debt = 0;
+      }
+    });
+
+  } else {
+
+    shopName = "My Shop";
+    document.querySelector("#shopTitle h1").innerText = shopName;
+
+  }
+
+}
+
+// --- AUTH ---
+window.signupUser = async function(){
+  const email = emailEl.value;
+  const password = passwordEl.value;
+  const shopNameInput = document.getElementById("shopNameInput").value;
+
+  if(!email || !password || !shopNameInput){
+    return showToast("Fill all fields including shop name");
+  }
+
+  try{
+    const userCred = await createUserWithEmailAndPassword(auth,email,password);
+    const userId = userCred.user.uid;
+await setDoc(doc(db, "users", userId), {
+  email,
+  shopName: shopNameInput.trim(),
+
+  ownerName:"",
+  phone:"",
+  address:"",
+  gstNumber:"",
+
+  role:"shopkeeper",
+
+  status:"pending",
+
+  shophelpAccess:true,
+  onshopAccess:false,
+
+  createdAt:Date.now()
+});
+  shopName = shopNameInput.trim();
+
+await setDoc(doc(db, "shops", userId), {
+  shopName:shopNameInput.trim(),
+
+  products:[],
+  customers:[],
+  sales:[],
+  expenses:[],
+  chatHistory:[],
+
+  createdAt:Date.now(),
+  updatedAt:Date.now()
+});
+document.querySelector("#shopTitle h1").innerText = shopName;
+    alert("Signup successful");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+window.loginUser = async function(){
+  const email = emailEl.value;
+  const password = passwordEl.value;
+
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+
+    loginPage.classList.add("hidden");
+    appDiv.classList.remove("hidden");
+
+await loadData();
+
+
+    loadChatUI();
+    checkLowStock();
+
+    renderAll();
+    renderFinances();
+    renderChart();
+
+  }catch(e){
+    alert(e.message);
+  }
+}
+window.googleLogin = async function(){
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Check whether this Google account already has a shop
+    const shopRef = doc(db, "shops", user.uid);
+    const shopSnap = await getDoc(shopRef);
+
+    // New Google account: ask for shop name
+    if (!shopSnap.exists() || !shopSnap.data().shopName?.trim()) {
+
+      const enteredName = prompt(
+        "Welcome to ShopHelp Pro!\n\nPlease enter your shop name:"
+      );
+
+      const shopName = enteredName ? enteredName.trim() : "";
+
+      // Shop name is required
+      if (!shopName) {
+        await signOut(auth);
+        alert("Shop name is required. Please sign in again.");
+        return;
+      }
+
+      // Save the shop name
+      await setDoc(shopRef, {
+        shopName: shopName,
+        products: [],
+        customers: [],
+        sales: [],
+        expenses: [],
+        chatHistory: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }, { merge: true });
+
+      // Also save it against the user
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email || "",
+        shopName: shopName,
+        ownerName: user.displayName || "",
+        role: "shopkeeper"
+      }, { merge: true });
+    }
+
+    // Continue into ShopHelp
+    loginPage.classList.add("hidden");
+    appDiv.classList.remove("hidden");
+
+    await loadData();
+    loadChatUI();
+    checkLowStock();
+    renderAll();
+    renderFinances();
+    renderChart();
+
+  } catch(error) {
+    console.error("Google login error:", error);
+    alert("Google login failed: " + error.message);
+  }
+};
 window.logoutUser = async function(){
 await signOut(auth);
-location.href="shopkeeper-login.html";
-};
-
-window.showPage = function(page){
-
-document.getElementById("dashboardPage").classList.add("hidden");
-document.getElementById("productsPage").classList.add("hidden");
-document.getElementById("ordersPage").classList.add("hidden");
-document.getElementById("customersPage").classList.add("hidden");
-document.getElementById("analyticsPage").classList.add("hidden");
-document.getElementById("settingsPage").classList.add("hidden");
-
-document.getElementById(page+"Page")
-.classList.remove("hidden");
-
-};
-
-async function loadShop(){
-
-const uid = auth.currentUser.uid;
-
-const userSnap =
-await getDoc(doc(db,"users",uid));
-
-if(!userSnap.exists()){
-
-alert(st("userNotFound"));
-return;
-
+location.reload();
 }
 
-userData = userSnap.data();
+// shortcuts
+const emailEl=document.getElementById("email");
+const passwordEl=document.getElementById("password");
+const loginPage=document.getElementById("loginPage");
+const appDiv=document.getElementById("app");
+const billBody = document.getElementById("billBody");
+const invTable = document.getElementById("invTable");
+const custTable = document.getElementById("custTable");
+const totalDisplay = document.getElementById("totalDisplay");
+const itemCount = document.getElementById("itemCount");
+const custDropdown = document.getElementById("custDropdown");
+const productDropdown = document.getElementById("productDropdown");
 
-if(userData.role !== "shopkeeper"){
+// --- UI ---
+window.showPage=function(p){
+  document.querySelectorAll("#app .card").forEach(c=>c.classList.add("hidden"));
+  document.getElementById(p+"Page").classList.remove("hidden");
 
-alert(st("accessDenied"));
-location.href="index.html";
-return;
+  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
 
-}
+  // 🔥 refresh data when opening pages
+  if(p === "expenses"){
+    renderFinances();
+    renderChart();
+  }
 
-document.getElementById("shopName")
-.innerText =
-userData.shopName || "My Shop";
+  if(p === "inventory"){
+    renderInventory();
+  }
 
-if(userData.status === "approved"){
-
-document.getElementById("approvalBadge")
-.innerText = "Approved";
-
-document.getElementById("approvalBadge")
-.className =
-"status approved";
-
-}else{
-
-document.getElementById("approvalBadge")
-.innerText = "Pending";
-
-}
-
-const shopSnap =
-await getDoc(doc(db,"shops",uid));
-
-if(shopSnap.exists()){
-
-shopData = shopSnap.data();
-
-products =
-shopData.products || [];
-
-customers =
-shopData.customers || [];
-
-sales =
-shopData.sales || [];
+  if(p === "customers"){
+    renderCustomers();
+  }
 
 }
+function showToast(msg){
+  let t = document.getElementById("toast");
 
-updateDashboard();
-renderProducts();
-renderCustomers();
-renderAnalytics();
-renderOrders();
-renderSettings();
-applyShopkeeperLanguage();
+  t.innerText = msg;
+  t.style.display = "block";
+  t.style.opacity = "1";
 
+  setTimeout(()=>{
+    t.style.opacity = "0";
+    setTimeout(()=> t.style.display="none", 300);
+  }, 2500);
+}
+function checkLowStock(){
+  let low = products.filter(p=>p.qty < 5);
+
+  let box = document.getElementById("lowStockWarning");
+
+  if(low.length){
+    let names = low.map(p=> `${p.name} (${p.qty})`);
+    
+    showToast("Low stock: " + names.join(", "));
+    
+    box.innerHTML = "⚠ LOW STOCK: " + names.join(", ");
+  } else {
+    box.innerHTML = "";
+  }
+}
+window.changeQty=function(name,val){
+  let item=bill.find(b=>b.name===name);
+  if(!item) return;
+
+  item.count+=val;
+
+  if(item.count<=0){
+    bill=bill.filter(b=>b.name!==name);
+  }
+
+  renderBill();
 }
 
-onAuthStateChanged(auth, async(user)=>{
+window.removeFromBill=function(name){
+  bill=bill.filter(b=>b.name!==name);
+  renderBill();
+}
+// --- INVENTORY ---
+window.searchProducts=function(){
+  let val=document.getElementById("searchProduct").value.toLowerCase();
+  let table=document.getElementById("invTable");
+  let rows=table.querySelectorAll("tr");
 
-if(!user){
-
-location.href="shopkeeper-login.html";
-return;
-
+  rows.forEach((r,i)=>{
+    if(i===0) return;
+    r.style.display=r.innerText.toLowerCase().includes(val) ? "" : "none";
+  });
 }
 
-await loadShop();
+window.addItem=function(){
+  addBtn.innerText="Adding...";
+  addBtn.disabled=true;
 
+  let n = pName.value.trim(),
+      cp = +pCP.value,
+      sp = +pSP.value,
+      q = +pQty.value,
+      u = pUnit.value,
+      barcode = pBarcode.value.trim();
+
+  if(!n || !cp || !sp || !q || !barcode){
+    showToast("Fill all fields + barcode");
+    addBtn.innerText="Add Item";
+    addBtn.disabled=false;
+    return;
+  }
+
+  // Prevent duplicate barcode
+  let exists = products.find(p => p.barcode === barcode);
+
+  if(exists){
+    showToast("Barcode already exists ❌");
+    addBtn.innerText="Add Item";
+    addBtn.disabled=false;
+    return;
+  }
+
+  products.push({
+    name: n,
+    cp: cp,
+    sp: sp,
+    qty: q,
+    unit: u,
+    barcode: barcode,
+
+    category: "",
+    brand: "",
+    description: "",
+    image: "",
+
+    approved: false,
+    onshopEnabled: false,
+
+    createdAt: Date.now()
+  });
+
+  saveData();
+  renderInventory();
+
+  // Clear inputs
+  pName.value = "";
+  pCP.value = "";
+  pSP.value = "";
+  pQty.value = "";
+  pBarcode.value = "";
+
+  addBtn.innerText="Add Item";
+  addBtn.disabled=false;
+}
+function renderInventory(){
+
+if(products.length===0){
+  invTable.innerHTML="<tr><td>No products added yet</td></tr>";
+  return;
+}
+
+let h=`<tr>
+<th data-i18n="Item">Item</th>
+<th>CP</th>
+<th>SP</th>
+<th>Stock</th>
+<th data-i18n="Action">Action</th>
+</tr>`;
+
+products.forEach((p,i)=>{
+h+=`<tr>
+<td>
+${p.name} 
+${p.qty < 5 ? '<span style="color:red;font-size:12px;">(LOW STOCK)</span>' : ''}
+</td>
+
+
+<td>₹${p.cp}</td>
+<td>₹${p.sp}</td>
+
+<td>
+<input type="number" value="${p.qty}" 
+style="width:70px; color:${p.qty<5 ? 'red' : 'black'}"
+onchange="updateStock(${i}, this.value)">
+</td>
+
+<td>
+<button onclick="deleteItem(${i})" class="delete-btn">Delete</button>
+</td>
+</tr>`;
 });
 
-function updateDashboard(){
+invTable.innerHTML=h;
+checkLowStock();
+}
+window.exportData=function(){
+  let data={
+    products,customers,sales,expenses
+  };
 
-document.getElementById("totalProducts")
-.innerText =
-products.length;
+  let blob=new Blob([JSON.stringify(data)],{type:"application/json"});
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="shophelp-pro-backup.json";
+  a.click();
+}
+// --- BILL ---
+window.addToBill=function(i){
+let p=products[i];
+if(p.qty<=0) return alert("Out of stock");
 
-document.getElementById("totalCustomers")
-.innerText =
-customers.length;
+let item=bill.find(x=>x.name===p.name);
+if(item) item.count++;
+else bill.push({...p,count:1});
 
-document.getElementById("totalSales")
-.innerText =
-sales.length;
+renderBill();
+}
+window.clearBill = function(){
 
-let revenue = 0;
+  // 🔥 clear bill data
+  bill = [];
+
+  // 🔥 reset totals
+  totalDisplay.innerText = "0.00";
+  document.getElementById("finalTotal").innerText = "0.00";
+  itemCount.innerText = "0";
+
+  // 🔥 clear discount & GST
+  document.getElementById("discountInput").value = "";
+  document.getElementById("gstSelect").value = "0";
+
+  // 🔥 reset customer
+  selectedCustomer = null;
+  document.getElementById("custSearch").value = "";
+
+  // 🔥 clear product search
+  document.getElementById("productSearch").value = "";
+
+  // 🔥 clear bill table
+  billBody.innerHTML = "<tr><td colspan='4'>No items added</td></tr>";
+
+  // 🔥 close dropdowns
+  document.getElementById("custDropdown").style.display = "none";
+  document.getElementById("productDropdown").style.display = "none";
+};
+function renderBill(){
+
+  if(bill.length===0){
+    billBody.innerHTML="<tr><td colspan='4'>No items added</td></tr>";
+    totalDisplay.innerText="0.00";
+    return;
+  }
+
+  let h="", total=0;
+
+  bill.forEach(b=>{
+    total+=b.sp*b.count;
+
+    h+=`<tr>
+    <td>${b.name}</td>
+    <td>
+    <button onclick="changeQty('${b.name}',-1)">-</button>
+    ${b.count}
+    <button onclick="changeQty('${b.name}',1)">+</button>
+    </td>
+    <td>${b.sp*b.count}</td>
+    <td><button onclick="removeFromBill('${b.name}')">X</button></td>
+    </tr>`;
+  });
+
+  billBody.innerHTML=h;
+  totalDisplay.innerText = total.toFixed(2);
+
+// NEW LOGIC
+let discount = Number(document.getElementById("discountInput").value) || 0;
+let gstPercent = Number(document.getElementById("gstSelect").value);
+
+let afterDiscount = total - discount;
+if(afterDiscount < 0) afterDiscount = 0;
+
+let gstAmount = (afterDiscount * gstPercent) / 100;
+let final = afterDiscount + gstAmount;
+
+document.getElementById("finalTotal").innerText = final.toFixed(2);
+  itemCount.innerText = bill.reduce((a,b)=>a+b.count,0);
+}
+document.getElementById("discountInput").oninput = renderBill;
+document.getElementById("gstSelect").onchange = renderBill;
+function generateInvoiceNo(){
+  let max = 0;
+
+  sales.forEach(s=>{
+    if(s.invoiceNo){
+      let num = Number(s.invoiceNo.replace("INV-",""));
+      if(num > max) max = num;
+    }
+  });
+
+  let next = max + 1;
+
+  return "INV-" + String(next).padStart(3, "0");
+}
+window.saveAndPrint=function(){
+  let invoiceNo = generateInvoiceNo();
+if(bill.length===0) return;
+
+let total=0, profit=0, rows="";
+
+bill.forEach(item=>{
+total+=item.sp*item.count;
+profit+=(item.sp-item.cp)*item.count;
+
+rows+=`<tr><td>${item.name}</td><td>${item.count}</td><td>${item.sp*item.count}</td></tr>`;
+});
+let discount = Number(document.getElementById("discountInput").value) || 0;
+let gstPercent = Number(document.getElementById("gstSelect").value);
+
+let afterDiscount = total - discount;
+if(afterDiscount < 0) afterDiscount = 0;
+
+let gstAmount = (afterDiscount * gstPercent) / 100;
+
+// ✅ ROUNDING FIX
+let finalTotal = Math.round((afterDiscount + gstAmount) * 100) / 100;
+let customerName = "Walk-in Customer";
+let customerPhone = "-";
+
+if(selectedCustomer !== null){
+  customerName = customers[selectedCustomer].name;
+  customerPhone = customers[selectedCustomer].phone;
+}
+sales.push({
+  invoiceNo: invoiceNo,
+  date: new Date().toISOString().split("T")[0],
+  profit,
+  total: finalTotal,
+  items: bill,
+  customer: selectedCustomer,
+  customerName,
+  customerPhone,
+  discount,
+  gst: gstPercent,
+
+  // 🔥 ADD THESE TWO LINES HERE
+  subtotal: total,
+  gstAmount: gstAmount
+});
+let custIndex = selectedCustomer;
+
+if(paymentType.value === "credit" && custIndex !== null){
+  if(!customers[custIndex].debt){
+    customers[custIndex].debt = 0;
+  }
+  customers[custIndex].debt += finalTotal;
+}
+saveData();
+
+
+let dateTime = new Date().toLocaleString();
+let w = window.open("", "", "width=400,height=600");
+
+w.document.write(`
+<html>
+<head>
+<title>Bill</title>
+<style>
+body{
+  font-family: monospace;
+  padding: 10px;
+}
+h2{
+  text-align:center;
+  margin:5px 0;
+}
+hr{
+  border:1px dashed #000;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+td,th{
+  padding:6px;
+  text-align:left;
+}
+th{
+  border-bottom:1px solid #000;
+}
+.total{
+  font-size:18px;
+  font-weight:bold;
+  text-align:right;
+  margin-top:10px;
+}
+.center{
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<h2>${shopName}</h2>
+<div class="center">📍 Thank you for shopping</div>
+
+<hr>
+
+<p><b>Customer:</b> ${customerName}</p>
+<p><b>Phone:</b> ${customerPhone}</p>
+<p><b>Invoice:</b> ${invoiceNo}</p>
+<p><b>Date:</b> ${dateTime}</p>
+<p><b>Payment:</b> ${paymentType.value.toUpperCase()}</p>
+
+<hr>
+
+<table>
+<tr>
+  <th data-i18n="Item">Item</th>
+  <th data-i18n="Qty">Qty</th>
+  <th>₹</th>
+</tr>
+${rows}
+</table>
+
+<hr>
+
+<hr>
+
+<div>Subtotal: ₹${total.toFixed(2)}</div>
+<div>Discount: ₹${discount}</div>
+<div>GST (${gstPercent}%): ₹${gstAmount.toFixed(2)}</div>
+
+<div class="total">Final: ₹${finalTotal.toFixed(2)}</div>
+
+<hr>
+
+<div class="center">
+  🙏 Visit Again 🙏<br>
+  Powered by ShopHelp Pro
+</div>
+
+</body>
+</html>
+`);
+
+w.document.close();
+w.print();
+
+bill.forEach(b=>{
+let p=products.find(x=>x.name===b.name);
+if(p) p.qty-=b.count;
+});
+saveData();
+bill=[];
+renderBill(); 
+renderInventory(); 
+renderCustomers();   // ✅ IMPORTANT
+renderFinances();
+renderChart();
+selectedCustomer = null;
+document.getElementById("custSearch").value = "";
+}
+window.updateStock=function(i,val){
+  products[i].qty = Number(val);
+  saveData();
+  renderInventory();
+}
+window.deleteItem=function(i){
+if(confirm("Delete this item?")){
+products.splice(i,1);
+saveData();
+renderInventory();
+}
+}
+// --- CUSTOMERS ---
+window.addCust=function(){
+if(!cName.value||!cPhone.value) return alert("Fill all");
+customers.push({name:cName.value,phone:cPhone.value,debt:0});
+saveData();
+renderCustomers();
+}
+function getCustomerHistory(i){
+  return sales.filter(s => s.customer == i);
+}
+window.viewHistory = function(i){
+  let data = getCustomerHistory(i);
+
+  if(data.length === 0){
+    alert("No history found");
+    return;
+  }
+
+  let html = "<h3>Order History</h3>";
+
+  data.forEach(s=>{
+    html += `<div style="margin-bottom:10px;">
+      <b>${s.date}</b> - ₹${s.total}<br>
+      ${s.items.map(it=>`${it.name} (${it.count})`).join(", ")}
+    </div>`;
+  });
+
+  // show properly instead of alert
+  let w = window.open("", "", "width=400,height=500");
+  w.document.write(html);
+}
+function renderCustomers(){
+let h=`<tr><th>Name</th><th>Phone</th><th>Debt</th><th data-i18n="Action">Action</th></tr>`;
+
+customers.forEach((c,i)=>{
+h+=`<tr>
+<td>${c.name}</td>
+<td>${c.phone}</td>
+<td style="color:${c.debt>0?'red':'green'}">₹${c.debt}</td>
+<td>
+<button onclick="viewHistory(${i})">History</button>
+<button onclick="payDebt(${i})" style="background:#27ae60;color:white;">Pay</button>
+<button onclick="deleteCustomer(${i})" style="background:#e74c3c;color:white;">Delete</button>
+</td>
+</tr>`;
+});
+window.searchCust=function(val){
+  val=val.toLowerCase();
+  custTable.querySelectorAll("tr").forEach((r,i)=>{
+    if(i===0) return;
+    r.style.display=r.innerText.toLowerCase().includes(val)?"":"none";
+  });
+}
+const el = document.getElementById("custTable");
+if(el) el.innerHTML = h;
+}
+
+window.deleteCustomer=function(i){
+if(confirm("Delete customer?")){
+customers.splice(i,1);
+saveData();
+renderCustomers();
+}
+}
+window.payDebt=function(i){
+  let amt = prompt("Enter amount paid:");
+  amt = Number(amt);
+
+  if(isNaN(amt) || amt<=0) return;
+
+  customers[i].debt -= amt;
+
+  if(customers[i].debt < 0) customers[i].debt = 0;
+
+  saveData();
+  renderCustomers();
+}
+// --- EXPENSES ---
+window.addNewExpense=function(){
+expenses.push({
+desc:expenseName.value,
+amt:+expenseAmount.value,
+date:expenseDate.value
+});
+saveData();
+renderFinances();
+expenseName.value="";
+expenseAmount.value="";
+expenseDate.value="";
+}
+window.deleteExpense=function(i){
+if(confirm("Delete expense?")){
+expenses.splice(i,1);
+saveData();
+renderFinances();
+}
+}
+function getTodaySales(){
+  let today = new Date().toISOString().split("T")[0];
+  return sales.filter(s=>s.date===today)
+              .reduce((a,b)=>a+b.total,0);
+}
+function getMonthlySales(){
+  let m = new Date().getMonth();
+  let y = new Date().getFullYear();
+
+  return sales.filter(s=>{
+    let d = new Date(s.date);
+    return d.getMonth()==m && d.getFullYear()==y;
+  }).reduce((a,b)=>a+b.total,0);
+}
+function renderFinances()
+{
+let gross=0, exp=0, h="";
 
 sales.forEach(s=>{
+  gross += s.profit;
 
-revenue += Number(
-s.total || 0
-);
-
-});
-
-document.getElementById("totalRevenue")
-.innerText =
-"₹"+revenue;
-
-}
-window.renderProducts = function renderProducts(){
-let html = `
-<h2>${st("products")}</h2>
-<br>
-<table>
-<tr>
-<th>${st("name")}</th>
-<th>${st("price")}</th>
-<th>${st("stock")}</th>
-<th>${st("onshop")}</th>
-<th>${st("action")}</th>
-</tr>
-`;
-products.forEach((p,index)=>{
-html += `
-<tr>
-<td>${p.name || "-"}</td>
-<td>₹${p.sp || 0}</td>
-<td>${p.qty || 0}</td>
-<td>${p.onshopEnabled ? "✅ " + st("live") : "❌ " + st("off")}</td>
-<td><button class="btn primary" onclick="toggleProduct(${index})">${p.onshopEnabled ? st("disable") : st("enable")}</button></td>
+h += `<tr>
+ <td>
+  ${s.invoiceNo || "-"} <br>
+  <small>${s.date}</small>
+</td>
+  <td>Sale</td>
+  <td>₹${s.total}</td>
+  <td>Income</td>
+  <td style="color:${s.profit >= 0 ? 'green' : 'red'}">
+    ₹${s.profit}
+  </td>
+<td>
+  <button onclick="viewSale(${sales.indexOf(s)})" class="btn-main">View</button>
+  <button onclick="editSale(${sales.indexOf(s)})" style="background:#f39c12;color:white;">Edit</button>
+  <button onclick="deleteSale(${sales.indexOf(s)})" class="delete-btn">Delete</button>
+</td>
 </tr>`;
 });
-html += `</table>`;
-document.getElementById("productsPage").innerHTML = html;
-}
+expenses.forEach((e,i)=>{
+  exp += e.amt;
 
-window.toggleProduct = async function(index){
-
-const uid = auth.currentUser.uid;
-
-products[index].onshopEnabled =
-!products[index].onshopEnabled;
-
-await updateDoc(
-doc(db,"shops",uid),
-{
-products
-}
-);
-
-renderProducts();
-
-};
-
-window.renderCustomers = function renderCustomers(){
-let html = `
-<h2>${st("customers")}</h2>
-<br>
-<table>
-<tr>
-<th>${st("name")}</th>
-<th>${st("phone")}</th>
-<th>${st("debt")}</th>
-</tr>
-`;
-customers.forEach(c=>{
-html += `
-<tr>
-<td>${c.name || "-"}</td>
-<td>${c.phone || "-"}</td>
-<td>₹${c.debt || 0}</td>
-</tr>`;
+  h += `<tr>
+    <td>${e.date}</td>
+    <td>${e.desc}</td>
+    <td>₹${e.amt}</td>
+    <td>Expense</td>
+    <td style="color:red">-₹${e.amt}</td> <!-- loss -->
+    <td>
+      <button onclick="deleteExpense(${i})" style="background:#e74c3c;color:white;">Delete</button>
+    </td>
+  </tr>`;
 });
-html += `</table>`;
-document.getElementById("customersPage").innerHTML = html;
-}
+stProfit.innerText="₹"+gross;
+stExp.innerText="₹"+exp;
+stNet.innerText="₹"+(gross-exp);
 
-window.renderAnalytics = function renderAnalytics(){
-let revenue = 0;
-sales.forEach(sale=>{ revenue += Number(sale.total || 0); });
-document.getElementById("analyticsPage").innerHTML = `
-<h2>${st("analytics")}</h2>
-<br>
-<div class="cards">
-<div class="card"><h4>${st("totalRevenue")}</h4><h2>₹${revenue}</h2></div>
-<div class="card"><h4>${st("totalSales")}</h4><h2>${sales.length}</h2></div>
-<div class="card"><h4>${st("products")}</h4><h2>${products.length}</h2></div>
-</div>`;
+finBody.innerHTML=h;
 }
-
-window.renderOrders = function renderOrders(){
-document.getElementById("ordersPage").innerHTML = `
-<h2>${st("orders")}</h2>
-<br>
-<div class="card">
-<h3>${st("noOrders")}</h3>
-<p>${st("ordersMessage")}</p>
-</div>`;
+function renderAll(){
+renderInventory();
+renderCustomers();
+renderProductSelect();
 }
+window.onerror = function(msg, url, line){
+  alert("Error: " + msg + " at line " + line);
+};
+function renderChart(){
+  let dates = {};
+  
+  // group sales by date
+  sales.forEach(s=>{
+    if(!dates[s.date]) dates[s.date] = 0;
+    dates[s.date] += s.total;
+  });
 
-window.renderSettings = function renderSettings(){
-document.getElementById("settingsPage").innerHTML = `
-<h2>${st("storeSettings")}</h2>
-<br>
-<label>${st("language")}</label>
-<select id="shopkeeperLanguage" onchange="setShopkeeperLanguage(this.value)" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:8px;margin-bottom:15px;">
-<option value="en">English</option>
-<option value="hi">हिंदी</option>
-</select>
-<label>${st("shopName")}</label>
-<input id="shopNameInput" value="${userData.shopName || ""}">
-<label>${st("ownerName")}</label>
-<input id="ownerNameInput" value="${userData.ownerName || ""}">
-<label>${st("phone")}</label>
-<input id="phoneInput" value="${userData.phone || ""}">
-<label>${st("address")}</label>
-<textarea id="addressInput">${userData.address || ""}</textarea>
-<button class="btn success" onclick="saveSettings()">${st("saveSettings")}</button>
+  let labels = Object.keys(dates);
+  let data = Object.values(dates);
+
+  let ctx = document.getElementById("salesChart");
+
+  if(window.myChart) window.myChart.destroy();
+
+  window.myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Daily Sales ₹',
+        data: data
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins:{
+        legend:{ display:true }
+      }
+    }
+  });
+}
+// ===== AI CONFIG =====
+// ===== AI CONFIG =====
+async function askAI(userMessage){
+
+  const shopData = `
+PRODUCTS:
+${JSON.stringify(products)}
+
+SALES:
+${JSON.stringify(sales)}
+
+CUSTOMERS:
+${JSON.stringify(customers)}
+
+EXPENSES:
+${JSON.stringify(expenses)}
+
+LOW STOCK:
+${products.filter(p => Number(p.qty) < 5).map(p => p.name).join(", ") || "None"}
 `;
-const selector=document.getElementById("shopkeeperLanguage"); if(selector) selector.value=shopkeeperLanguage;
+
+  try {
+
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: userMessage,
+        shopData: shopData
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("AI API error:", data);
+      return "Sorry, AI service mein problem aa gayi 😕";
+    }
+
+    return data.answer || "No response 🤔";
+
+  } catch (err) {
+
+    console.error("AI request failed:", err);
+
+    return "AI se connect nahi ho pa raha 😕";
+  }
+}
+// toggle
+
+
+// send message
+window.sendMsg = async function(){
+  let input = document.getElementById("chatInput");
+  let msg = input.value.trim();
+  if(!msg) return;
+
+  let chat = document.getElementById("chatMessages");
+
+  // USER MESSAGE
+  chat.innerHTML += `<div class="msg user">${msg}</div>`;
+  chatHistory.push({ role: "user", text: msg });  // ✅ SAVE USER MSG
+saveData();
+  input.value = "";
+
+  // TYPING ANIMATION
+  let typingId = "typing-" + Date.now();
+  chat.innerHTML += `
+    <div class="msg bot" id="${typingId}">
+      <div class="typing">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  `;
+
+  let reply = await askAI(msg);
+  chatHistory.push({ role: "bot", text: reply }); // ✅ SAVE AI MSG
+saveData();
+
+  // REMOVE TYPING
+  document.getElementById(typingId).remove();
+
+  // TYPEWRITER EFFECT
+  let botDiv = document.createElement("div");
+  botDiv.className = "msg bot";
+  chat.appendChild(botDiv);
+
+  let i = 0;
+  let speed = 15;
+
+  function type(){
+    if(i < reply.length){
+      botDiv.innerHTML += reply.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+
+  chat.scrollTop = chat.scrollHeight;
+
+}
+;
+
+ 
+let dataSummary = `
+FULL SHOP DATA (Use this carefully):
+
+🛒 PRODUCTS:
+${JSON.stringify(products)}
+
+💰 SALES:
+${JSON.stringify(sales)}
+
+👥 CUSTOMERS:
+${JSON.stringify(customers)}
+
+📉 EXPENSES:
+${JSON.stringify(expenses)}
+
+⚠ LOW STOCK:
+${products.filter(p=>p.qty < 5).map(p=>p.name).join(", ") || "None"}
+`;
+function speak(text){
+  return; // 🚫 stop voice completely
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-IN";
+  speechSynthesis.speak(utter);
 }
 
-window.saveSettings = async function(){
+window.addEventListener("DOMContentLoaded", () => {
 
-const uid = auth.currentUser.uid;
+  const imageInput = document.getElementById("imageInput");
 
-await updateDoc(
-doc(db,"users",uid),
-{
-shopName:
-document.getElementById(
-"shopNameInput"
-).value,
+  if(imageInput){
 
-ownerName:
-document.getElementById(
-"ownerNameInput"
-).value,
+    imageInput.addEventListener("change", async function(){
 
-phone:
-document.getElementById(
-"phoneInput"
-).value,
+      const file = this.files[0];
 
-address:
-document.getElementById(
-"addressInput"
-).value
+      if(!file) return;
+
+      if(!file.type.startsWith("image/")){
+        alert("Please select an image file.");
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = async function(){
+
+        const base64 = reader.result.split(",")[1];
+
+        let chat = document.getElementById("chatMessages");
+
+        chat.innerHTML += `
+          <div style="text-align:right;margin:6px;">
+            <img src="${reader.result}" style="max-width:120px;border-radius:10px;">
+          </div>
+        `;
+
+        chat.innerHTML += `
+          <div id="loading">
+            🤖 analyzing image...
+          </div>
+        `;
+
+        try {
+
+          const res = await fetch("/api/vision", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              image: base64,
+              mimeType: file.type,
+              prompt: "Explain this image in simple Hinglish. If it contains a bill, receipt, product, invoice, or shop-related information, identify the important details clearly."
+            })
+          });
+
+          const data = await res.json();
+
+          document.getElementById("loading")?.remove();
+
+        if(!res.ok){
+  console.error("Vision API error:", data);
+
+  chat.innerHTML += `
+    <div class="msg bot">
+      ❌ Image AI Error:<br>
+      ${data.error || "Unknown error"}
+    </div>
+  `;
+
+  return;
 }
-);
 
-alert(st("settingsSaved"));
+          const reply = data.answer || "No response";
 
+          chat.innerHTML += `
+            <div class="msg bot">${reply}</div>
+          `;
+
+        } catch(error) {
+
+          console.error("Image AI error:", error);
+
+          document.getElementById("loading")?.remove();
+
+          chat.innerHTML += `
+            <div class="msg bot">
+              Image AI se connect nahi ho pa raha 😕
+            </div>
+          `;
+        }
+
+      };
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+});
+function loadChatUI(){
+  let chat = document.getElementById("chatMessages");
+  chat.innerHTML = "";
+
+  chatHistory.forEach(m=>{
+    chat.innerHTML += `<div class="msg ${m.role}">${m.text}</div>`;
+  });
+
+  chat.scrollTop = chat.scrollHeight;
+}
+window.clearChat = function(){
+  if(confirm("Clear chat?")){
+    chatHistory = [];
+    saveData();
+    document.getElementById("chatMessages").innerHTML = "";
+  }
+}
+window.toggleChat = function(){
+  const chat = document.getElementById("chatApp");
+  const btn = document.getElementById("chatToggleBtn");
+
+  if(getComputedStyle(chat).display === "none"){
+    chat.style.display = "flex";
+    btn.style.display = "none";   // ❌ hide button
+  } else {
+    chat.style.display = "none";
+    btn.style.display = "block";  // ✅ show button again
+  }
+}
+
+window.startVoice = function(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    alert("Voice not supported");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+
+  recognition.start();
+
+  recognition.onresult = function(event){
+    let text = event.results[0][0].transcript.toLowerCase();
+    processVoiceCommand(text);
+  };
 };
 
-renderOrders();
+function processVoiceCommand(text){
+  let words = text.split(" ");
+  let qty = 1;
 
+  words.forEach(w=>{
+    if(!isNaN(w)) qty = Number(w);
+  });
+
+  let product = products.find(p =>
+    text.includes(p.name.toLowerCase())
+  );
+
+  if(!product){
+    alert("Product not found");
+    return;
+  }
+
+  let index = products.findIndex(p => p.name === product.name);
+
+  for(let i=0;i<qty;i++){
+    addToBill(index);
+  }
+}
+function renderProductSelect(){
+  let select = document.getElementById("productSelect");
+
+  if(!select) return; // ✅ prevent error
+
+  select.innerHTML = `<option value="">-- Select Product --</option>`;
+
+  products.forEach((p,i)=>{
+    select.innerHTML += `<option value="${i}">
+      ${p.name} | ₹${p.sp} | Stock: ${p.qty}
+    </option>`;
+  });
+}
+window.selectProductFromDropdown = function(){
+  let index = document.getElementById("productSelect").value;
+
+  if(index !== ""){
+    addToBill(Number(index));
+    document.getElementById("productSelect").value = "";
+  }
+}
+window.showDropdown = function(){
+  const dd = document.getElementById("productDropdown");
+  dd.style.display = "block";
+  renderDropdown(products);
+};
+// ===== CUSTOMER DROPDOWN FOR BILLING =====
+
+// show dropdown
+window.showCustDropdown = function(){
+  const dd = document.getElementById("custDropdown");
+  dd.style.display = "block";
+  renderCustDropdown(customers);
+};
+
+// filter customers
+window.filterCustBilling = function(){
+  const val = document.getElementById("custSearch").value.toLowerCase();
+
+  const filtered = customers.filter(c =>
+    c.name.toLowerCase().includes(val) ||
+    c.phone.includes(val)
+  );
+
+  renderCustDropdown(filtered);
+};
+
+// render dropdown list
+function renderCustDropdown(list){
+  const dd = document.getElementById("custDropdown");
+
+  if(list.length === 0){
+    dd.innerHTML = "<div style='padding:10px;'>No customer found</div>";
+    return;
+  }
+
+  dd.innerHTML = list.map((c,i)=>`
+    <div style="padding:10px; cursor:pointer; border-bottom:1px solid #eee;"
+     onclick="selectCustomer('${c.name.replace(/'/g, "\\'")}')">
+      ${c.name} | ${c.phone}
+    </div>
+  `).join("");
+}
+window.selectCustomer = function(name){
+  const index = customers.findIndex(c => c.name === name);
+
+  if(index !== -1){
+    selectedCustomer = index; // ✅ STORE HERE
+    document.getElementById("custSearch").value = name;
+  }
+
+  document.getElementById("custDropdown").style.display = "none";
+};
+window.filterProducts = function(){
+  const val = document.getElementById("productSearch").value.toLowerCase();
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(val)
+  );
+  renderDropdown(filtered);
+};
+
+function renderDropdown(list){
+  const dd = document.getElementById("productDropdown");
+
+  if(list.length === 0){
+    dd.innerHTML = "<div style='padding:10px;'>No product found</div>";
+    return;
+  }
+dd.innerHTML = list.map(p=>`
+  <div style="padding:10px; cursor:pointer; border-bottom:1px solid #eee;"
+    onclick="selectProduct(${products.indexOf(p)})">
+    ${p.name} | ₹${p.sp} | Stock: ${p.qty}
+  </div>
+`).join("");
+}
+
+window.selectProduct = function(index){
+  if(index !== -1){
+    addToBill(index);
+  }
+
+document.getElementById("productSearch").value = products[index].name;
+  document.getElementById("productDropdown").style.display = "none";
+};
+
+document.addEventListener("click", function(e){
+
+  // product dropdown close
+  if(!e.target.closest("#productSearch")){
+    document.getElementById("productDropdown").style.display = "none";
+  }
+
+  // customer dropdown close
+  if(!e.target.closest("#custSearch")){
+    document.getElementById("custDropdown").style.display = "none";
+  }
+
+});
+window.downloadPDF = function(){
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  let customerName = "Walk-in";
+  let customerPhone = "-";
+
+  if(selectedCustomer !== null){
+    customerName = customers[selectedCustomer].name;
+    customerPhone = customers[selectedCustomer].phone;
+  }
+
+  let y = 10;
+
+  doc.setFont("courier");
+
+  doc.text(shopName, 80, y); y+=10;
+  doc.text("Customer: " + customerName, 10, y); y+=8;
+  doc.text("Phone: " + customerPhone, 10, y); y+=8;
+  doc.text("Date: " + new Date().toLocaleString(), 10, y); y+=10;
+
+  doc.text("-----------------------------", 10, y); y+=8;
+
+  bill.forEach(item=>{
+    doc.text(
+      `${item.name}  x${item.count}  ₹${item.sp * item.count}`,
+      10, y
+    );
+    y+=8;
+  });
+
+  doc.text("-----------------------------", 10, y); y+=10;
+
+  let total = bill.reduce((a,b)=>a+(b.sp*b.count),0);
+
+  doc.text("TOTAL: ₹" + total, 10, y);
+
+  doc.save("bill.pdf");
+};
+window.sendWhatsApp = function(){
+
+  let customerPhone = "";
+
+  if(selectedCustomer !== null){
+    customerPhone = customers[selectedCustomer].phone;
+  }
+
+  if(!customerPhone){
+    alert("Customer phone not available");
+    return;
+  }
+
+  let msg = `🧾 *${shopName}*\n\n`;
+
+  bill.forEach(item=>{
+    msg += `${item.name} x${item.count} = ₹${item.sp * item.count}\n`;
+  });
+
+  let total = bill.reduce((a,b)=>a+(b.sp*b.count),0);
+
+  msg += `\n*Total: ₹${total}*\n`;
+  msg += `\n🙏 Thank you!`;
+
+  let url = `https://wa.me/91${customerPhone}?text=${encodeURIComponent(msg)}`;
+
+  window.open(url, "_blank");
+};
+window.startBarcodeScanner = function () {
+  let readerDiv = document.getElementById("reader");
+  readerDiv.innerHTML = "";
+
+  // Scanner container UI
+  readerDiv.innerHTML = `
+    <div id="scannerBox" style="
+      position:relative;
+      width:100%;
+      max-width:350px;
+      margin:auto;
+      text-align:center;
+    ">
+      <div id="scanner" style="
+        width:100%;
+        border-radius:12px;
+        overflow:hidden;
+      "></div>
+
+      <p style="margin-top:10px;font-weight:600;">
+        📷 Align barcode inside frame
+      </p>
+
+      <button onclick="stopScanner()" style="
+        margin-top:10px;
+        background:#e74c3c;
+        color:#fff;
+        padding:10px 15px;
+        border:none;
+        border-radius:10px;
+      ">
+        Stop Scanner
+      </button>
+    </div>
+  `;
+
+  const html5Qr = new Html5Qrcode("scanner");
+
+  window.activeScanner = html5Qr;
+
+  Html5Qrcode.getCameras().then(devices => {
+
+    if (!devices || devices.length === 0) {
+      alert("No camera found");
+      return;
+    }
+
+    let cameraId = devices[0].id;
+
+    html5Qr.start(
+      { facingMode: "environment" }, // back camera
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }
+      },
+
+      (decodedText) => {
+
+        console.log("Scanned:", decodedText);
+
+        let index = products.findIndex(
+          p => p.barcode == decodedText
+        );
+
+        if (index !== -1) {
+
+          addToBill(index);
+          showToast("✔ " + products[index].name);
+
+          html5Qr.stop();
+          readerDiv.innerHTML = "";
+
+        } else {
+
+          showToast("❌ Product not found");
+        }
+
+      },
+
+      (error) => {
+        // ignore scan noise
+      }
+    );
+
+  }).catch(err => {
+    console.error(err);
+    alert("Camera error");
+  });
+};
+window.handleManualBarcode = function(e){
+  if(e.key === "Enter"){
+    let code = e.target.value.trim();
+
+    if(!code){
+      showToast("Enter barcode");
+      return;
+    }
+
+    let index = products.findIndex(p => p.barcode == code);
+
+    if(index === -1){
+      showToast("Product not found ❌");
+    } else {
+      addToBill(index); // ✅ ADD PRODUCT
+      showToast("Added: " + products[index].name);
+    }
+
+    e.target.value = ""; // clear input
+  }
+};
+window.stopScanner = function () {
+  if (window.activeScanner) {
+    window.activeScanner.stop().then(() => {
+      document.getElementById("reader").innerHTML = "";
+    });
+  }
+};
+if(products.some(p=>p.qty < 5)){
+  showToast("AI: Restock low items ⚠");
+}
+window.viewSale = function(index){
+
+  let s = sales[index];
+
+  if(!s){
+    alert("Sale not found");
+    return;
+  }
+
+  let rows = "";
+  s.items.forEach(item=>{
+    rows += `<tr>
+      <td>${item.name}</td>
+      <td>${item.count}</td>
+      <td>₹${item.sp * item.count}</td>
+    </tr>`;
+  });
+
+  let customerName = "Walk-in Customer";
+  let customerPhone = "-";
+
+  if(s.customer !== null && customers[s.customer]){
+    customerName = customers[s.customer].name;
+    customerPhone = customers[s.customer].phone;
+  }
+
+  let w = window.open("", "", "width=400,height=600");
+
+  w.document.write(`
+  <html>
+  <head>
+  <title>View Bill</title>
+  <style>
+  body{font-family:monospace;padding:10px;}
+  h2{text-align:center;}
+  table{width:100%;border-collapse:collapse;margin-top:10px;}
+  td,th{padding:6px;}
+  th{border-bottom:1px solid #000;}
+  .total{text-align:right;font-weight:bold;}
+  </style>
+  </head>
+
+  <body>
+
+  <h2>${shopName}</h2>
+  <p><b>Customer:</b> ${customerName}</p>
+  <p><b>Phone:</b> ${customerPhone}</p>
+  <p><b>Date:</b> ${s.date}</p>
+  <p><b>Invoice:</b> ${s.invoiceNo || "-"}</p>
+
+  <hr>
+
+  <table>
+  <tr>
+    <th data-i18n="Item">Item</th>
+    <th data-i18n="Qty">Qty</th>
+    <th>₹</th>
+  </tr>
+  ${rows}
+  </table>
+
+  <hr>
+  
+<div>Subtotal: ₹${(s.subtotal || 0).toFixed(2)}</div>
+<div>Discount: ₹${(s.discount || 0).toFixed(2)}</div>
+<div>GST (${s.gst || 0}%): ₹${(s.gstAmount || 0).toFixed(2)}</div>
+
+<div class="total">Final: ₹${(s.total || 0).toFixed(2)}</div>
+
+  <hr>
+  <div style="text-align:center;">Thank you 🙏</div>
+
+  </body>
+  </html>
+  `);
+
+  w.document.close();
+};
+window.deleteSale = function(index){
+
+  if(!confirm("Delete this invoice? This will restore stock and remove sale.")) return;
+
+  let s = sales[index];
+
+  if(!s){
+    alert("Sale not found");
+    return;
+  }
+
+  // 🔥 RESTORE STOCK
+  s.items.forEach(item=>{
+    let p = products.find(prod => prod.name === item.name);
+    if(p){
+      p.qty += item.count; // add back stock
+    }
+  });
+// 🔥 FIX CUSTOMER DEBT
+if(s.customer !== null && customers[s.customer]){
+  customers[s.customer].debt -= s.total;
+
+  if(customers[s.customer].debt < 0){
+    customers[s.customer].debt = 0;
+  }
+}
+  // 🔥 REMOVE SALE
+  sales.splice(index, 1);
+
+  // 🔥 SAVE + REFRESH
+  saveData();
+  renderInventory();
+  renderFinances();
+  renderChart();
+  renderCustomers();
+
+  alert("Invoice deleted ✅");
+};
+  // ===============================
+// SHOPHELP VOICE INPUT
+// ===============================
+
+// ===============================
+// SHOPHELP VOICE INPUT
+// BILLING + INVENTORY
+// ===============================
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function createShopHelpVoice() {
+
+  if (!SpeechRecognition) {
+    alert("Voice input is not supported in this browser. Please use Google Chrome.");
+    return null;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  return recognition;
+}
+
+
+// ==========================================
+// BILLING VOICE
+// ==========================================
+
+window.startBillingVoice = function () {
+
+  const recognition = createShopHelpVoice();
+
+  if (!recognition) return;
+
+  showToast("🎤 Listening... Say product name and quantity");
+
+  recognition.onstart = () => {
+    console.log("Billing voice started");
+  };
+
+  recognition.onerror = (event) => {
+
+    console.error("Billing voice error:", event.error);
+
+    if (event.error === "not-allowed") {
+      alert("Microphone permission is blocked. Please allow microphone access.");
+    } else {
+      alert("Could not hear you. Please try again.");
+    }
+  };
+
+  recognition.onresult = async (event) => {
+
+    const spokenText =
+      event.results[0][0].transcript.trim();
+
+    console.log("Billing voice:", spokenText);
+
+    await processBillingVoice(spokenText);
+  };
+
+  recognition.start();
+};
+
+
+async function processBillingVoice(text) {
+
+  text = text.toLowerCase().trim();
+
+  console.log("Processing billing voice:", text);
+
+  // Find quantity
+  const quantityMatch = text.match(/\b(\d+)\b/);
+
+  const quantity = quantityMatch
+    ? parseInt(quantityMatch[1])
+    : 1;
+
+  // Remove common command words
+  let productSearch = text
+    .replace(/\b(add|put|give|bill|billing|please|item|items|quantity|qty)\b/g, "")
+    .replace(/\b\d+\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!productSearch) {
+    alert("Please say the product name.");
+    return;
+  }
+
+  console.log("Searching product:", productSearch);
+
+  const product = findProductForVoice(productSearch);
+
+  if (!product) {
+
+    alert(
+      `Product "${productSearch}" was not found in Inventory.\n\n` +
+      `Please add it to Inventory first.`
+    );
+
+    return;
+  }
+
+  addVoiceProductToBill(product, quantity);
+}
+
+
+function findProductForVoice(searchText) {
+
+  if (!Array.isArray(products)) {
+    return null;
+  }
+
+  const search = searchText.toLowerCase().trim();
+
+  // Exact match
+  let product = products.find(p => {
+
+    const name = String(p.name || "")
+      .toLowerCase()
+      .trim();
+
+    return name === search;
+  });
+
+  if (product) return product;
+
+  // Partial match
+  product = products.find(p => {
+
+    const name = String(p.name || "")
+      .toLowerCase()
+      .trim();
+
+    return name.includes(search) ||
+           search.includes(name);
+  });
+
+  return product || null;
+}
+
+
+function addVoiceProductToBill(product, quantity) {
+
+  if (!product) return;
+
+  if (product.qty <= 0) {
+
+    alert(`${product.name} is out of stock.`);
+
+    return;
+  }
+
+  // Don't allow adding more than available stock
+  if (quantity > product.qty) {
+
+    alert(
+      `${product.name} has only ${product.qty} ${product.unit || "PCS"} in stock.`
+    );
+
+    quantity = product.qty;
+  }
+
+  let existing = bill.find(
+    item => item.name === product.name
+  );
+
+  if (existing) {
+
+    existing.count += quantity;
+
+  } else {
+
+    bill.push({
+      ...product,
+      count: quantity
+    });
+  }
+
+  renderBill();
+
+  showToast(
+    `✔ Added ${quantity} × ${product.name}`
+  );
+
+  console.log(
+    `Added ${quantity} x ${product.name} to bill`
+  );
+}
+
+
+// ==========================================
+// INVENTORY VOICE
+// ==========================================
+
+window.startInventoryVoice = function () {
+
+  const recognition = createShopHelpVoice();
+
+  if (!recognition) return;
+
+  showToast(
+    "🎤 Listening... Say product, cost price, sell price and stock"
+  );
+
+  recognition.onstart = () => {
+    console.log("Inventory voice started");
+  };
+
+  recognition.onerror = (event) => {
+
+    console.error("Inventory voice error:", event.error);
+
+    if (event.error === "not-allowed") {
+      alert("Microphone permission is blocked. Please allow microphone access.");
+    } else {
+      alert("Could not hear you. Please try again.");
+    }
+  };
+
+  recognition.onresult = (event) => {
+
+    const spokenText =
+      event.results[0][0].transcript.trim();
+
+    console.log(
+      "Inventory voice:",
+      spokenText
+    );
+
+    processInventoryVoice(spokenText);
+  };
+
+  recognition.start();
+};
+
+async function processInventoryVoice(text) {
+
+  text = text.toLowerCase().trim();
+
+  console.log(
+    "Processing inventory voice:",
+    text
+  );
+
+  /*
+    Example:
+
+    "Add Maggi cost 10 sell 15 stock 20 barcode 123456"
+
+    OR
+
+    "Maggi cost 10 selling 15 stock 20 barcode 123456"
+  */
+
+  // -----------------------------
+  // COST PRICE
+  // -----------------------------
+
+  const costMatch = text.match(
+    /(?:cost|cp|purchase|buying)\s*(?:price)?\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // SELL PRICE
+  // -----------------------------
+
+  const sellMatch = text.match(
+    /(?:sell|selling|sp|sale)\s*(?:price)?\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // STOCK / QUANTITY
+  // -----------------------------
+
+  const stockMatch = text.match(
+    /(?:stock|quantity|qty)\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // BARCODE
+  // -----------------------------
+
+  const barcodeMatch = text.match(
+    /(?:barcode|bar code)\s*([0-9]+)/i
+  );
+
+  const cp = costMatch
+    ? Number(costMatch[1])
+    : 0;
+
+  const sp = sellMatch
+    ? Number(sellMatch[1])
+    : 0;
+
+  const qty = stockMatch
+    ? Number(stockMatch[1])
+    : 0;
+
+  const barcode = barcodeMatch
+    ? barcodeMatch[1]
+    : "";
+
+  // -----------------------------
+  // PRODUCT NAME
+  // -----------------------------
+
+  let productName = text;
+
+  productName = productName
+    .replace(
+      /(?:add|create|new|product|item|please|please add)/gi,
+      ""
+    )
+
+    .replace(
+      /(?:cost|cp|purchase|buying)\s*(?:price)?\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:sell|selling|sp|sale)\s*(?:price)?\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:stock|quantity|qty)\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:barcode|bar code)\s*[0-9]+/gi,
+      ""
+    )
+
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!productName) {
+
+    alert(
+      "Could not understand the product name."
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // SHOW WHAT WAS UNDERSTOOD
+  // -----------------------------
+
+  console.log({
+    productName,
+    cp,
+    sp,
+    qty,
+    barcode
+  });
+
+  // -----------------------------
+  // VALIDATION
+  // -----------------------------
+
+  if (!cp || !sp || !qty || !barcode) {
+
+    alert(
+      `I heard:\n\n` +
+      `Product: ${productName}\n` +
+      `Cost Price: ₹${cp}\n` +
+      `Sell Price: ₹${sp}\n` +
+      `Stock: ${qty}\n` +
+      `Barcode: ${barcode || "missing"}\n\n` +
+      `Please say all details like:\n` +
+      `"Add Maggi cost 10 sell 15 stock 20 barcode 123456"`
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // DUPLICATE BARCODE CHECK
+  // -----------------------------
+
+  const exists = products.find(
+    p => String(p.barcode) === String(barcode)
+  );
+
+  if (exists) {
+
+    alert(
+      `Barcode already exists for "${exists.name}".`
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // ADD PRODUCT
+  // -----------------------------
+
+  products.push({
+
+    name: productName,
+
+    cp: cp,
+
+    sp: sp,
+
+    qty: qty,
+
+    unit: "PCS",
+
+    barcode: barcode,
+
+    category: "",
+    brand: "",
+    description: "",
+    image: "",
+
+    approved: false,
+    onshopEnabled: false,
+
+    createdAt: Date.now()
+  });
+
+  // -----------------------------
+  // SAVE
+  // -----------------------------
+
+  await saveData();
+
+  // -----------------------------
+  // REFRESH INVENTORY
+  // -----------------------------
+
+  renderInventory();
+
+  checkLowStock();
+
+  // -----------------------------
+  // CLEAR INPUTS
+  // -----------------------------
+
+  document.getElementById("pName").value = "";
+  document.getElementById("pCP").value = "";
+  document.getElementById("pSP").value = "";
+  document.getElementById("pQty").value = "";
+  document.getElementById("pBarcode").value = "";
+
+  showToast(
+    `✔ ${productName} added to Inventory`
+  );
+}
+window.editSale = function(index){
+
+  if(!confirm("Edit this invoice? It will be moved back to billing.")) return;
+
+  let s = sales[index];
+
+  if(!s){
+    alert("Sale not found");
+    return;
+  }
+
+  // 🔥 Restore stock
+  s.items.forEach(item=>{
+    let p = products.find(prod => prod.name === item.name);
+    if(p){
+      p.qty += item.count;
+    }
+  });
+
+  // 🔥 Fix customer debt
+  if(s.customer !== null && customers[s.customer]){
+    customers[s.customer].debt -= s.total;
+    if(customers[s.customer].debt < 0){
+      customers[s.customer].debt = 0;
+    }
+  }
+
+  // 🔥 Load items into bill
+  bill = [];
+  s.items.forEach(item=>{
+    bill.push({
+      name: item.name,
+      sp: item.sp,
+      cp: item.cp,
+      count: item.count
+    });
+  });
+
+  // 🔥 Restore customer
+  selectedCustomer = s.customer;
+  if(selectedCustomer !== null && customers[selectedCustomer]){
+    document.getElementById("custSearch").value = customers[selectedCustomer].name;
+  }
+
+  // ✅ RESTORE DISCOUNT & GST (FIX)
+  document.getElementById("discountInput").value = s.discount || "";
+  document.getElementById("gstSelect").value = s.gst || "0";
+
+  // 🔥 Remove old sale
+  sales.splice(index, 1);
+
+  // 🔥 Switch to billing
+  showPage('billing');
+
+  // 🔥 Render
+  renderBill();
+  renderInventory();
+  renderCustomers();
+  renderFinances();
+  renderChart();
+
+  alert("Invoice loaded for editing ✏️");
+};
+window.searchInvoices = function(){
+
+  let val = document.getElementById("invoiceSearch").value.toLowerCase();
+
+  let rows = document.querySelectorAll("#finBody tr");
+
+  rows.forEach(row => {
+
+    let text = row.innerText.toLowerCase();
+
+    if(text.includes(val)){
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+
+  });
+};
 </script>
+<div id="toast" style="
+position:fixed;
+top:20px;
+right:20px;
+background:#e74c3c;
+color:white;
+padding:12px 20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+display:none;
+z-index:999;
+font-weight:600;
+"></div>
+<div id="chatApp">
 
+<div id="chatTop" style="display:flex; justify-content:space-between; align-items:center;">
+  <span>🤖 ShopHelp Pro AI</span>
+  <button onclick="toggleChat()" style="background:none;border:none;color:white;font-size:18px;cursor:pointer;">✖</button>
+</div>
+
+  <!-- Messages -->
+  <div id="chatMessages"></div>
+
+  <!-- Input -->
+  <div id="chatInputArea">
+    <button onclick="startVoice()">🎤</button>
+    <input id="chatInput" data-i18n="Message ShopHelp Pro AI..." data-i18n-type="placeholder" placeholder="Message ShopHelp Pro AI...">
+    <button onclick="document.getElementById('imageInput').click()">📷</button>
+    <button onclick="sendMsg()">➤</button>
+    <button onclick="clearChat()">🗑 Clear Chat</button>
+    <input type="file" id="imageInput" accept="image/*" hidden>
+  </div>
+
+</div>
+<div id="chatToggleBtn" onclick="toggleChat()">
+  <span>💬</span>
+</div>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
