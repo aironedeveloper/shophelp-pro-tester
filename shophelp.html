@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,6 +138,9 @@ About Us
 >
 <button onclick="startBarcodeScanner()"><span data-i18n="Scan Barcode">📷 Scan Barcode</span></button>
 <div id="reader" style="width:300px;"></div>
+  <button type="button" class="btn" onclick="startBillingVoice()">
+  🎤 Add by Voice
+</button>
 <table>
 <thead>
 <tr>
@@ -189,7 +191,9 @@ About Us
 <option data-i18n="KG">KG</option>
 <option data-i18n="L">L</option>
 </select>
-
+<button type="button" class="btn" onclick="startInventoryVoice()">
+  🎤 Fill by Voice
+</button>
 <button onclick="addItem()" class="btn-main" id="addBtn" data-i18n="Add Item">Add Item</button>
 <table id="invTable"></table>
 </div>
@@ -1350,59 +1354,53 @@ function renderChart(){
   });
 }
 // ===== AI CONFIG =====
+// ===== AI CONFIG =====
 async function askAI(userMessage){
 
-  let dataSummary = `
-Products: ${products.map(p=>`${p.name}(${p.qty})`).join(", ")}
-Sales: ${sales.slice(-3).map(s=>`₹${s.total}`).join(", ")}
-Customers: ${customers.map(c=>`${c.name}:${c.debt}`).join(", ")}
+  const shopData = `
+PRODUCTS:
+${JSON.stringify(products)}
+
+SALES:
+${JSON.stringify(sales)}
+
+CUSTOMERS:
+${JSON.stringify(customers)}
+
+EXPENSES:
+${JSON.stringify(expenses)}
+
+LOW STOCK:
+${products.filter(p => Number(p.qty) < 5).map(p => p.name).join(", ") || "None"}
 `;
 
-  try{
-  const res = await fetch(
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAF0y0of0PrLGGykM6RvubNxpUhS_as9YQ",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-text: `You are an advanced AI business assistant.
+  try {
 
-Rules:
-- Understand full shop data deeply
-- Give smart insights, not just answers
-- Suggest profit improvement ideas
-- Detect low stock, high sales trends
-- Reply in Hinglish (short + clear)
-- Be helpful like a business advisor
-
-User: ${userMessage}
-
-Shop Data:
-${dataSummary}`
-            }]
-          }]
-        })
-      }
-    );
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: userMessage,
+        shopData: shopData
+      })
+    });
 
     const data = await res.json();
 
-    console.log("FULL:", data);
-
-    // ✅ SAFE parsing
-    if(data.candidates && data.candidates.length > 0){
-      return data.candidates[0].content.parts[0].text;
-    } else if(data.error){
-      return "Error: " + data.error.message;
-    } else {
-      return "No response 🤔";
+    if (!res.ok) {
+      console.error("AI API error:", data);
+      return "Sorry, AI service mein problem aa gayi 😕";
     }
 
-  }catch(err){
-    console.error(err);
-    return "Network error 😢";
+    return data.answer || "No response 🤔";
+
+  } catch (err) {
+
+    console.error("AI request failed:", err);
+
+    return "AI se connect nahi ho pa raha 😕";
   }
 }
 // toggle
@@ -1493,14 +1491,22 @@ window.addEventListener("DOMContentLoaded", () => {
   const imageInput = document.getElementById("imageInput");
 
   if(imageInput){
+
     imageInput.addEventListener("change", async function(){
 
       const file = this.files[0];
+
       if(!file) return;
+
+      if(!file.type.startsWith("image/")){
+        alert("Please select an image file.");
+        return;
+      }
 
       const reader = new FileReader();
 
       reader.onload = async function(){
+
         const base64 = reader.result.split(",")[1];
 
         let chat = document.getElementById("chatMessages");
@@ -1511,40 +1517,68 @@ window.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-        chat.innerHTML += `<div id="loading">🤖 analyzing image...</div>`;
+        chat.innerHTML += `
+          <div id="loading">
+            🤖 analyzing image...
+          </div>
+        `;
 
-        const res = await fetch(
-          "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=AIzaSyAF0y0of0PrLGGykM6RvubNxpUhS_as9YQ",
-          {
-            method:"POST",
-            headers:{ "Content-Type":"application/json" },
+        try {
+
+          const res = await fetch("/api/vision", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
-              contents: [{
-                parts: [
-                  { text: "Explain this image in simple Hinglish" },
-                  {
-                    inline_data: {
-                      mime_type: file.type,
-                      data: base64
-                    }
-                  }
-                ]
-              }]
+              image: base64,
+              mimeType: file.type,
+              prompt: "Explain this image in simple Hinglish. If it contains a bill, receipt, product, invoice, or shop-related information, identify the important details clearly."
             })
-          }
-        );
+          });
 
-        const data = await res.json();
+          const data = await res.json();
 
-        document.getElementById("loading")?.remove();
+          document.getElementById("loading")?.remove();
 
-        let reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+        if(!res.ok){
+  console.error("Vision API error:", data);
 
-        chat.innerHTML += `<div class="msg bot">${reply}</div>`;
+  chat.innerHTML += `
+    <div class="msg bot">
+      ❌ Image AI Error:<br>
+      ${data.error || "Unknown error"}
+    </div>
+  `;
+
+  return;
+}
+
+          const reply = data.answer || "No response";
+
+          chat.innerHTML += `
+            <div class="msg bot">${reply}</div>
+          `;
+
+        } catch(error) {
+
+          console.error("Image AI error:", error);
+
+          document.getElementById("loading")?.remove();
+
+          chat.innerHTML += `
+            <div class="msg bot">
+              Image AI se connect nahi ho pa raha 😕
+            </div>
+          `;
+        }
+
       };
 
       reader.readAsDataURL(file);
+
     });
+
   }
 
 });
@@ -2042,6 +2076,466 @@ if(s.customer !== null && customers[s.customer]){
 
   alert("Invoice deleted ✅");
 };
+  // ===============================
+// SHOPHELP VOICE INPUT
+// ===============================
+
+// ===============================
+// SHOPHELP VOICE INPUT
+// BILLING + INVENTORY
+// ===============================
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function createShopHelpVoice() {
+
+  if (!SpeechRecognition) {
+    alert("Voice input is not supported in this browser. Please use Google Chrome.");
+    return null;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  return recognition;
+}
+
+
+// ==========================================
+// BILLING VOICE
+// ==========================================
+
+window.startBillingVoice = function () {
+
+  const recognition = createShopHelpVoice();
+
+  if (!recognition) return;
+
+  showToast("🎤 Listening... Say product name and quantity");
+
+  recognition.onstart = () => {
+    console.log("Billing voice started");
+  };
+
+  recognition.onerror = (event) => {
+
+    console.error("Billing voice error:", event.error);
+
+    if (event.error === "not-allowed") {
+      alert("Microphone permission is blocked. Please allow microphone access.");
+    } else {
+      alert("Could not hear you. Please try again.");
+    }
+  };
+
+  recognition.onresult = async (event) => {
+
+    const spokenText =
+      event.results[0][0].transcript.trim();
+
+    console.log("Billing voice:", spokenText);
+
+    await processBillingVoice(spokenText);
+  };
+
+  recognition.start();
+};
+
+
+async function processBillingVoice(text) {
+
+  text = text.toLowerCase().trim();
+
+  console.log("Processing billing voice:", text);
+
+  // Find quantity
+  const quantityMatch = text.match(/\b(\d+)\b/);
+
+  const quantity = quantityMatch
+    ? parseInt(quantityMatch[1])
+    : 1;
+
+  // Remove common command words
+  let productSearch = text
+    .replace(/\b(add|put|give|bill|billing|please|item|items|quantity|qty)\b/g, "")
+    .replace(/\b\d+\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!productSearch) {
+    alert("Please say the product name.");
+    return;
+  }
+
+  console.log("Searching product:", productSearch);
+
+  const product = findProductForVoice(productSearch);
+
+  if (!product) {
+
+    alert(
+      `Product "${productSearch}" was not found in Inventory.\n\n` +
+      `Please add it to Inventory first.`
+    );
+
+    return;
+  }
+
+  addVoiceProductToBill(product, quantity);
+}
+
+
+function findProductForVoice(searchText) {
+
+  if (!Array.isArray(products)) {
+    return null;
+  }
+
+  const search = searchText.toLowerCase().trim();
+
+  // Exact match
+  let product = products.find(p => {
+
+    const name = String(p.name || "")
+      .toLowerCase()
+      .trim();
+
+    return name === search;
+  });
+
+  if (product) return product;
+
+  // Partial match
+  product = products.find(p => {
+
+    const name = String(p.name || "")
+      .toLowerCase()
+      .trim();
+
+    return name.includes(search) ||
+           search.includes(name);
+  });
+
+  return product || null;
+}
+
+
+function addVoiceProductToBill(product, quantity) {
+
+  if (!product) return;
+
+  if (product.qty <= 0) {
+
+    alert(`${product.name} is out of stock.`);
+
+    return;
+  }
+
+  // Don't allow adding more than available stock
+  if (quantity > product.qty) {
+
+    alert(
+      `${product.name} has only ${product.qty} ${product.unit || "PCS"} in stock.`
+    );
+
+    quantity = product.qty;
+  }
+
+  let existing = bill.find(
+    item => item.name === product.name
+  );
+
+  if (existing) {
+
+    existing.count += quantity;
+
+  } else {
+
+    bill.push({
+      ...product,
+      count: quantity
+    });
+  }
+
+  renderBill();
+
+  showToast(
+    `✔ Added ${quantity} × ${product.name}`
+  );
+
+  console.log(
+    `Added ${quantity} x ${product.name} to bill`
+  );
+}
+
+
+// ==========================================
+// INVENTORY VOICE
+// ==========================================
+
+window.startInventoryVoice = function () {
+
+  const recognition = createShopHelpVoice();
+
+  if (!recognition) return;
+
+  showToast(
+    "🎤 Listening... Say product, cost price, sell price and stock"
+  );
+
+  recognition.onstart = () => {
+    console.log("Inventory voice started");
+  };
+
+  recognition.onerror = (event) => {
+
+    console.error("Inventory voice error:", event.error);
+
+    if (event.error === "not-allowed") {
+      alert("Microphone permission is blocked. Please allow microphone access.");
+    } else {
+      alert("Could not hear you. Please try again.");
+    }
+  };
+
+  recognition.onresult = (event) => {
+
+    const spokenText =
+      event.results[0][0].transcript.trim();
+
+    console.log(
+      "Inventory voice:",
+      spokenText
+    );
+
+    processInventoryVoice(spokenText);
+  };
+
+  recognition.start();
+};
+
+async function processInventoryVoice(text) {
+
+  text = text.toLowerCase().trim();
+
+  console.log(
+    "Processing inventory voice:",
+    text
+  );
+
+  /*
+    Example:
+
+    "Add Maggi cost 10 sell 15 stock 20 barcode 123456"
+
+    OR
+
+    "Maggi cost 10 selling 15 stock 20 barcode 123456"
+  */
+
+  // -----------------------------
+  // COST PRICE
+  // -----------------------------
+
+  const costMatch = text.match(
+    /(?:cost|cp|purchase|buying)\s*(?:price)?\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // SELL PRICE
+  // -----------------------------
+
+  const sellMatch = text.match(
+    /(?:sell|selling|sp|sale)\s*(?:price)?\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // STOCK / QUANTITY
+  // -----------------------------
+
+  const stockMatch = text.match(
+    /(?:stock|quantity|qty)\s*(\d+(?:\.\d+)?)/i
+  );
+
+  // -----------------------------
+  // BARCODE
+  // -----------------------------
+
+  const barcodeMatch = text.match(
+    /(?:barcode|bar code)\s*([0-9]+)/i
+  );
+
+  const cp = costMatch
+    ? Number(costMatch[1])
+    : 0;
+
+  const sp = sellMatch
+    ? Number(sellMatch[1])
+    : 0;
+
+  const qty = stockMatch
+    ? Number(stockMatch[1])
+    : 0;
+
+  const barcode = barcodeMatch
+    ? barcodeMatch[1]
+    : "";
+
+  // -----------------------------
+  // PRODUCT NAME
+  // -----------------------------
+
+  let productName = text;
+
+  productName = productName
+    .replace(
+      /(?:add|create|new|product|item|please|please add)/gi,
+      ""
+    )
+
+    .replace(
+      /(?:cost|cp|purchase|buying)\s*(?:price)?\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:sell|selling|sp|sale)\s*(?:price)?\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:stock|quantity|qty)\s*\d+(?:\.\d+)?/gi,
+      ""
+    )
+
+    .replace(
+      /(?:barcode|bar code)\s*[0-9]+/gi,
+      ""
+    )
+
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!productName) {
+
+    alert(
+      "Could not understand the product name."
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // SHOW WHAT WAS UNDERSTOOD
+  // -----------------------------
+
+  console.log({
+    productName,
+    cp,
+    sp,
+    qty,
+    barcode
+  });
+
+  // -----------------------------
+  // VALIDATION
+  // -----------------------------
+
+  if (!cp || !sp || !qty || !barcode) {
+
+    alert(
+      `I heard:\n\n` +
+      `Product: ${productName}\n` +
+      `Cost Price: ₹${cp}\n` +
+      `Sell Price: ₹${sp}\n` +
+      `Stock: ${qty}\n` +
+      `Barcode: ${barcode || "missing"}\n\n` +
+      `Please say all details like:\n` +
+      `"Add Maggi cost 10 sell 15 stock 20 barcode 123456"`
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // DUPLICATE BARCODE CHECK
+  // -----------------------------
+
+  const exists = products.find(
+    p => String(p.barcode) === String(barcode)
+  );
+
+  if (exists) {
+
+    alert(
+      `Barcode already exists for "${exists.name}".`
+    );
+
+    return;
+  }
+
+  // -----------------------------
+  // ADD PRODUCT
+  // -----------------------------
+
+  products.push({
+
+    name: productName,
+
+    cp: cp,
+
+    sp: sp,
+
+    qty: qty,
+
+    unit: "PCS",
+
+    barcode: barcode,
+
+    category: "",
+    brand: "",
+    description: "",
+    image: "",
+
+    approved: false,
+    onshopEnabled: false,
+
+    createdAt: Date.now()
+  });
+
+  // -----------------------------
+  // SAVE
+  // -----------------------------
+
+  await saveData();
+
+  // -----------------------------
+  // REFRESH INVENTORY
+  // -----------------------------
+
+  renderInventory();
+
+  checkLowStock();
+
+  // -----------------------------
+  // CLEAR INPUTS
+  // -----------------------------
+
+  document.getElementById("pName").value = "";
+  document.getElementById("pCP").value = "";
+  document.getElementById("pSP").value = "";
+  document.getElementById("pQty").value = "";
+  document.getElementById("pBarcode").value = "";
+
+  showToast(
+    `✔ ${productName} added to Inventory`
+  );
+}
 window.editSale = function(index){
 
   if(!confirm("Edit this invoice? It will be moved back to billing.")) return;
