@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="tBOdFCujUnTIar_UksmG7NwpvZdx5EtXgzj0Ia3rUJ4" />
 <meta property="og:title" content="ShopHelp Pro">
 <meta property="og:description" content="Billing, Inventory, Ecommerce and Delivery Platform">
 <meta property="og:image" content="logo.jpeg">
@@ -16,100 +17,1119 @@ content="ShopHelp Pro - Complete Business Platform for Billing, Inventory, Custo
 <link rel="stylesheet" href="styles.css">
 
 <style>
+
+/* =========================================================
+   SHOPHELP LANDING PAGE — PREMIUM HERO UI
+   Works with the new ShopHelp dashboard CSS
+   ========================================================= */
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
 .hero{
+  position:relative;
+  overflow:hidden;
+
   text-align:center;
-  padding:80px 20px;
+
+  padding:110px 20px 95px;
+
+  border-radius:32px;
+
+  margin-bottom:35px;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(99,91,255,.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(34,211,238,.15),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(139,92,246,.12),
+      transparent 35%
+    ),
+    rgba(255,255,255,.48);
+
+  border:
+    1px solid rgba(255,255,255,.75);
+
+  box-shadow:
+    0 30px 90px rgba(15,23,42,.10);
+
+  -webkit-backdrop-filter:blur(25px);
+  backdrop-filter:blur(25px);
+
+  animation:
+    shopHeroIn .7s cubic-bezier(.2,.8,.2,1);
 }
+
+
+/* glowing border */
+
+.hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:32px;
+
+  padding:1px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(99,91,255,.55),
+      transparent 30%,
+      transparent 70%,
+      rgba(34,211,238,.5)
+    );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite:xor;
+
+  mask-composite:exclude;
+
+  pointer-events:none;
+
+}
+
+
+/* floating glow */
+
+.hero::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:280px;
+  height:280px;
+
+  left:50%;
+  top:45%;
+
+  transform:
+    translate(-50%,-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99,91,255,.10),
+      transparent 70%
+    );
+
+  pointer-events:none;
+
+}
+
+
+/* =========================================================
+   HERO ANIMATION
+   ========================================================= */
+
+@keyframes shopHeroIn{
+
+  from{
+    opacity:0;
+    transform:
+      translateY(25px)
+      scale(.98);
+  }
+
+  to{
+    opacity:1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   HERO TITLE
+   ========================================================= */
 
 .hero h1{
-  font-size:4rem;
-  margin-bottom:15px;
-  color:var(--primary);
+
+  position:relative;
+
+  z-index:2;
+
+  font-size:
+    clamp(3rem,7vw,6rem);
+
+  line-height:.98;
+
+  font-weight:900;
+
+  letter-spacing:-4px;
+
+  margin-bottom:24px;
+
+  color:
+    #111827;
+
 }
+
+
+/* gradient ShopHelp title */
+
+.hero h1{
+
+  background:
+    linear-gradient(
+      135deg,
+      #111827 5%,
+      #4f46e5 42%,
+      #7c3aed 68%,
+      #0891b2 100%
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
 
 .hero p{
-  max-width:800px;
+
+  position:relative;
+
+  z-index:2;
+
+  max-width:760px;
+
   margin:auto;
-  font-size:1.2rem;
-  color:#555;
-  line-height:1.7;
+
+  font-size:
+    clamp(1rem,2vw,1.25rem);
+
+  color:#667085;
+
+  line-height:1.8;
+
+  font-weight:500;
+
 }
+
+
+/* =========================================================
+   HERO BUTTONS
+   ========================================================= */
 
 .hero-buttons{
-  margin-top:30px;
+
+  position:relative;
+
+  z-index:3;
+
+  margin-top:36px;
+
   display:flex;
-  gap:15px;
+
+  gap:14px;
+
   justify-content:center;
+
   flex-wrap:wrap;
+
 }
+
+
+.hero-buttons button{
+
+  min-width:165px;
+
+  min-height:52px;
+
+  padding:
+    14px 24px;
+
+  border-radius:16px;
+
+  font-size:15px;
+
+}
+
+
+/* =========================================================
+   PLATFORM GRID
+   ========================================================= */
 
 .platform-grid{
+
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-  gap:25px;
-  margin-top:30px;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(280px,1fr)
+    );
+
+  gap:22px;
+
+  margin-top:35px;
+
 }
+
+
+/* =========================================================
+   PLATFORM CARD
+   ========================================================= */
 
 .platform-card{
+
+  position:relative;
+
+  overflow:hidden;
+
   text-align:center;
+
+  padding:32px 25px;
+
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.9),
+      rgba(255,255,255,.62)
+    );
+
+  border:
+    1px solid rgba(255,255,255,.85);
+
+  box-shadow:
+    0 15px 45px rgba(15,23,42,.08);
+
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease,
+    border-color .35s ease;
+
 }
+
+
+/* colorful top line */
+
+.platform-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #635bff,
+      #8b5cf6,
+      #22d3ee
+    );
+
+}
+
+
+/* corner glow */
+
+.platform-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:130px;
+  height:130px;
+
+  right:-70px;
+  top:-70px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99,91,255,.14),
+      transparent 70%
+    );
+
+  pointer-events:none;
+
+}
+
+
+.platform-card:hover{
+
+  transform:
+    translateY(-9px);
+
+  box-shadow:
+    0 25px 60px rgba(99,91,255,.14);
+
+  border-color:
+    rgba(99,91,255,.18);
+
+}
+
+
+/* =========================================================
+   PLATFORM CARD TITLE
+   ========================================================= */
 
 .platform-card h2{
-  margin-bottom:15px;
+
+  margin-bottom:14px;
+
+  font-size:1.45rem;
+
+  font-weight:800;
+
+  letter-spacing:-.5px;
+
+  color:#101828;
+
 }
+
+
+/* =========================================================
+   PLATFORM LIST
+   ========================================================= */
 
 .platform-card ul{
+
   list-style:none;
+
   padding:0;
-  margin:20px 0;
+
+  margin:22px 0;
+
 }
+
 
 .platform-card ul li{
-  padding:8px 0;
+
+  padding:10px 0;
+
+  color:#667085;
+
+  font-weight:500;
+
+  border-bottom:
+    1px solid rgba(148,163,184,.10);
+
+  transition:
+    transform .2s ease,
+    color .2s ease;
+
 }
+
+
+.platform-card ul li:last-child{
+
+  border-bottom:none;
+
+}
+
+
+.platform-card ul li:hover{
+
+  color:#4f46e5;
+
+  transform:
+    translateX(4px);
+
+}
+
+
+/* =========================================================
+   MAX SECTION
+   ========================================================= */
 
 .max-section{
+
+  position:relative;
+
+  overflow:hidden;
+
   text-align:center;
+
+  margin-top:35px;
+
+  padding:55px 25px;
+
+  border-radius:30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b1020,
+      #111936 50%,
+      #0c1b2e
+    );
+
+  color:#ffffff;
+
+  box-shadow:
+    0 30px 80px rgba(15,23,42,.20);
+
 }
+
+
+/* colorful border */
+
+.max-section::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:30px;
+
+  padding:1px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(99,91,255,.65),
+      transparent 35%,
+      transparent 65%,
+      rgba(34,211,238,.6)
+    );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite:xor;
+
+  mask-composite:exclude;
+
+}
+
+
+/* background glow */
+
+.max-section::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:400px;
+  height:400px;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate(-50%,-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99,91,255,.13),
+      transparent 70%
+    );
+
+  pointer-events:none;
+
+}
+
+
+.max-section h2{
+
+  position:relative;
+
+  z-index:2;
+
+  color:#ffffff;
+
+  font-size:
+    clamp(2rem,4vw,3.2rem);
+
+  font-weight:900;
+
+  letter-spacing:-1.5px;
+
+  margin-bottom:12px;
+
+}
+
+
+.max-section p{
+
+  position:relative;
+
+  z-index:2;
+
+  max-width:700px;
+
+  margin:auto;
+
+  color:#aab4c8;
+
+  line-height:1.7;
+
+}
+
+
+/* =========================================================
+   MAX FEATURES
+   ========================================================= */
 
 .max-features{
+
+  position:relative;
+
+  z-index:3;
+
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(210px,1fr)
+    );
+
   gap:15px;
-  margin-top:25px;
+
+  margin-top:30px;
+
 }
+
+
+/* =========================================================
+   MAX ITEM
+   ========================================================= */
 
 .max-item{
-  background:white;
-  padding:20px;
-  border-radius:15px;
-  box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+  position:relative;
+
+  overflow:hidden;
+
+  padding:22px 18px;
+
+  border-radius:18px;
+
+  background:
+    rgba(255,255,255,.06);
+
+  border:
+    1px solid rgba(255,255,255,.09);
+
+  color:#ffffff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05);
+
+  transition:
+    transform .3s ease,
+    background .3s ease,
+    border-color .3s ease;
+
 }
 
-.footer{
-  text-align:center;
-  padding:30px;
-  color:#555;
+
+.max-item:hover{
+
+  transform:
+    translateY(-6px);
+
+  background:
+    rgba(255,255,255,.10);
+
+  border-color:
+    rgba(99,91,255,.4);
+
 }
+
+
+.max-item h3{
+
+  color:#ffffff;
+
+  margin-bottom:8px;
+
+}
+
+
+.max-item p{
+
+  color:#9ca8bc;
+
+  font-size:14px;
+
+  line-height:1.6;
+
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
 
 .logo{
-  width:120px;
-  margin-bottom:20px;
+
+  width:130px;
+
+  height:auto;
+
+  margin-bottom:24px;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 10px 20px
+      rgba(99,91,255,.15)
+    );
+
+  transition:
+    transform .3s ease,
+    filter .3s ease;
+
 }
+
+
+.logo:hover{
+
+  transform:
+    translateY(-3px)
+    scale(1.04);
+
+  filter:
+    drop-shadow(
+      0 15px 30px
+      rgba(99,91,255,.25)
+    );
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer{
+
+  text-align:center;
+
+  padding:
+    45px 20px 25px;
+
+  margin-top:30px;
+
+  color:#667085;
+
+  font-size:14px;
+
+}
+
+
+.footer a{
+
+  color:#4f46e5;
+
+  font-weight:700;
+
+  text-decoration:none;
+
+  transition:
+    color .2s ease;
+
+}
+
+
+.footer a:hover{
+
+  color:#0891b2;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media(max-width:600px){
 
-.hero{
-  padding:50px 10px;
+  .hero{
+
+    padding:
+      65px 15px 60px;
+
+    border-radius:24px;
+
+  }
+
+
+  .hero h1{
+
+    font-size:
+      clamp(2.7rem,13vw,4rem);
+
+    letter-spacing:-2.5px;
+
+    line-height:1;
+
+    margin-bottom:18px;
+
+  }
+
+
+  .hero p{
+
+    font-size:1rem;
+
+    line-height:1.7;
+
+  }
+
+
+  .hero-buttons{
+
+    margin-top:26px;
+
+    gap:10px;
+
+  }
+
+
+  .hero-buttons button{
+
+    width:100%;
+
+    min-width:0;
+
+  }
+
+
+  .platform-grid{
+
+    grid-template-columns:1fr;
+
+    gap:16px;
+
+  }
+
+
+  .platform-card{
+
+    padding:
+      27px 20px;
+
+    border-radius:21px;
+
+  }
+
+
+  .max-section{
+
+    padding:
+      40px 16px;
+
+    border-radius:24px;
+
+  }
+
+
+  .max-section h2{
+
+    font-size:2rem;
+
+  }
+
+
+  .max-features{
+
+    grid-template-columns:1fr;
+
+    gap:10px;
+
+  }
+
+
+  .max-item{
+
+    padding:18px 15px;
+
+  }
+
+
+  .logo{
+
+    width:105px;
+
+    margin-bottom:18px;
+
+  }
+
+
+  .footer{
+
+    padding:
+      35px 15px 20px;
+
+  }
+
 }
 
-.hero h1{
-  font-size:2.5rem;
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+   ========================================================= */
+
+@media(max-width:380px){
+
+  .hero{
+
+    padding:
+      50px 12px;
+
+  }
+
+
+  .hero h1{
+
+    font-size:2.5rem;
+
+  }
+
+
+  .platform-card{
+
+    padding:
+      23px 16px;
+
+  }
+
+}
+/* =========================================================
+   FIX — WHY CHOOSE SHOPHELP PRO
+   ========================================================= */
+
+/* Normal feature section */
+.card:not(.max-section) .max-item{
+
+  color:#172033;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f7f8ff
+    );
+
+  border:
+    1px solid rgba(99,91,255,.10);
+
+  box-shadow:
+    0 10px 28px rgba(15,23,42,.07);
+
 }
 
-.hero p{
-  font-size:1rem;
+
+/* Feature text */
+.card:not(.max-section) .max-item{
+
+  font-weight:700;
+
+  font-size:15px;
+
 }
+
+
+/* Hover */
+.card:not(.max-section) .max-item:hover{
+
+  color:#4f46e5;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #eef2ff
+    );
+
+  border-color:
+    rgba(99,91,255,.25);
+
+  box-shadow:
+    0 18px 40px rgba(99,91,255,.13);
+
+  transform:
+    translateY(-7px)
+    scale(1.02);
+
+}
+
+
+/* =========================================================
+   INDIVIDUAL FEATURE COLORS
+   ========================================================= */
+
+.card:not(.max-section) .max-item:nth-child(1){
+  border-top:3px solid #f59e0b;
+}
+
+.card:not(.max-section) .max-item:nth-child(2){
+  border-top:3px solid #8b5cf6;
+}
+
+.card:not(.max-section) .max-item:nth-child(3){
+  border-top:3px solid #3b82f6;
+}
+
+.card:not(.max-section) .max-item:nth-child(4){
+  border-top:3px solid #10b981;
+}
+
+.card:not(.max-section) .max-item:nth-child(5){
+  border-top:3px solid #ef4444;
+}
+
+.card:not(.max-section) .max-item:nth-child(6){
+  border-top:3px solid #06b6d4;
+}
+
+
+/* =========================================================
+   WHY CHOOSE SECTION
+   ========================================================= */
+
+.card:not(.max-section):has(.max-features){
+
+  position:relative;
+
+  overflow:hidden;
+
+  padding:
+    35px 28px 40px;
+
+}
+
+
+/* heading */
+
+.card:not(.max-section):has(.max-features) > h2{
+
+  position:relative;
+
+  z-index:5;
+
+  color:#101828;
+
+  font-size:
+    clamp(1.7rem,3vw,2.2rem);
+
+  font-weight:900;
+
+  letter-spacing:-1px;
+
+  margin-bottom:30px;
+
+}
+
+
+/* =========================================================
+   FEATURE GRID
+   ========================================================= */
+
+.card:not(.max-section) .max-features{
+
+  position:relative;
+
+  z-index:5;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(190px,1fr)
+    );
+
+  gap:16px;
+
+  margin-top:10px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:600px){
+
+  .card:not(.max-section):has(.max-features){
+
+    padding:
+      28px 16px 32px;
+
+  }
+
+  .card:not(.max-section) .max-features{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+    gap:10px;
+
+  }
+
+  .card:not(.max-section) .max-item{
+
+    padding:
+      18px 10px;
+
+    font-size:13px;
+
+    border-radius:15px;
+
+  }
+
+}
+
+
+@media(max-width:380px){
+
+  .card:not(.max-section) .max-features{
+
+    grid-template-columns:1fr;
+
+  }
+
 }
 </style>
 </head>
