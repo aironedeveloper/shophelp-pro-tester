@@ -761,7 +761,7 @@ const productDropdown = document.getElementById("productDropdown");
 
 // --- UI ---
 window.showPage=function(p){
-  document.querySelectorAll("#app .card").forEach(c=>c.classList.add("hidden"));
+  document.querySelectorAll("#app > .card").forEach(c=>c.classList.add("hidden"));
   const targetPage = document.getElementById(p+"Page");
   if(!targetPage){
     console.error("ShopHelp page not found:", p+"Page");
