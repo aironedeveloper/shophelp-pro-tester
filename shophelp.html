@@ -81,6 +81,10 @@ ShopHelp Pro
   <i class="fa-solid fa-truck"></i> Supplier Demand
 </button>
 
+<button onclick="openAddSupplier()" data-i18n="Add Supplier">
+  <i class="fa-solid fa-user-plus"></i> Add Supplier
+</button>
+
 <button onclick="showPage('about')" data-i18n="About Us">
 <i class="fa-solid fa-circle-info"></i>
 About Us
@@ -2672,6 +2676,16 @@ window.searchInvoices = function(){
     }
 
   });
+};
+</script>
+
+<script>
+window.openAddSupplier = function(){
+  if(typeof window.showPage === "function") window.showPage("supplierDemand");
+  setTimeout(function(){
+    const input = document.getElementById("supplierNameInput");
+    if(input){ input.focus(); input.scrollIntoView({behavior:"smooth", block:"center"}); }
+  }, 100);
 };
 </script>
 
