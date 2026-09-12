@@ -260,9 +260,11 @@ About Us
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
     <div class="card" style="margin:0;">
       <h3>➕ Add Supplier</h3>
-      <input id="supplierPhoneInput" type="tel" placeholder="Supplier mobile number" inputmode="numeric">
-      <button class="btn-main" onclick="addSupplierByPhone()">Find & Add Supplier</button>
-      <p style="font-size:12px;color:#777;margin-top:10px;">Supplier must first register on SupplierDemand with Google using this mobile number.</p>
+      <input id="supplierNameInput" type="text" placeholder="Supplier Name">
+      <input id="supplierPhoneInput" type="tel" inputmode="numeric" placeholder="Supplier Mobile Number">
+      <input id="supplierEmailInput" type="email" placeholder="Supplier Google Email">
+      <button class="btn-main" onclick="addSupplier()">➕ Add Supplier</button>
+      <p style="font-size:12px;color:#777;margin-top:10px;">Supplier must first register on SupplierDemand with the same Google email and mobile number.</p>
     </div>
 
     <div class="card" style="margin:0;">
@@ -2775,25 +2777,39 @@ async function renderShopkeeperDemands(){
   }
 }
 
-window.addSupplierByPhone = async function(){
-  if(!supplierAuth.currentUser) return alert("Please login first.");
-  const input = document.getElementById("supplierPhoneInput");
-  const phone = normalizeSupplierPhone(input.value);
+window.addSupplier = async function(){
+  if(!auth.currentUser) return alert("Please login first.");
 
+  const nameInput = document.getElementById("supplierNameInput");
+  const phoneInput = document.getElementById("supplierPhoneInput");
+  const emailInput = document.getElementById("supplierEmailInput");
+
+  const name = nameInput.value.trim();
+  const phone = normalizeSupplierPhone(phoneInput.value);
+  const email = emailInput.value.trim().toLowerCase();
+
+  if(!name) return alert("Enter supplier name.");
   if(phone.length !== 10) return alert("Enter a valid 10-digit supplier mobile number.");
+  if(!email || !email.includes("@")) return alert("Enter a valid Google email.");
 
   try{
-    const q = query(collection(supplierDb, "suppliers"), where("phone", "==", phone));
+    // Supplier must already have a Google account/profile on SupplierDemand.
+    const q = query(collection(db, "suppliers"), where("email", "==", email));
     const snap = await getDocs(q);
 
     if(snap.empty){
-      return alert("Supplier not found. Ask the supplier to register on SupplierDemand with Google and this mobile number.");
+      return alert("Supplier not found. Ask the supplier to first register on SupplierDemand with this Google email.");
     }
 
     const supplierDoc = snap.docs[0];
     const supplierData = supplierDoc.data();
+    const registeredPhone = normalizeSupplierPhone(supplierData.phone);
 
-    if(supplierDoc.id === supplierAuth.currentUser.uid){
+    if(registeredPhone !== phone){
+      return alert("Supplier mobile number does not match the number registered on SupplierDemand.");
+    }
+
+    if(supplierDoc.id === auth.currentUser.uid){
       return alert("You cannot add your own account as a supplier.");
     }
 
@@ -2805,14 +2821,17 @@ window.addSupplierByPhone = async function(){
 
     suppliers.push({
       uid: supplierDoc.id,
-      name: supplierData.name || supplierData.displayName || "Supplier",
+      name,
       phone,
-      email: supplierData.email || "",
+      email,
       addedAt: Date.now()
     });
 
     await window.shopHelpSaveData();
-    input.value = "";
+
+    nameInput.value = "";
+    phoneInput.value = "";
+    emailInput.value = "";
     renderSupplierList();
     refreshSupplierControls();
     alert("Supplier added successfully.");
