@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shopkeeper Login - OnShop</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+.login-box{
+  max-width:450px;
+  margin:60px auto;
+  text-align:center;
+}
+
+.login-box h1{
+  color:var(--primary);
+  margin-bottom:10px;
+}
+
+.login-box p{
+  color:#666;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:15px;
+  outline:none;
+}
+
+button{
+  width:100%;
+  margin-top:15px;
+}
+
+.note{
+  font-size:13px;
+  color:#888;
+  margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card login-box">
+
+<h1>🧑‍💼 Shopkeeper Login</h1>
+
+<p>Login to access OnShop (Admin approval required)</p>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="loginShopkeeper()">
+Login to OnShop
+</button>
+
+<p class="note">
+Only ShopHelp-approved users can access OnShop
+</p>
+
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { getFirestore, doc, getDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 🔥 YOUR FIREBASE CONFIG
+const firebaseConfig = {
+apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// LOGIN FUNCTION
+window.loginShopkeeper = async function(){
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if(!email || !password){
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+
+    // 1. Firebase Auth Login
+    const userCredential =
+      await signInWithEmailAndPassword(auth, email, password);
+
+    const user = userCredential.user;
+
+    // 2. Firestore user check
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    // ❌ Not a ShopHelp user
+    if(!snap.exists()){
+      alert("❌ Not a ShopHelp user. Access denied.");
+      await signOut(auth);
+      return;
+    }
+
+    const data = snap.data();
+
+    // ❌ Rejected by admin
+    if(data.status === "rejected"){
+      alert("❌ Access denied by admin.");
+      await signOut(auth);
+      return;
+    }
+
+    // ⏳ Pending approval
+    if(data.status === "pending"){
+      alert("⏳ Waiting for admin approval.");
+      await signOut(auth);
+      return;
+    }
+
+    // ❌ Wrong role
+    if(data.role !== "shopkeeper"){
+      alert("❌ Only Shopkeepers allowed here.");
+      await signOut(auth);
+      return;
+    }
+
+    // ❌ OnShop not enabled
+    if(!data.onshopAccess){
+      alert("❌ OnShop access not enabled by admin.");
+      await signOut(auth);
+      return;
+    }
+
+    // ✅ SUCCESS LOGIN
+    localStorage.setItem("uid", user.uid);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("shopName", data.shopName);
+    localStorage.setItem("role", data.role);
+
+    alert("Login successful!");
+
+    window.location.href = "shopkeeper.html";
+
+  } catch (err) {
+    alert("Login failed: " + err.message);
+  }
+};
+
+</script>
+
+</body>
+</html>

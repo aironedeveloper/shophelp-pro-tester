@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Courier Company Login - OnShop</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+.auth-box{
+  max-width:500px;
+  margin:50px auto;
+  text-align:center;
+}
+
+.tabs{
+  display:flex;
+  margin-bottom:20px;
+  gap:10px;
+}
+
+.tabs button{
+  flex:1;
+}
+
+.form{
+  display:none;
+}
+
+.form.active{
+  display:block;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:12px;
+  border:1px solid #ddd;
+}
+
+button{
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<div class="card auth-box">
+
+<h1>🚚 Courier Company Portal</h1>
+
+<div class="tabs">
+  <button onclick="showForm('login')">Login</button>
+  <button onclick="showForm('register')">Register</button>
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginForm" class="form active">
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Company Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button onclick="loginCourier()">
+Login
+</button>
+
+</div>
+
+<!-- REGISTER -->
+
+<div id="registerForm" class="form">
+
+<input
+type="text"
+id="companyName"
+placeholder="Company Name">
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password">
+
+<button onclick="registerCourier()">
+Register Company
+</button>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+setDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.showForm = function(type){
+
+  document
+  .querySelectorAll(".form")
+  .forEach(f=>f.classList.remove("active"));
+
+  document
+  .getElementById(type+"Form")
+  .classList.add("active");
+};
+
+// REGISTER
+
+window.registerCourier = async function(){
+
+  const companyName =
+  document.getElementById("companyName").value.trim();
+
+  const email =
+  document.getElementById("registerEmail").value.trim();
+
+  const password =
+  document.getElementById("registerPassword").value;
+
+  if(!companyName || !email || !password){
+    alert("Fill all fields");
+    return;
+  }
+
+  try{
+
+    const cred =
+    await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = cred.user;
+
+    await setDoc(doc(db,"users",user.uid),{
+
+      companyName,
+      email,
+
+      role:"courier",
+
+      status:"pending",
+
+      onshopAccess:false,
+
+      createdAt:Date.now()
+
+    });
+
+    alert(
+      "Registration submitted. Waiting for admin approval."
+    );
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+};
+
+// LOGIN
+
+window.loginCourier = async function(){
+
+  const email =
+  document.getElementById("loginEmail").value.trim();
+
+  const password =
+  document.getElementById("loginPassword").value;
+
+  try{
+
+    const cred =
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = cred.user;
+
+    const snap =
+    await getDoc(doc(db,"users",user.uid));
+
+    if(!snap.exists()){
+
+      alert("Courier account not found");
+      return;
+
+    }
+
+    const data = snap.data();
+
+    if(data.role !== "courier"){
+
+      alert("Not a courier account");
+      return;
+
+    }
+
+    if(data.status !== "approved"){
+
+      alert("Waiting for admin approval");
+      return;
+
+    }
+
+    localStorage.setItem(
+      "courierName",
+      data.companyName
+    );
+
+    window.location.href =
+    "courier-dashboard.html";
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>

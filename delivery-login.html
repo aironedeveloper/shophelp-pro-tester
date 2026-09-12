@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Delivery Partner Portal - OnShop</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+.auth-box{
+  max-width:500px;
+  margin:50px auto;
+  text-align:center;
+}
+
+.tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.tabs button{
+  flex:1;
+}
+
+.form{
+  display:none;
+}
+
+.form.active{
+  display:block;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:12px;
+  border:1px solid #ddd;
+}
+
+button{
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<div class="card auth-box">
+
+<h1>🏍 Delivery Partner Portal</h1>
+
+<div class="tabs">
+  <button onclick="showForm('login')">Login</button>
+  <button onclick="showForm('register')">Register</button>
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginForm" class="form active">
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password">
+
+<button onclick="loginPartner()">
+Login
+</button>
+
+</div>
+
+<!-- REGISTER -->
+
+<div id="registerForm" class="form">
+
+<input
+type="text"
+id="partnerName"
+placeholder="Full Name">
+
+<input
+type="tel"
+id="mobile"
+placeholder="Mobile Number">
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Email">
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password">
+
+<button onclick="registerPartner()">
+Register as Delivery Partner
+</button>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+setDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDObJ8UKlYL_M4qHmJiWgxlNJraqmDZwGc",
+  authDomain: "shophelpay.firebaseapp.com",
+  projectId: "shophelpay",
+  storageBucket: "shophelpay.firebasestorage.app",
+  messagingSenderId: "714326373961",
+  appId: "1:714326373961:web:7df87c2fb87f08e69e7198",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.showForm = function(type){
+
+  document
+  .querySelectorAll(".form")
+  .forEach(f=>f.classList.remove("active"));
+
+  document
+  .getElementById(type+"Form")
+  .classList.add("active");
+
+};
+
+// REGISTER
+
+window.registerPartner = async function(){
+
+  const name =
+  document.getElementById("partnerName").value.trim();
+
+  const mobile =
+  document.getElementById("mobile").value.trim();
+
+  const email =
+  document.getElementById("registerEmail").value.trim();
+
+  const password =
+  document.getElementById("registerPassword").value;
+
+  if(!name || !mobile || !email || !password){
+
+    alert("Fill all fields");
+    return;
+
+  }
+
+  try{
+
+    const cred =
+    await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = cred.user;
+
+    await setDoc(doc(db,"users",user.uid),{
+
+      name,
+      mobile,
+      email,
+
+      role:"delivery",
+
+      status:"pending",
+
+      onshopAccess:false,
+
+      createdAt:Date.now()
+
+    });
+
+    alert(
+      "Registration submitted. Waiting for admin approval."
+    );
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+
+};
+
+// LOGIN
+
+window.loginPartner = async function(){
+
+  const email =
+  document.getElementById("loginEmail").value.trim();
+
+  const password =
+  document.getElementById("loginPassword").value;
+
+  try{
+
+    const cred =
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = cred.user;
+
+    const snap =
+    await getDoc(doc(db,"users",user.uid));
+
+    if(!snap.exists()){
+
+      alert("Delivery partner account not found");
+      return;
+
+    }
+
+    const data = snap.data();
+
+    if(data.role !== "delivery"){
+
+      alert("Not a delivery partner account");
+      return;
+
+    }
+
+    if(data.status !== "approved"){
+
+      alert("Waiting for admin approval");
+      return;
+
+    }
+
+    localStorage.setItem(
+      "deliveryName",
+      data.name
+    );
+
+    window.location.href =
+    "delivery-partner.html";
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>

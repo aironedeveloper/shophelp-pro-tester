@@ -1,0 +1,48 @@
+SupplierDemand Firestore rules to MERGE into your existing Firestore rules.
+
+Important: do NOT replace your existing rules blindly. Keep your current rules and add these match blocks inside:
+
+match /databases/{database}/documents {
+
+  match /suppliers/{supplierId} {
+    allow create: if request.auth != null
+      && request.auth.uid == supplierId
+      && request.resource.data.role == "supplier";
+
+    allow read: if request.auth != null
+      && request.auth.uid == supplierId;
+
+    allow update: if request.auth != null
+      && request.auth.uid == supplierId;
+
+    allow delete: if false;
+  }
+
+  match /supplierDemands/{demandId} {
+    allow create: if request.auth != null
+      && request.resource.data.shopkeeperUID == request.auth.uid
+      && request.resource.data.supplierUID is string
+      && request.resource.data.productName is string
+      && request.resource.data.quantity is number
+      && request.resource.data.quantity > 0;
+
+    allow read: if request.auth != null
+      && (
+        resource.data.shopkeeperUID == request.auth.uid
+        || resource.data.supplierUID == request.auth.uid
+      );
+
+    allow update: if request.auth != null
+      && resource.data.supplierUID == request.auth.uid
+      && request.resource.data.shopkeeperUID == resource.data.shopkeeperUID
+      && request.resource.data.supplierUID == resource.data.supplierUID;
+
+    allow delete: if false;
+  }
+}
+
+Note:
+- The supplier profile is created after Google login.
+- The shopkeeper searches suppliers by their registered 10-digit mobile number.
+- The demand is linked by supplierUID, not by phone number.
+- For production, phone verification is recommended so someone cannot claim another person's number.
