@@ -258,17 +258,23 @@ About Us
   <p style="color:#666;margin:8px 0 20px;">Add suppliers and send product demands when stock is low.</p>
 
   <!-- ADD SUPPLIER -->
-  <div class="card" style="margin:0 0 20px 0;">
-    <button class="btn-main" type="button" onclick="toggleAddSupplierForm()">
+  <div class="card" id="addSupplierSection" style="margin:0 0 20px 0;display:block !important;visibility:visible !important;">
+    <button id="addSupplierToggleBtn" type="button"
+      onclick="toggleAddSupplierForm()"
+      style="display:block !important;visibility:visible !important;width:100%;padding:14px 18px;border:0;border-radius:12px;cursor:pointer;font-size:16px;font-weight:700;background:#2563eb;color:white;">
       ➕ Add Supplier
     </button>
 
     <div id="addSupplierForm" style="display:none;margin-top:15px;">
-      <input id="supplierNameInput" type="text" placeholder="Supplier Name">
-      <input id="supplierPhoneInput" type="tel" inputmode="numeric" placeholder="Supplier Mobile Number">
-      <input id="supplierEmailInput" type="email" placeholder="Supplier Google Email">
+      <input id="supplierNameInput" type="text" placeholder="Supplier Name"
+        style="display:block;width:100%;box-sizing:border-box;margin:8px 0;padding:12px;border-radius:10px;">
+      <input id="supplierPhoneInput" type="tel" inputmode="numeric" placeholder="Supplier Mobile Number"
+        style="display:block;width:100%;box-sizing:border-box;margin:8px 0;padding:12px;border-radius:10px;">
+      <input id="supplierEmailInput" type="email" placeholder="Supplier Google Email"
+        style="display:block;width:100%;box-sizing:border-box;margin:8px 0;padding:12px;border-radius:10px;">
 
-      <button class="btn-main" type="button" onclick="addSupplier()">
+      <button type="button" onclick="addSupplier()"
+        style="display:block;width:100%;padding:14px 18px;border:0;border-radius:12px;cursor:pointer;font-size:16px;font-weight:700;background:#16a34a;color:white;margin-top:10px;">
         ✅ Add Supplier
       </button>
 
@@ -2688,10 +2694,16 @@ window.searchInvoices = function(){
 <script>
 window.toggleAddSupplierForm = function(){
   const form = document.getElementById("addSupplierForm");
+  const button = document.getElementById("addSupplierToggleBtn");
   if(!form) return;
 
-  const isHidden = form.style.display === "none" || !form.style.display;
+  const isHidden = form.style.display === "none" || form.style.display === "";
+
   form.style.display = isHidden ? "block" : "none";
+
+  if(button){
+    button.innerHTML = isHidden ? "✖ Close Add Supplier" : "➕ Add Supplier";
+  }
 
   if(isHidden){
     setTimeout(function(){
