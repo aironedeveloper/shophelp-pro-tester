@@ -81,10 +81,6 @@ ShopHelp Pro
   <i class="fa-solid fa-truck"></i> Supplier Demand
 </button>
 
-<button onclick="openAddSupplier()" data-i18n="Add Supplier">
-  <i class="fa-solid fa-user-plus"></i> Add Supplier
-</button>
-
 <button onclick="showPage('about')" data-i18n="About Us">
 <i class="fa-solid fa-circle-info"></i>
 About Us
@@ -261,20 +257,30 @@ About Us
   <h3 data-i18n="Supplier Demand">🚚 Supplier Demand</h3>
   <p style="color:#666;margin:8px 0 20px;">Add suppliers and send product demands when stock is low.</p>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-    <div class="card" style="margin:0;">
-      <h3>➕ Add Supplier</h3>
+  <!-- ADD SUPPLIER -->
+  <div class="card" style="margin:0 0 20px 0;">
+    <button class="btn-main" type="button" onclick="toggleAddSupplierForm()">
+      ➕ Add Supplier
+    </button>
+
+    <div id="addSupplierForm" style="display:none;margin-top:15px;">
       <input id="supplierNameInput" type="text" placeholder="Supplier Name">
       <input id="supplierPhoneInput" type="tel" inputmode="numeric" placeholder="Supplier Mobile Number">
       <input id="supplierEmailInput" type="email" placeholder="Supplier Google Email">
-      <button class="btn-main" onclick="addSupplier()">➕ Add Supplier</button>
-      <p style="font-size:12px;color:#777;margin-top:10px;">Supplier must first register on SupplierDemand with the same Google email and mobile number.</p>
-    </div>
 
-    <div class="card" style="margin:0;">
-      <h3>👥 My Suppliers</h3>
-      <div id="supplierList"></div>
+      <button class="btn-main" type="button" onclick="addSupplier()">
+        ✅ Add Supplier
+      </button>
+
+      <p style="font-size:12px;color:#777;margin-top:10px;">
+        Supplier must first register on SupplierDemand with the same Google email and mobile number.
+      </p>
     </div>
+  </div>
+
+  <div class="card" style="margin:0 0 20px 0;">
+    <h3>👥 My Suppliers</h3>
+    <div id="supplierList"></div>
   </div>
 
   <div class="card" style="margin-top:20px;">
@@ -2680,12 +2686,22 @@ window.searchInvoices = function(){
 </script>
 
 <script>
-window.openAddSupplier = function(){
-  if(typeof window.showPage === "function") window.showPage("supplierDemand");
-  setTimeout(function(){
-    const input = document.getElementById("supplierNameInput");
-    if(input){ input.focus(); input.scrollIntoView({behavior:"smooth", block:"center"}); }
-  }, 100);
+window.toggleAddSupplierForm = function(){
+  const form = document.getElementById("addSupplierForm");
+  if(!form) return;
+
+  const isHidden = form.style.display === "none" || !form.style.display;
+  form.style.display = isHidden ? "block" : "none";
+
+  if(isHidden){
+    setTimeout(function(){
+      const input = document.getElementById("supplierNameInput");
+      if(input){
+        input.focus();
+        input.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }, 50);
+  }
 };
 </script>
 
